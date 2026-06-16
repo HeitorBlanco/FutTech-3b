@@ -1,0 +1,123 @@
+﻿@page "/apresentacao"
+
+<div class="hero">
+
+    <div class="card">
+
+        <img class="logo" src="images/logo.png" />
+
+        <div class="conteudo">
+
+            <div class="texto">
+
+                <span class="tag">⚽ FUTTECH</span>
+
+                <h1>
+                    Transformando talento em
+                    <span>performance</span>
+                </h1>
+
+                <p>
+                    Formando atletas preparados dentro e fora de campo,
+                    desenvolvendo disciplina, técnica e inteligência de jogo.
+                </p>
+
+                <button>
+                    Conheça o Projeto
+                </button>
+
+            </div>
+
+            <div class="imagem">
+                <img src="images/jogador.png" />
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+
+    .hero {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg,#0b1f8f,#2755ff);
+    }
+
+    .card {
+        width: 90%;
+        max-width: 1200px;
+        padding: 50px;
+        border-radius: 30px;
+        backdrop-filter: blur(15px);
+        background: rgba(255,255,255,.08);
+        box-shadow: 0 20px 40px rgba(0,0,0,.2);
+    }
+
+    .logo {
+        width: 90px;
+        margin-bottom: 20px;
+    }
+
+    .conteudo {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .texto {
+        max-width: 550px;
+        color: white;
+    }
+
+    .tag {
+        background: white;
+        color: #1a34d8;
+        padding: 8px 15px;
+        border-radius: 30px;
+        font-weight: bold;
+    }
+
+    h1 {
+        font-size: 70px;
+        margin: 20px 0;
+        line-height: 1.1;
+    }
+
+        h1 span {
+            color: #7cc8ff;
+        }
+
+    p {
+        font-size: 18px;
+        margin-bottom: 25px;
+    }
+
+    button {
+        background: white;
+        color: #1a34d8;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 50px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: .3s;
+    }
+
+        button:hover {
+            transform: translateY(-3px);
+        }
+
+    .imagem img {
+        width: 450px;
+    }
+
+</style>
+
+@code {
+
+}
