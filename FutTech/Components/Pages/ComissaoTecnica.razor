@@ -1,0 +1,124 @@
+﻿@page "/comissaotecnica"
+
+<section class="ft-section comissao-page">
+    <div class="ft-container">
+        <div class="comissao-header">
+            <h1>Comissão Técnica</h1>
+        </div>
+
+        <div class="comissao-card">
+            <div class="comissao-profile">
+                <img src="images/comissao-heitor.png" alt="Heitor" />
+            </div>
+
+            <div class="comissao-text">
+                <ul>
+                    <li><strong>Heitor Blanco</strong></li>
+                    <li>Técnico Treinador</li>
+                    <li>17 anos</li>
+                    <li>Especialidades: contra-ataque ofensivo e condicionamento.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="comissao-gallery">
+            <img src="images/comissao-heitor.png" alt="Foto 1" />
+            <img src="images/comissao-samuel.png" alt="Foto 2" />
+        </div>
+
+        <div class="comissao-card">
+            <div class="comissao-profile">
+                <img src="images/comissao-samuel.png" alt="Samuel" />
+            </div>
+
+            <div class="comissao-text">
+                <ul>
+                    <li><strong>Samuel Butzke</strong></li>
+                    <li>Auxiliar Técnico</li>
+                    <li>17 anos</li>
+                    <li>Especialidades: táticas defensivas e treino de fundamentos.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .comissao-page {
+        background: #efefef;
+    }
+
+    .comissao-header {
+        background: var(--ft-blue);
+        color: #fff;
+        padding: 24px;
+        border-radius: 18px;
+        text-align: center;
+        margin-bottom: 18px;
+    }
+
+        .comissao-header h1 {
+            font-size: 2.6rem;
+        }
+
+    .comissao-card {
+        background: var(--ft-blue);
+        color: #fff;
+        border-radius: 22px;
+        padding: 26px;
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 26px;
+        align-items: center;
+        margin-bottom: 18px;
+    }
+
+    .comissao-profile {
+        display: flex;
+        justify-content: center;
+    }
+
+        .comissao-profile img {
+            max-height: 220px;
+            object-fit: contain;
+        }
+
+    .comissao-text ul {
+        list-style: disc;
+        padding-left: 20px;
+        font-size: 1.6rem;
+        font-weight: 700;
+    }
+
+    .comissao-text li {
+        margin-bottom: 8px;
+    }
+
+    .comissao-gallery {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+        margin-bottom: 18px;
+        overflow: hidden;
+        border-radius: 12px;
+    }
+
+        .comissao-gallery img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+        }
+
+    @media (max-width: 900px) {
+        .comissao-card
+
+    {
+        grid-template-columns: 1fr;
+    }
+
+    .comissao-gallery {
+        grid-template-columns: 1fr;
+    }
+
+    }
+</style>
