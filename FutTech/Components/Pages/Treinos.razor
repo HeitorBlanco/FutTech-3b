@@ -1,5 +1,8 @@
 @page "/treinos"
-@layout Layout.PublicLayout
+@layout Layout.DashboardLayout
+@rendermode InteractiveServer
+
+<div class="page-wrapper">
 
 <div class="header-section">
     <h2>Treinos</h2>
@@ -68,11 +71,11 @@
     @foreach (var treino in FilteredTreinos)
     {
         <div class="treino-card">
-            <div class="card-header">
+            <div class="treino-card-header">
                 <span class="category-badge">@treino.Categoria</span>
-                <span class="status-badge @treino.Status.ToLower()">@treino.Status</span>
+                <span class="status-badge @treino.Status.ToLower().Replace("í","i")">@treino.Status</span>
             </div>
-            <div class="card-body">
+            <div class="treino-card-body">
                 <h4 class="treino-foco">@treino.Foco</h4>
                 <div class="treino-info">
                     <div class="info-item">
@@ -83,7 +86,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card-footer">
+            <div class="treino-card-footer">
                 @if (treino.Status == "Agendado")
                 {
                     <button class="btn-complete" @onclick="() => CompleteTreino(treino.Id)">Concluir</button>
@@ -92,6 +95,8 @@
             </div>
         </div>
     }
+</div>
+
 </div>
 
 @code {

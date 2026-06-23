@@ -1,102 +1,89 @@
-﻿
-.pagina-comissao {
-    background-color: #001E8C;
+.comissao-page {
+    background: #0826a8;
     min-height: 100vh;
     color: white;
-    font-family: Arial, Helvetica, sans-serif;
+    padding: 50px 20px;
 }
 
-.cabecalho {
-    background-color: #001E8C;
-    border-bottom: 2px solid white;
-    padding: 8px 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+.comissao-container {
+    max-width: 900px;
+    margin: 0 auto;
 }
 
-    .cabecalho h2 {
-        margin: 0;
-        font-size: 16px;
-        font-weight: bold;
-    }
-
-.logo {
-    position: absolute;
-    right: 15px;
-    width: 35px;
-    height: 35px;
+.comissao-header {
+    text-align: center;
+    margin-bottom: 40px;
 }
 
-.card-comissao {
-    background-color: #001E8C;
-    padding: 10px 15px;
+.comissao-header h1 {
+    font-size: 36px;
+    font-weight: 800;
+    color: white;
+}
+
+.comissao-card {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 24px;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 24px;
+    border-radius: 16px;
+    margin-bottom: 24px;
 }
 
-.foto-perfil {
-    width: 90px;
-    height: 90px;
-    border-radius: 6px;
+.comissao-profile img {
+    width: 100px;
+    height: 100px;
+    border-radius: 12px;
     object-fit: cover;
 }
 
-.info-comissao {
-    flex: 1;
+.comissao-text ul {
+    margin: 0;
+    padding-left: 18px;
+    list-style: disc;
 }
 
-    .info-comissao ul {
-        margin: 0;
-        padding-left: 18px;
-    }
-
-    .info-comissao li {
-        margin-bottom: 4px;
-        font-size: 13px;
-    }
-
-.nome {
-    font-weight: bold;
+.comissao-text li {
+    margin-bottom: 6px;
+    font-size: 15px;
+    line-height: 1.5;
 }
 
-.banner-foto {
+.comissao-text li strong {
+    font-size: 18px;
+}
+
+.comissao-gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.comissao-gallery img {
     width: 100%;
-    height: 180px;
+    height: 220px;
     object-fit: cover;
-    display: block;
-}
-
-.legenda {
-    background: white;
-    color: #555;
-    font-size: 10px;
-    padding: 4px 8px;
-}
-
-.secao {
-    margin-bottom: 10px;
+    border-radius: 12px;
 }
 
 @media (max-width: 768px) {
-
-    .card-comissao {
-        flex-direction: row;
-        align-items: flex-start;
+    .comissao-card {
+        flex-direction: column;
+        text-align: center;
     }
 
-    .foto-perfil {
-        width: 75px;
-        height: 75px;
+    .comissao-text ul {
+        padding-left: 0;
+        list-style: none;
     }
 
-    .info-comissao li {
-        font-size: 12px;
+    .comissao-gallery {
+        grid-template-columns: 1fr;
     }
 
-    .banner-foto {
-        height: 150px;
+    .comissao-gallery img {
+        height: 180px;
     }
 }

@@ -3,70 +3,103 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg,#0b1f8f,#2755ff);
+    background: linear-gradient(135deg, #0826a8, #2755ff);
+    padding: 30px;
 }
 
 .card {
     width: 90%;
-    max-width: 1200px;
+    max-width: 1100px;
     padding: 50px;
-    border-radius: 30px;
+    border-radius: 24px;
     backdrop-filter: blur(15px);
-    background: rgba(255,255,255,.08);
-    box-shadow: 0 20px 40px rgba(0,0,0,.2);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
 
 .conteudo {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 30px;
+    gap: 40px;
 }
 
 .texto {
-    max-width: 550px;
+    max-width: 520px;
     color: white;
 }
 
 .tag {
     background: white;
-    color: #1a34d8;
-    padding: 8px 15px;
+    color: #0826a8;
+    padding: 8px 16px;
     border-radius: 30px;
-    font-weight: bold;
+    font-weight: 700;
+    font-size: 13px;
+    display: inline-block;
+    letter-spacing: 0.5px;
 }
 
-h1 {
-    font-size: 60px;
-    margin: 20px 0;
+.texto h1 {
+    font-size: 50px;
+    margin: 22px 0;
     line-height: 1.1;
+    font-weight: 800;
 }
 
-h1 span {
+.texto h1 span {
     color: #7cc8ff;
 }
 
-p {
-    font-size: 18px;
-    margin-bottom: 25px;
+.texto p {
+    font-size: 17px;
+    margin-bottom: 28px;
+    line-height: 1.6;
+    opacity: 0.9;
 }
 
-button {
+.texto button {
     background: white;
-    color: #1a34d8;
+    color: #0826a8;
     border: none;
-    padding: 15px 30px;
+    padding: 14px 32px;
     border-radius: 50px;
-    font-size: 16px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
     cursor: pointer;
-    transition: .3s;
+    transition: transform 0.25s;
 }
 
-button:hover {
+.texto button:hover {
     transform: translateY(-3px);
 }
 
 .imagem img {
-    width: 400px;
+    width: 380px;
     border-radius: 20px;
+}
+
+@media (max-width: 768px) {
+    .hero {
+        padding: 20px;
+    }
+
+    .card {
+        padding: 30px;
+    }
+
+    .conteudo {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .texto h1 {
+        font-size: 34px;
+    }
+
+    .imagem img {
+        width: 100%;
+        max-width: 300px;
+    }
 }

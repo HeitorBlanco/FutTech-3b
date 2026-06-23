@@ -1,49 +1,56 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-body {
-    background: #efefef;
-}
-
 .hero {
     width: 85%;
-    margin: 70px auto;
+    max-width: 1200px;
+    margin: 60px auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 40px;
 }
 
 .texto {
-    width: 45%;
+    width: 50%;
 }
 
 .texto h2 {
-    font-size: 25px;
+    font-size: 22px;
     margin-bottom: 10px;
+    color: #333;
+    font-weight: 600;
 }
 
 .texto h1 {
-    color: #1037df;
-    font-size: 55px;
+    color: #0826a8;
+    font-size: 48px;
     margin-bottom: 20px;
+    line-height: 1.1;
+    font-weight: 800;
 }
 
 .texto p {
-    color: #444;
+    color: #555;
     line-height: 28px;
     margin-bottom: 30px;
+    font-size: 16px;
 }
 
 .btn-contato {
-    width: 170px;
-    height: 50px;
-    border: 1px solid #555;
+    width: 180px;
+    height: 48px;
+    border: 2px solid #0826a8;
     background: white;
+    color: #0826a8;
     cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    font-family: inherit;
+    border-radius: 8px;
+    transition: all 0.25s;
+}
+
+.btn-contato:hover {
+    background: #0826a8;
+    color: white;
 }
 
 .imagem {
@@ -56,7 +63,7 @@ body {
     width: 420px;
     height: 280px;
     background: #0826a8;
-    border-radius: 40px;
+    border-radius: 30px;
     position: relative;
 }
 
@@ -76,30 +83,38 @@ body {
 
 .fundadores {
     width: 85%;
-    margin: 60px auto;
+    max-width: 1200px;
+    margin: 50px auto 60px;
     background: #0826a8;
-    border-radius: 0 0 40px 40px;
+    border-radius: 0 0 30px 30px;
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 50px;
+    gap: 40px;
 }
 
 .texto-fundadores {
-    width: 45%;
+    width: 50%;
 }
 
 .texto-fundadores h2 {
-    font-size: 26px;
+    font-size: 24px;
+    font-weight: 700;
 }
 
 .texto-fundadores h3 {
     margin: 10px 0 20px;
+    font-weight: 500;
+    font-size: 16px;
+    opacity: 0.9;
 }
 
 .texto-fundadores p {
     line-height: 28px;
+    font-size: 15px;
+    opacity: 0.9;
 }
 
 .foto {
@@ -108,5 +123,61 @@ body {
 }
 
 .foto img {
-    width: 360px;
+    width: 340px;
+    border-radius: 16px;
+}
+
+@media (max-width: 768px) {
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        width: 90%;
+        margin: 30px auto;
+    }
+
+    .texto {
+        width: 100%;
+    }
+
+    .texto h1 {
+        font-size: 34px;
+    }
+
+    .imagem {
+        width: 100%;
+    }
+
+    .box-azul {
+        width: 100%;
+        max-width: 350px;
+        height: 220px;
+    }
+
+    .img1 {
+        width: 160px;
+    }
+
+    .img2 {
+        width: 130px;
+    }
+
+    .fundadores {
+        flex-direction: column;
+        width: 90%;
+        padding: 30px;
+        text-align: center;
+    }
+
+    .texto-fundadores {
+        width: 100%;
+    }
+
+    .foto {
+        width: 100%;
+        text-align: center;
+    }
+
+    .foto img {
+        width: 280px;
+    }
 }

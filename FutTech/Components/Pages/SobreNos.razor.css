@@ -1,8 +1,9 @@
 .sobre {
     width: 100%;
     min-height: 100vh;
-    background: #efefef;
-    padding-top: 90px;
+    background: #f0f2f5;
+    padding-top: 80px;
+    padding-bottom: 60px;
 }
 
 .titulo {
@@ -15,25 +16,27 @@
     content: "Sobre Nós";
     position: absolute;
     left: 50%;
-    top: -30px;
+    top: -25px;
     transform: translateX(-50%);
-    font-size: 95px;
+    font-size: 85px;
     font-weight: 800;
     color: white;
-    opacity: .35;
+    opacity: 0.4;
     z-index: 0;
+    white-space: nowrap;
 }
 
 .titulo h1 {
     position: relative;
     z-index: 2;
-    font-size: 58px;
-    font-weight: bold;
-    color: black;
+    font-size: 50px;
+    font-weight: 800;
+    color: #111;
 }
 
 .card {
     width: 85%;
+    max-width: 1100px;
     height: 250px;
     margin: auto;
     background: #0826a8;
@@ -54,19 +57,54 @@
 
 .conteudo {
     width: 70%;
-    margin: 90px auto;
+    max-width: 800px;
+    margin: 80px auto;
     text-align: center;
 }
 
 .conteudo h2 {
-    font-size: 32px;
+    font-size: 28px;
     font-style: italic;
-    margin-bottom: 30px;
+    margin-bottom: 28px;
+    color: #0826a8;
+    font-weight: 700;
 }
 
 .conteudo p {
-    font-size: 17px;
-    color: #444;
+    font-size: 16px;
+    color: #555;
     line-height: 30px;
     text-align: justify;
+}
+
+@media (max-width: 768px) {
+    .titulo::before {
+        font-size: 50px;
+    }
+
+    .titulo h1 {
+        font-size: 34px;
+    }
+
+    .card {
+        width: 95%;
+        height: 200px;
+    }
+
+    .imagem {
+        left: 30px;
+    }
+
+    .imagem img {
+        height: 250px;
+    }
+
+    .conteudo {
+        width: 90%;
+        margin: 50px auto;
+    }
+
+    .conteudo h2 {
+        font-size: 22px;
+    }
 }
