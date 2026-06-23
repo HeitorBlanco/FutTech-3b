@@ -1,7 +1,160 @@
-﻿@page "/treinos"
+@page "/treinos"
+@layout Layout.PublicLayout
 
-<h3>Treinos</h3>
+<div class="header-section">
+    <h2>Treinos</h2>
+    <button class="btn-primary" @onclick="PrepareNew">Agendar Treino</button>
+</div>
+
+<div class="dashboard-cards">
+    <div class="card-summary">
+        <div class="card-title">Treinos Agendados</div>
+        <div class="card-value">@treinos.Count(t => t.Status == "Agendado")</div>
+    </div>
+    <div class="card-summary">
+        <div class="card-title">Treinos Concluídos</div>
+        <div class="card-value text-success">@treinos.Count(t => t.Status == "Concluído")</div>
+    </div>
+</div>
+
+@if (showForm)
+{
+    <div class="form-container">
+        <h3>Novo Agendamento</h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Categoria</label>
+                <select @bind="newTreino.Categoria">
+                    <option value="Sub-7">Sub-7</option>
+                    <option value="Sub-11">Sub-11</option>
+                    <option value="Sub-15">Sub-15</option>
+                    <option value="Sub-17">Sub-17</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Dia e Horário</label>
+                <input type="text" placeholder="Ex: Terça-feira, 14:00" @bind="newTreino.DataHora" />
+            </div>
+            <div class="form-group">
+                <label>Treinador</label>
+                <select @bind="newTreino.Treinador">
+                    <option value="Heitor Blanco">Heitor Blanco</option>
+                    <option value="Luís Souza">Luís Souza</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Foco do Treino</label>
+                <input type="text" placeholder="Ex: Finalização, Tática" @bind="newTreino.Foco" />
+            </div>
+        </div>
+        <div class="form-actions">
+            <button class="btn-success" @onclick="Save">Salvar</button>
+            <button class="btn-secondary" @onclick="Cancel">Cancelar</button>
+        </div>
+    </div>
+}
+
+<div class="filter-section">
+    <select class="filter-select" @bind="selectedCategory">
+        <option value="">Todas as Categorias</option>
+        <option value="Sub-7">Sub-7</option>
+        <option value="Sub-11">Sub-11</option>
+        <option value="Sub-15">Sub-15</option>
+        <option value="Sub-17">Sub-17</option>
+    </select>
+</div>
+
+<div class="treinos-grid">
+    @foreach (var treino in FilteredTreinos)
+    {
+        <div class="treino-card">
+            <div class="card-header">
+                <span class="category-badge">@treino.Categoria</span>
+                <span class="status-badge @treino.Status.ToLower()">@treino.Status</span>
+            </div>
+            <div class="card-body">
+                <h4 class="treino-foco">@treino.Foco</h4>
+                <div class="treino-info">
+                    <div class="info-item">
+                        <span class="info-label">Horário:</span> @treino.DataHora
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Treinador:</span> @treino.Treinador
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                @if (treino.Status == "Agendado")
+                {
+                    <button class="btn-complete" @onclick="() => CompleteTreino(treino.Id)">Concluir</button>
+                }
+                <button class="btn-delete" @onclick="() => DeleteTreino(treino.Id)">Excluir</button>
+            </div>
+        </div>
+    }
+</div>
 
 @code {
+    private string selectedCategory = "";
+    private bool showForm = false;
+    private Treino newTreino = new Treino();
 
+    private List<Treino> treinos = new List<Treino>
+    {
+        new Treino { Id = 1, Categoria = "Sub-11", DataHora = "Terça-feira, 14:00", Treinador = "Heitor Blanco", Foco = "Tática & Posicionamento", Status = "Agendado" },
+        new Treino { Id = 2, Categoria = "Sub-15", DataHora = "Quarta-feira, 16:00", Treinador = "Luís Souza", Foco = "Finalização & Chutes", Status = "Agendado" },
+        new Treino { Id = 3, Categoria = "Sub-7", DataHora = "Segunda-feira, 09:00", Treinador = "Heitor Blanco", Foco = "Coordenação Motora", Status = "Concluído" },
+        new Treino { Id = 4, Categoria = "Sub-17", DataHora = "Sexta-feira, 15:30", Treinador = "Luís Souza", Foco = "Treino Físico & Resistência", Status = "Agendado" }
+    };
+
+    private IEnumerable<Treino> FilteredTreinos => treinos
+        .Where(t => string.IsNullOrEmpty(selectedCategory) || t.Categoria == selectedCategory);
+
+    private void PrepareNew()
+    {
+        newTreino = new Treino { Categoria = "Sub-11", Treinador = "Heitor Blanco", Status = "Agendado" };
+        showForm = true;
+    }
+
+    private void Save()
+    {
+        if (string.IsNullOrWhiteSpace(newTreino.DataHora) || string.IsNullOrWhiteSpace(newTreino.Foco)) return;
+
+        newTreino.Id = treinos.Any() ? treinos.Max(t => t.Id) + 1 : 1;
+        treinos.Add(newTreino);
+        showForm = false;
+    }
+
+    private void CompleteTreino(int id)
+    {
+        var existing = treinos.FirstOrDefault(t => t.Id == id);
+        if (existing != null)
+        {
+            existing.Status = "Concluído";
+        }
+    }
+
+    private void DeleteTreino(int id)
+    {
+        var existing = treinos.FirstOrDefault(t => t.Id == id);
+        if (existing != null)
+        {
+            treinos.Remove(existing);
+        }
+    }
+
+    private void Cancel()
+    {
+        showForm = false;
+    }
+
+    public class Treino
+    {
+        public int Id { get; set; }
+        public string Categoria { get; set; }
+        public string DataHora { get; set; }
+        public string Treinador { get; set; }
+        public string Foco { get; set; }
+        public string Status { get; set; }
+    }
 }

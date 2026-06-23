@@ -1,20 +1,6 @@
-﻿@page "/"
-
-<div class="navbar">
-    <div class="logo">
-        <img src="images/logo.png" alt="Logo">
-    </div>
-
-    <ul class="menu">
-        <li><a href="#">Home</a></li>
-        <li><a href="/sobrenos">Sobre Nós</a></li>
-        <li><a href="#">Planos</a></li>
-    </ul>
-
-    <button class="btn-login" @onclick="Acessar">
-        Acessar
-    </button>
-</div>
+@page "/"
+@layout Layout.PublicLayout
+@inject NavigationManager Navigation
 
 <section class="hero">
 
@@ -33,8 +19,7 @@
             de 5 a 17 anos.
         </p>
 
-        <button class="btn-contato"
-                @onclick="Contato">
+        <button class="btn-contato" @onclick="Contato">
             Entre em Contato
         </button>
 
@@ -79,14 +64,9 @@
 
 @code {
 
-    void Acessar()
-    {
-
-    }
-
     void Contato()
     {
-
+        Navigation.NavigateTo("/contato");
     }
 
 }

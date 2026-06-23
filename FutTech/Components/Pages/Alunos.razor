@@ -1,7 +1,205 @@
-﻿@page "/alunos"
+@page "/alunos"
+@layout Layout.PublicLayout
 
-<h3>Alunos</h3>
+<div class="page-wrapper">
+
+<div class="header-section">
+    <h2>Alunos</h2>
+    <button class="btn-primary" @onclick="PrepareNew">Novo Aluno</button>
+</div>
+
+<div class="dashboard-cards">
+    <div class="card-summary">
+        <div class="card-title">Total de Alunos</div>
+        <div class="card-value">@alunos.Count</div>
+    </div>
+    <div class="card-summary">
+        <div class="card-title">Mensalidades Pagas</div>
+        <div class="card-value text-success">@alunos.Count(a => a.StatusMensalidade == "Pago")</div>
+    </div>
+    <div class="card-summary">
+        <div class="card-title">Pendentes / Atrasadas</div>
+        <div class="card-value text-danger">@alunos.Count(a => a.StatusMensalidade != "Pago")</div>
+    </div>
+</div>
+
+<div class="filter-section">
+    <input type="text" class="search-input" placeholder="Buscar aluno por nome..." @bind="searchTerm" @bind:event="oninput" />
+    <select class="filter-select" @bind="selectedCategory">
+        <option value="">Todas as Categorias</option>
+        <option value="Sub-7">Sub-7</option>
+        <option value="Sub-11">Sub-11</option>
+        <option value="Sub-15">Sub-15</option>
+        <option value="Sub-17">Sub-17</option>
+    </select>
+</div>
+
+@if (showForm)
+{
+    <div class="form-container">
+        <h3>@(currentAluno.Id == 0 ? "Novo Aluno" : "Editar Aluno")</h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Nome</label>
+                <input type="text" @bind="currentAluno.Nome" />
+            </div>
+            <div class="form-group">
+                <label>Idade</label>
+                <input type="number" @bind="currentAluno.Idade" />
+            </div>
+            <div class="form-group">
+                <label>Categoria</label>
+                <select @bind="currentAluno.Categoria">
+                    <option value="Sub-7">Sub-7</option>
+                    <option value="Sub-11">Sub-11</option>
+                    <option value="Sub-15">Sub-15</option>
+                    <option value="Sub-17">Sub-17</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Posição</label>
+                <select @bind="currentAluno.Posicao">
+                    <option value="Goleiro">Goleiro</option>
+                    <option value="Lateral">Lateral</option>
+                    <option value="Zagueiro">Zagueiro</option>
+                    <option value="Meia">Meia</option>
+                    <option value="Atacante">Atacante</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Mensalidade</label>
+                <select @bind="currentAluno.StatusMensalidade">
+                    <option value="Pago">Pago</option>
+                    <option value="Pendente">Pendente</option>
+                    <option value="Atrasado">Atrasado</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button class="btn-success" @onclick="Save">Salvar</button>
+            <button class="btn-secondary" @onclick="Cancel">Cancelar</button>
+        </div>
+    </div>
+}
+
+<div class="table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Idade</th>
+                <th>Categoria</th>
+                <th>Posição</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var aluno in FilteredAlunos)
+            {
+                <tr>
+                    <td>@aluno.Nome</td>
+                    <td>@aluno.Idade</td>
+                    <td>@aluno.Categoria</td>
+                    <td>@aluno.Posicao</td>
+                    <td>
+                        <span class="badge @aluno.StatusMensalidade.ToLower()">@aluno.StatusMensalidade</span>
+                    </td>
+                    <td>
+                        <button class="btn-edit" @onclick="() => Edit(aluno)">Editar</button>
+                        <button class="btn-delete" @onclick="() => Delete(aluno.Id)">Excluir</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+</div>
 
 @code {
+    private string searchTerm = "";
+    private string selectedCategory = "";
+    private bool showForm = false;
+    private Aluno currentAluno = new Aluno();
 
+    private List<Aluno> alunos = new List<Aluno>
+    {
+        new Aluno { Id = 1, Nome = "Heitor Blanco", Idade = 10, Categoria = "Sub-11", Posicao = "Meia", StatusMensalidade = "Pago" },
+        new Aluno { Id = 2, Nome = "Luis Souza", Idade = 14, Categoria = "Sub-15", Posicao = "Atacante", StatusMensalidade = "Pendente" },
+        new Aluno { Id = 3, Nome = "Gabriel Silva", Idade = 6, Categoria = "Sub-7", Posicao = "Goleiro", StatusMensalidade = "Atrasado" },
+        new Aluno { Id = 4, Nome = "Lucas Santos", Idade = 16, Categoria = "Sub-17", Posicao = "Zagueiro", StatusMensalidade = "Pago" }
+    };
+
+    private IEnumerable<Aluno> FilteredAlunos => alunos
+        .Where(a => (string.IsNullOrEmpty(searchTerm) || a.Nome.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) &&
+                    (string.IsNullOrEmpty(selectedCategory) || a.Categoria == selectedCategory));
+
+    private void PrepareNew()
+    {
+        currentAluno = new Aluno { Categoria = "Sub-11", Posicao = "Meia", StatusMensalidade = "Pago" };
+        showForm = true;
+    }
+
+    private void Edit(Aluno aluno)
+    {
+        currentAluno = new Aluno
+        {
+            Id = aluno.Id,
+            Nome = aluno.Nome,
+            Idade = aluno.Idade,
+            Categoria = aluno.Categoria,
+            Posicao = aluno.Posicao,
+            StatusMensalidade = aluno.StatusMensalidade
+        };
+        showForm = true;
+    }
+
+    private void Save()
+    {
+        if (string.IsNullOrWhiteSpace(currentAluno.Nome)) return;
+
+        if (currentAluno.Id == 0)
+        {
+            currentAluno.Id = alunos.Any() ? alunos.Max(a => a.Id) + 1 : 1;
+            alunos.Add(currentAluno);
+        }
+        else
+        {
+            var existing = alunos.FirstOrDefault(a => a.Id == currentAluno.Id);
+            if (existing != null)
+            {
+                existing.Nome = currentAluno.Nome;
+                existing.Idade = currentAluno.Idade;
+                existing.Categoria = currentAluno.Categoria;
+                existing.Posicao = currentAluno.Posicao;
+                existing.StatusMensalidade = currentAluno.StatusMensalidade;
+            }
+        }
+        showForm = false;
+    }
+
+    private void Delete(int id)
+    {
+        var existing = alunos.FirstOrDefault(a => a.Id == id);
+        if (existing != null)
+        {
+            alunos.Remove(existing);
+        }
+    }
+
+    private void Cancel()
+    {
+        showForm = false;
+    }
+
+    public class Aluno
+    {
+        public int Id { get; set; }
+        public string Nome { get; set; }
+        public int Idade { get; set; }
+        public string Categoria { get; set; }
+        public string Posicao { get; set; }
+        public string StatusMensalidade { get; set; }
+    }
 }

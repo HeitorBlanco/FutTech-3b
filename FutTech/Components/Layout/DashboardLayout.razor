@@ -1,0 +1,18 @@
+@inherits LayoutComponentBase
+
+<div class="dashboard-container">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <div class="main-content">
+        <header class="top-bar">
+            <div class="user-greeting">Olá, Treinador</div>
+            <a href="/" class="btn-logout">Sair</a>
+        </header>
+
+        <main class="page-content">
+            @Body
+        </main>
+    </div>
+</div>
