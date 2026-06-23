@@ -1,0 +1,80 @@
+﻿.sobre {
+    width: 100%;
+    min-height: 100vh;
+    background: #efefef;
+    padding-top: 90px;
+}
+
+/* TÍTULO */
+
+.titulo {
+    position: relative;
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+    .titulo::before {
+        content: "Sobre Nós";
+        position: absolute;
+        left: 50%;
+        top: -30px;
+        transform: translateX(-50%);
+        font-size: 95px;
+        font-weight: 800;
+        color: white;
+        opacity: .35;
+        z-index: 0;
+    }
+
+    .titulo h1 {
+        position: relative;
+        z-index: 2;
+        font-size: 58px;
+        font-weight: bold;
+        color: black;
+    }
+
+/* CARD AZUL */
+
+.card {
+    width: 85%;
+    height: 250px;
+    margin: auto;
+    background: #0826a8;
+    border-radius: 0 40px 40px 0;
+    position: relative;
+    overflow: visible;
+}
+
+/* FOTO */
+
+.imagem {
+    position: absolute;
+    left: 120px;
+    bottom: 0;
+}
+
+    .imagem img {
+        height: 320px;
+    }
+
+/* TEXTO */
+
+.conteudo {
+    width: 70%;
+    margin: 90px auto;
+    text-align: center;
+}
+
+    .conteudo h2 {
+        font-size: 32px;
+        font-style: italic;
+        margin-bottom: 30px;
+    }
+
+    .conteudo p {
+        font-size: 17px;
+        color: #444;
+        line-height: 30px;
+        text-align: justify;
+    }

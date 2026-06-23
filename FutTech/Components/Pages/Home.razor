@@ -1,5 +1,92 @@
-﻿@page "/home"
+﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+<div class="navbar">
+    <div class="logo">
+        <img src="images/logo.png" alt="Logo">
+    </div>
 
-<h1>Hello, world!</h1>
+    <ul class="menu">
+        <li><a href="#">Home</a></li>
+        <li><a href="/sobrenos">Sobre Nós</a></li>
+        <li><a href="#">Planos</a></li>
+    </ul>
+
+    <button class="btn-login" @onclick="Acessar">
+        Acessar
+    </button>
+</div>
+
+<section class="hero">
+
+    <div class="texto">
+
+        <h2>FutTech</h2>
+
+        <h1>
+            Preparando Atletas para
+            entender o jogo!
+        </h1>
+
+        <p>
+            Desenvolvendo campeões dentro e fora de campo,
+            com oportunidades iguais para crianças e adolescentes
+            de 5 a 17 anos.
+        </p>
+
+        <button class="btn-contato"
+                @onclick="Contato">
+            Entre em Contato
+        </button>
+
+    </div>
+
+    <div class="imagem">
+
+        <div class="box-azul">
+            <img src="images/atleta1.png" class="img1">
+            <img src="images/atleta2.png" class="img2">
+        </div>
+
+    </div>
+
+</section>
+
+<section class="fundadores">
+
+    <div class="texto-fundadores">
+
+        <h2>Heitor & Luís</h2>
+
+        <h3>Fundadores e Treinadores</h3>
+
+        <p>
+            Heitor e Luís são ex-atletas profissionais com vasta
+            experiência no futebol. Juntos, trazem sua paixão pelo
+            esporte e anos de conhecimento para formar e desenvolver
+            sistemas de academia de futebol, com foco em disciplina,
+            tática e alta performance.
+        </p>
+
+    </div>
+
+    <div class="foto">
+
+        <img src="images/fundadores.png">
+
+    </div>
+
+</section>
+
+@code {
+
+    void Acessar()
+    {
+
+    }
+
+    void Contato()
+    {
+
+    }
+
+}
