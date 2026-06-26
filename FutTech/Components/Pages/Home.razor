@@ -1,4 +1,5 @@
 @page "/"
+@rendermode InteractiveServer
 @layout Layout.PublicLayout
 @inject NavigationManager Navigation
 
@@ -19,7 +20,7 @@
             de 5 a 17 anos.
         </p>
 
-        <button class="btn-contato" @onclick="Contato">
+        <button class="btn-contato" @onclick="irParaContato">
             Entre em Contato
         </button>
 
@@ -28,8 +29,8 @@
     <div class="imagem">
 
         <div class="box-azul">
-            <img src="images/atleta1.png" class="img1">
-            <img src="images/atleta2.png" class="img2">
+            <img src="/images/LuisSangerman.png" class="img1" alt="Luis Sangerman">
+            <img src="/images/LuisJifro2025.png" class="img2" alt="Luis Jifro 2025">
         </div>
 
     </div>
@@ -56,7 +57,7 @@
 
     <div class="foto">
 
-        <img src="images/fundadores.png">
+        <img src="images/Fundadores.png" alt="Fundadores Heitor e Luís">
 
     </div>
 
@@ -64,8 +65,9 @@
 
 @code {
 
-    void Contato()
+    void irParaContato()
     {
+        Console.WriteLine("testando");
         Navigation.NavigateTo("/contato");
     }
 
