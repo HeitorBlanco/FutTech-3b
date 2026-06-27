@@ -1,110 +1,161 @@
 .sobre {
-    width: 100%;
-    min-height: 100vh;
-    background: #f0f2f5;
-    padding-top: 80px;
-    padding-bottom: 60px;
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f8fafc 0%, #eff6ff 100%);
+  padding-top: 80px;
+  padding-bottom: 100px;
 }
 
 .titulo {
-    position: relative;
-    text-align: center;
-    margin-bottom: 60px;
+  position: relative;
+  text-align: center;
+  margin-bottom: 80px;
 }
 
 .titulo::before {
-    content: "Sobre Nós";
-    position: absolute;
-    left: 50%;
-    top: -25px;
-    transform: translateX(-50%);
-    font-size: 85px;
-    font-weight: 800;
-    color: white;
-    opacity: 0.4;
-    z-index: 0;
-    white-space: nowrap;
+  content: "Sobre Nós";
+  position: absolute;
+  left: 50%;
+  top: -35px;
+  transform: translateX(-50%);
+  font-size: 110px;
+  font-weight: 900;
+  font-family: "Inter", sans-serif;
+  -webkit-text-stroke: 1.5px rgba(37, 99, 235, 0.08);
+  color: #c4c4c4ab;
+  z-index: 0;
+  white-space: nowrap;
+  letter-spacing: 2px;
 }
 
 .titulo h1 {
-    position: relative;
-    z-index: 2;
-    font-size: 50px;
-    font-weight: 800;
-    color: #111;
+  position: relative;
+  z-index: 2;
+  font-size: 54px;
+  font-weight: 800;
+  font-family: "Inter", sans-serif;
+  color: #0f172a;
+  letter-spacing: -1px;
 }
 
 .card {
-    width: 85%;
-    max-width: 1100px;
-    height: 250px;
-    margin: auto;
-    background: #0826a8;
-    border-radius: 0 40px 40px 0;
-    position: relative;
-    overflow: visible;
+  width: 85%;
+  max-width: 1050px;
+  height: 260px;
+  margin: auto;
+  background: linear-gradient(135deg, #0826a8 0%, #1d4ed8 50%, #2563eb 100%);
+  border-radius: 0 60px 60px 0;
+  position: relative;
+  overflow: visible;
+  box-shadow: 0 25px 50px -12px rgba(8, 38, 168, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition:
+    transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+    box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 35px 60px -10px rgba(8, 38, 168, 0.35);
 }
 
 .imagem {
-    position: absolute;
-    left: 120px;
-    bottom: 0;
+  position: absolute;
+  left: 100px;
+  bottom: 0;
+  z-index: 5;
 }
 
 .imagem img {
-    height: 320px;
+  height: 330px;
+  display: block;
+  filter: drop-shadow(0 15px 15px rgba(0, 0, 0, 0.25));
+  transition:
+    transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    filter 0.4s ease;
+}
+
+.card:hover .imagem img {
+  transform: translateY(-8px) scale(1.02);
+  filter: drop-shadow(0 20px 20px rgba(0, 0, 0, 0.3));
 }
 
 .conteudo {
-    width: 70%;
-    max-width: 800px;
-    margin: 80px auto;
-    text-align: center;
+  width: 75%;
+  max-width: 780px;
+  margin: 80px auto 0;
+  text-align: center;
 }
 
 .conteudo h2 {
-    font-size: 28px;
-    font-style: italic;
-    margin-bottom: 28px;
-    color: #0826a8;
-    font-weight: 700;
+  font-size: 32px;
+  font-weight: 800;
+  font-family: "Inter", sans-serif;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, #0826a8 0%, #2563eb 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
 }
 
 .conteudo p {
-    font-size: 16px;
-    color: #555;
-    line-height: 30px;
-    text-align: justify;
+  font-size: 17px;
+  font-family: "Inter", sans-serif;
+  color: #334155;
+  line-height: 1.85;
+  text-align: justify;
+}
+
+@media (max-width: 1024px) {
+  .imagem {
+    left: 50px;
+  }
 }
 
 @media (max-width: 768px) {
-    .titulo::before {
-        font-size: 50px;
-    }
+  .titulo::before {
+    font-size: 64px;
+    top: -15px;
+  }
 
-    .titulo h1 {
-        font-size: 34px;
-    }
+  .titulo h1 {
+    font-size: 36px;
+  }
 
-    .card {
-        width: 95%;
-        height: 200px;
-    }
+  .card {
+    width: 90%;
+    height: auto;
+    min-height: 220px;
+    border-radius: 30px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-top: 60px;
+  }
 
-    .imagem {
-        left: 30px;
-    }
+  .imagem {
+    position: relative;
+    left: 0;
+    bottom: 0;
+    margin: 0 auto -20px auto;
+  }
 
-    .imagem img {
-        height: 250px;
-    }
+  .imagem img {
+    height: 260px;
+  }
 
-    .conteudo {
-        width: 90%;
-        margin: 50px auto;
-    }
+  .conteudo {
+    width: 90%;
+    margin-top: 50px;
+  }
 
-    .conteudo h2 {
-        font-size: 22px;
-    }
+  .conteudo h2 {
+    font-size: 24px;
+  }
+
+  .conteudo p {
+    font-size: 15px;
+    text-align: center;
+  }
 }
