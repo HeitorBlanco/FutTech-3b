@@ -21,7 +21,7 @@
 
 .contato {
     max-width: 1000px;
-    margin: -40px auto 60px;
+    margin: 50px auto 60px;
     display: flex;
     gap: 60px;
     align-items: flex-start;
