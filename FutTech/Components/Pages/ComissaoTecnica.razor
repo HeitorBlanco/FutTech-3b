@@ -1,45 +1,269 @@
 @page "/comissaotecnica"
 @layout Layout.PublicLayout
 
-<section class="comissao-page">
-    <div class="comissao-container">
-        <div class="comissao-header">
-            <h1>Comissão Técnica</h1>
+<section class="comissao">
+
+    <div class="hero">
+        <div class="hero-text">
+            <span class="titulo-menor">FUTTECH</span>
+
+            <h1>
+                Nossa<br />
+                Comissão Técnica
+            </h1>
+
+            <p>
+                Conheça os profissionais responsáveis por desenvolver nossos atletas,
+                trabalhando técnica, disciplina e evolução dentro e fora de campo.
+            </p>
+
+            <a href="/contato" class="btn-contato">
+                Entre em Contato
+            </a>
         </div>
 
-        <div class="comissao-card">
-            <div class="comissao-profile">
-                <img src="images/comissao-heitor.png" alt="Heitor" />
-            </div>
-
-            <div class="comissao-text">
-                <ul>
-                    <li><strong>Heitor Blanco</strong></li>
-                    <li>Técnico Treinador</li>
-                    <li>17 anos</li>
-                    <li>Especialidades: contra-ataque ofensivo e condicionamento.</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="comissao-gallery">
-            <img src="images/comissao-heitor.png" alt="Foto 1" />
-            <img src="images/comissao-samuel.png" alt="Foto 2" />
-        </div>
-
-        <div class="comissao-card">
-            <div class="comissao-profile">
-                <img src="images/comissao-samuel.png" alt="Samuel" />
-            </div>
-
-            <div class="comissao-text">
-                <ul>
-                    <li><strong>Samuel Butzke</strong></li>
-                    <li>Auxiliar Técnico</li>
-                    <li>17 anos</li>
-                    <li>Especialidades: táticas defensivas e treino de fundamentos.</li>
-                </ul>
-            </div>
+        <div class="hero-img">
+            <img src="images/comissao-heitor.png" alt="Equipe Técnica">
         </div>
     </div>
+
+
+    <div class="card-comissao">
+
+        <div class="perfil">
+            <img src="images/comissao-heitor.png" alt="Heitor">
+        </div>
+
+        <div class="informacoes">
+
+            <h2>Heitor Blanco</h2>
+
+            <h4>Técnico Treinador</h4>
+
+            <p>
+                Atua no desenvolvimento técnico dos atletas, focando no
+                contra-ataque ofensivo, condicionamento físico e evolução
+                individual.
+            </p>
+
+            <span>17 anos</span>
+
+        </div>
+
+    </div>
+
+
+    <div class="galeria">
+
+        <img src="images/comissao-heitor.png">
+        <img src="images/comissao-samuel.png">
+
+    </div>
+
+
+    <div class="card-comissao invertido">
+
+        <div class="informacoes">
+
+            <h2>Samuel Butzke</h2>
+
+            <h4>Auxiliar Técnico</h4>
+
+            <p>
+                Responsável pelo apoio tático da equipe, auxiliando no treino
+                de fundamentos e na organização defensiva dos atletas.
+            </p>
+
+            <span>17 anos</span>
+
+        </div>
+
+        <div class="perfil">
+            <img src="images/comissao-samuel.png">
+        </div>
+
+    </div>
+
 </section>
+
+     <style>
+          .comissao {
+              max-width: 1200px;
+              margin: auto;
+              padding: 50px 40px;
+          }
+
+          /* HERO */
+
+          .hero {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              gap: 70px;
+              margin-bottom: 90px;
+          }
+
+          .hero-text {
+              flex: 1;
+          }
+
+          .titulo-menor {
+              color: #1736C7;
+              font-weight: 700;
+              letter-spacing: 4px;
+              font-size: 18px;
+          }
+
+          .hero h1 {
+              margin-top: 15px;
+              font-size: 60px;
+              line-height: 65px;
+              font-weight: 800;
+          }
+
+          .hero p {
+              margin-top: 25px;
+              color: #555;
+              font-size: 20px;
+              line-height: 35px;
+          }
+
+          .btn-contato {
+              display: inline-block;
+              margin-top: 35px;
+              padding: 15px 35px;
+              border: 2px solid #1736C7;
+              border-radius: 12px;
+              color: #1736C7;
+              text-decoration: none;
+              font-weight: 600;
+              transition: .3s;
+          }
+
+              .btn-contato:hover {
+                  background: #1736C7;
+                  color: white;
+              }
+
+          .hero-img {
+              flex: 1;
+              display: flex;
+              justify-content: center;
+              background: #1736C7;
+              border-radius: 30px;
+              padding: 40px;
+              box-shadow: 0 10px 30px rgba(0,0,0,.15);
+          }
+
+              .hero-img img {
+                  width: 300px;
+              }
+
+
+          /* CARDS */
+
+          .card-comissao {
+              margin-top: 70px;
+              background: #1736C7;
+              border-radius: 35px;
+              color: white;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              padding: 50px;
+              gap: 60px;
+          }
+
+              .card-comissao.invertido {
+                  flex-direction: row-reverse;
+              }
+
+          .perfil {
+              flex: 1;
+              text-align: center;
+          }
+
+              .perfil img {
+                  width: 280px;
+              }
+
+          .informacoes {
+              flex: 1;
+          }
+
+              .informacoes h2 {
+                  font-size: 42px;
+                  margin-bottom: 10px;
+              }
+
+              .informacoes h4 {
+                  color: #ddd;
+                  margin-bottom: 25px;
+              }
+
+              .informacoes p {
+                  font-size: 18px;
+                  line-height: 30px;
+              }
+
+              .informacoes span {
+                  display: inline-block;
+                  margin-top: 25px;
+                  background: white;
+                  color: #1736C7;
+                  padding: 10px 20px;
+                  border-radius: 20px;
+                  font-weight: 700;
+              }
+
+
+          /* GALERIA */
+
+          .galeria {
+              margin: 70px 0;
+              display: flex;
+              justify-content: center;
+              gap: 40px;
+          }
+
+              .galeria img {
+                  width: 320px;
+                  border-radius: 25px;
+                  box-shadow: 0 8px 25px rgba(0,0,0,.18);
+                  transition: .3s;
+              }
+
+                  .galeria img:hover {
+                      transform: scale(1.05);
+                  }
+
+          {
+              flex-direction: column;
+              text-align: center;
+          }
+
+          .card-comissao {
+              flex-direction: column;
+              text-align: center;
+          }
+
+              .card-comissao.invertido {
+                  flex-direction: column;
+              }
+
+          .galeria {
+              flex-direction: column;
+              align-items: center;
+          }
+
+          .hero h1 {
+              font-size: 42px;
+              line-height: 48px;
+          }
+
+          .hero-img img {
+              width: 220px;
+          }
+
+          }
+    </style>
