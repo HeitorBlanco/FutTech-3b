@@ -1,0 +1,114 @@
+.cadastro-page {
+    min-height: calc(100vh - 70px);
+    background: #f4f6fb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 42px 20px;
+}
+
+.cadastro-card {
+    width: 100%;
+    max-width: 880px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 30px 34px;
+    box-shadow: 0 16px 36px rgba(17, 24, 39, 0.1);
+}
+
+.cadastro-heading {
+    margin-bottom: 24px;
+}
+
+.cadastro-heading span {
+    color: #0826a8;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.cadastro-heading h1 {
+    margin: 8px 0 0;
+    color: #111827;
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.cadastro-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 26px;
+}
+
+.field {
+    display: grid;
+    gap: 8px;
+}
+
+.field.full {
+    grid-column: 1 / -1;
+}
+
+.field label {
+    color: #111827;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.field input {
+    width: 100%;
+    min-height: 46px;
+    border: 1px solid #9ca3af;
+    border-radius: 6px;
+    padding: 0 14px;
+    color: #111827;
+    background: #ffffff;
+    font: inherit;
+    font-size: 14px;
+}
+
+.field input:focus {
+    outline: 3px solid rgba(8, 38, 168, 0.18);
+    border-color: #0826a8;
+}
+
+.pay-button {
+    grid-column: 1 / -1;
+    min-height: 48px;
+    border: 0;
+    border-radius: 8px;
+    background: #214dff;
+    color: #ffffff;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.pay-button:hover {
+    background: #1238d8;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 720px) {
+    .cadastro-page {
+        align-items: flex-start;
+        padding: 28px 14px;
+    }
+
+    .cadastro-card {
+        padding: 24px 18px;
+    }
+
+    .cadastro-form {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .cadastro-heading h1 {
+        font-size: 24px;
+    }
+}

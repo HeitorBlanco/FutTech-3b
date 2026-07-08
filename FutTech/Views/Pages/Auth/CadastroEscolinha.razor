@@ -1,0 +1,48 @@
+@page "/cadastro"
+@page "/cadastro-escolinha"
+@layout PublicLayout
+
+<section class="cadastro-page">
+    <div class="cadastro-card">
+        <div class="cadastro-heading">
+            <span>Cadastro escolinha</span>
+            <h1>Crie a conta da sua escolinha</h1>
+        </div>
+
+        <form class="cadastro-form">
+            <div class="field full">
+                <label for="nome-escolinha">Nome da escolinha</label>
+                <input id="nome-escolinha" type="text" placeholder="Ex: FutTech Academy" />
+            </div>
+
+            <div class="field full">
+                <label for="administrador">Nome do administrador</label>
+                <input id="administrador" type="text" placeholder="Seu nome completo" />
+            </div>
+
+            <div class="field">
+                <label for="email">Email</label>
+                <input id="email" type="email" placeholder="seuemail@gmail.com" />
+            </div>
+
+            <div class="field">
+                <label for="cnpj">CNPJ</label>
+                <input id="cnpj" type="text" placeholder="Opcional" />
+            </div>
+
+            <div class="field">
+                <label for="senha">Senha</label>
+                <input id="senha" type="password" placeholder="Minimo 6 caracteres" />
+            </div>
+
+            <div class="field">
+                <label for="confirmar-senha">Confirmar senha</label>
+                <input id="confirmar-senha" type="password" placeholder="Repita a senha" />
+            </div>
+
+            <button class="pay-button" type="button">
+                Pagar
+            </button>
+        </form>
+    </div>
+</section>

@@ -1,0 +1,37 @@
+@page "/recuperar-senha"
+@page "/esqueci-senha"
+@layout PublicLayout
+
+<section class="recover-page">
+    <div class="recover-card">
+        <div class="recover-side">
+            <img src="images/logo.png" alt="FutTech" class="recover-logo" />
+
+            <h2>Recuperar acesso</h2>
+
+            <p>
+                Informe o email usado no cadastro para receber as instrucoes de redefinicao.
+            </p>
+        </div>
+
+        <div class="recover-form-area">
+            <span class="recover-label">Seguranca</span>
+            <h1>Esqueceu sua senha?</h1>
+
+            <form class="recover-form">
+                <div class="field">
+                    <label for="email-recuperacao">Email</label>
+                    <input id="email-recuperacao" type="email" placeholder="seuemail@gmail.com" />
+                </div>
+
+                <button class="recover-button" type="button">
+                    Enviar link de recuperacao
+                </button>
+            </form>
+
+            <a class="back-link" href="/login">
+                Voltar para o login
+            </a>
+        </div>
+    </div>
+</section>
