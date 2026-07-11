@@ -1,5 +1,9 @@
 @page "/login"
 @layout PublicLayout
+@rendermode InteractiveServer
+@using FutTech.Services
+@inject DemoAuthService AuthService
+@inject NavigationManager Navigation
 
 <section class="login-page">
 
@@ -21,19 +25,26 @@
 
             <h1>Entrar</h1>
 
-            <div class="input-group">
-                <label>Email</label>
-                <input type="email" placeholder="Digite seu email" />
-            </div>
+            <form @onsubmit="Entrar" @onsubmit:preventDefault="true">
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" placeholder="Digite seu email" @bind="Email" />
+                </div>
 
-            <div class="input-group">
-                <label>Senha</label>
-                <input type="password" placeholder="Digite sua senha" />
-            </div>
+                <div class="input-group">
+                    <label for="senha">Senha</label>
+                    <input id="senha" type="password" placeholder="Digite sua senha" @bind="Senha" />
+                </div>
 
-            <button class="btn-login">
-                Entrar
-            </button>
+                @if (!string.IsNullOrWhiteSpace(MensagemErro))
+                {
+                    <p class="login-error">@MensagemErro</p>
+                }
+
+                <button type="submit" class="btn-login">
+                    Entrar
+                </button>
+            </form>
 
             <a href="/recuperar-senha" class="forgot-password">
                 Esqueceu sua senha?
@@ -44,3 +55,22 @@
     </div>
 
 </section>
+
+@code {
+    private string Email { get; set; } = string.Empty;
+    private string Senha { get; set; } = string.Empty;
+    private string MensagemErro { get; set; } = string.Empty;
+
+    private void Entrar()
+    {
+        var usuario = AuthService.Entrar(Email, Senha);
+
+        if (usuario is null)
+        {
+            MensagemErro = "Email ou senha incorretos.";
+            return;
+        }
+
+        Navigation.NavigateTo(usuario.RotaInicial);
+    }
+}

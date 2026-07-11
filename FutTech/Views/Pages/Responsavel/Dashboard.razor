@@ -1,0 +1,59 @@
+@page "/responsavel/dashboard"
+@using FutTech.Services
+@inject DemoMenuService MenuService
+
+<PageTitle>Área do Responsável</PageTitle>
+
+<AppAreaShell NomeEscolinha="Escolinha Brasil FC (Demo)"
+              NomeUsuario="Roberto Pai do Lucas"
+              CargoUsuario="Responsável"
+              TextoPerfil="Responsável"
+              ItemAtivo="atletas"
+              TituloMenu="Menu do responsável"
+              MenuItems="@MenuItems">
+    <main class="portal-content">
+        <section class="portal-heading">
+            <h1>Meus Atletas</h1>
+            <p>Acompanhe o aluno vinculado à sua conta.</p>
+        </section>
+
+        <section class="athlete-card">
+            <div class="athlete-avatar" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 9a7 7 0 0 1 14 0M12 14v7" />
+                </svg>
+            </div>
+            <div>
+                <strong>Lucas Martins</strong>
+                <span>Turma Sub-13 Tarde</span>
+                <small>Treinos: segunda e quarta, 16:30</small>
+            </div>
+        </section>
+
+        <section class="notice-section">
+            <div class="section-title">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M3 11v2h4l10 6V5L7 11H3Zm14 1h4M20 7l-2 2m0 6 2 2" />
+                </svg>
+                <h2>Comunicados</h2>
+            </div>
+
+            <article class="notice-card">
+                <div>
+                    <strong>Treino cancelado amanhã</strong>
+                    <span>Campo em manutenção no período da tarde.</span>
+                </div>
+                <time datetime="2026-07-03">03/07/2026</time>
+            </article>
+        </section>
+    </main>
+</AppAreaShell>
+
+@code {
+    private IReadOnlyList<MenuItemSistema> MenuItems { get; set; } = [];
+
+    protected override void OnInitialized()
+    {
+        MenuItems = MenuService.ObterMenu(FutTech.Models.PerfilUsuario.Responsavel);
+    }
+}

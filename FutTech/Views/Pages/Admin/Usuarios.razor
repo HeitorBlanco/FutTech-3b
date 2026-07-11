@@ -1,0 +1,149 @@
+@page "/admin/usuarios"
+@rendermode InteractiveServer
+@using FutTech.Services
+@inject DemoAuthService AuthService
+@inject DemoMenuService MenuService
+
+<PageTitle>Usuários</PageTitle>
+
+<AppAreaShell NomeEscolinha="Escolinha Brasil FC (Demo)"
+              NomeUsuario="Carlos Admin"
+              CargoUsuario="Coordenador"
+              TextoPerfil="Administrador"
+              ItemAtivo="usuarios"
+              TituloMenu="Menu administrativo"
+              MenuItems="@MenuItems">
+    <main class="users-content">
+        <div class="users-heading">
+            <div>
+                <h1>Usuários</h1>
+                <p>Crie acessos para treinadores e responsáveis.</p>
+            </div>
+        </div>
+
+        <section class="user-form-panel">
+            <h2>Novo acesso</h2>
+
+            <form class="user-form" @onsubmit="CadastrarUsuario" @onsubmit:preventDefault="true">
+                <div class="form-group">
+                    <label for="nome">Nome</label>
+                    <input id="nome" type="text" @bind="Nome" placeholder="Nome completo" />
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" @bind="Email" placeholder="email@futtech.com" />
+                </div>
+
+                <div class="form-group">
+                    <label for="senha">Senha</label>
+                    <input id="senha" type="text" @bind="Senha" placeholder="Senha inicial" />
+                </div>
+
+                <div class="form-group">
+                    <label for="perfil">Perfil</label>
+                    <select id="perfil" @bind="PerfilSelecionado">
+                        <option value="Treinador">Treinador</option>
+                        <option value="Responsavel">Responsável</option>
+                    </select>
+                </div>
+
+                <button type="submit">Criar login</button>
+            </form>
+
+            @if (!string.IsNullOrWhiteSpace(Mensagem))
+            {
+                <p class="@MensagemClasse">@Mensagem</p>
+            }
+        </section>
+
+        <section class="users-table-panel">
+            <h2>Acessos cadastrados</h2>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Perfil</th>
+                            <th>Cargo</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var usuario in UsuariosCadastrados)
+                        {
+                            <tr>
+                                <td>@usuario.Nome</td>
+                                <td>@usuario.Email</td>
+                                <td>@usuario.PerfilDescricao</td>
+                                <td>@usuario.Cargo</td>
+                                <td><span class="status-badge">Ativo</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</AppAreaShell>
+
+@code {
+    private IReadOnlyList<MenuItemSistema> MenuItems { get; set; } = [];
+    private IReadOnlyList<UsuarioSistema> UsuariosCadastrados { get; set; } = [];
+    private string Nome { get; set; } = string.Empty;
+    private string Email { get; set; } = string.Empty;
+    private string Senha { get; set; } = string.Empty;
+    private string PerfilSelecionado { get; set; } = nameof(FutTech.Models.PerfilUsuario.Treinador);
+    private string Mensagem { get; set; } = string.Empty;
+    private string MensagemClasse { get; set; } = "form-message";
+
+    protected override void OnInitialized()
+    {
+        MenuItems = MenuService.ObterMenu(FutTech.Models.PerfilUsuario.Administrador);
+        AtualizarUsuarios();
+    }
+
+    private void CadastrarUsuario()
+    {
+        if (string.IsNullOrWhiteSpace(Nome) ||
+            string.IsNullOrWhiteSpace(Email) ||
+            string.IsNullOrWhiteSpace(Senha))
+        {
+            DefinirMensagem("Preencha nome, email e senha.", false);
+            return;
+        }
+
+        if (AuthService.EmailJaCadastrado(Email))
+        {
+            DefinirMensagem("Já existe um usuário com esse email.", false);
+            return;
+        }
+
+        var perfil = PerfilSelecionado == nameof(FutTech.Models.PerfilUsuario.Responsavel)
+            ? FutTech.Models.PerfilUsuario.Responsavel
+            : FutTech.Models.PerfilUsuario.Treinador;
+
+        var cargo = perfil == FutTech.Models.PerfilUsuario.Treinador ? "Treinador" : "Responsável";
+
+        AuthService.CadastrarUsuario(Nome, Email, Senha, perfil, cargo);
+        AtualizarUsuarios();
+        Nome = string.Empty;
+        Email = string.Empty;
+        Senha = string.Empty;
+        PerfilSelecionado = nameof(FutTech.Models.PerfilUsuario.Treinador);
+        DefinirMensagem("Login criado com sucesso.", true);
+    }
+
+    private void AtualizarUsuarios()
+    {
+        UsuariosCadastrados = AuthService.ListarUsuarios();
+    }
+
+    private void DefinirMensagem(string mensagem, bool sucesso)
+    {
+        Mensagem = mensagem;
+        MensagemClasse = sucesso ? "form-message success" : "form-message error";
+    }
+}

@@ -1,0 +1,162 @@
+@page "/dashboard"
+@page "/admin/dashboard"
+@using System.Globalization
+@using FutTech.Services
+@inject DemoAdminDashboardService DashboardService
+@inject DemoMenuService MenuService
+
+<PageTitle>Dashboard Administrativo</PageTitle>
+
+<AppAreaShell NomeEscolinha="@Resumo.NomeEscolinha"
+              NomeUsuario="@Resumo.NomeAdministrador"
+              CargoUsuario="@Resumo.CargoAdministrador"
+              TextoPerfil="Administrador"
+              ItemAtivo="dashboard"
+              TituloMenu="Menu administrativo"
+              MenuItems="@MenuItems">
+    <main class="dashboard-content">
+        <div class="dashboard-heading">
+            <div>
+                <h1>Dashboard</h1>
+                <span>@Resumo.PeriodoReferencia.ToString("MMMM/yyyy", PtBr)</span>
+            </div>
+            <p>Olá, @Resumo.NomeAdministrador (@Resumo.CargoAdministrador)!</p>
+        </div>
+
+        <section class="metric-grid" aria-label="Resumo administrativo">
+            <article class="metric-card metric-blue">
+                <div class="metric-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8m11 10v-2a4 4 0 0 0-3-3.87M17 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                </div>
+                <div>
+                    <span>Alunos ativos</span>
+                    <strong>@Resumo.AlunosAtivos</strong>
+                </div>
+            </article>
+
+            <article class="metric-card metric-green">
+                <div class="metric-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m12 3 9 5-9 5-9-5 9-5Zm-7 9 7 4 7-4M5 16l7 4 7-4" />
+                    </svg>
+                </div>
+                <div>
+                    <span>Turmas</span>
+                    <strong>@Resumo.TurmasAtivas</strong>
+                </div>
+            </article>
+
+            <article class="metric-card metric-orange">
+                <div class="metric-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M8 6h10v15H8V6Zm0 0V3h7l3 3M12 10h3a2 2 0 1 1 0 4h-3V9m0 5h4a2 2 0 1 1 0 4h-4m1-10v12" />
+                    </svg>
+                </div>
+                <div>
+                    <span>Mensalidades pendentes</span>
+                    <strong>@Resumo.MensalidadesPendentes</strong>
+                </div>
+            </article>
+
+            <article class="metric-card metric-purple">
+                <div class="metric-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 3v9h9A9 9 0 1 1 12 3Zm3 0.5A9 9 0 0 1 20.5 9H15V3.5Z" />
+                    </svg>
+                </div>
+                <div>
+                    <span>Frequência média</span>
+                    <strong>@Resumo.FrequenciaMediaPercentual.ToString("N0", PtBr)%</strong>
+                </div>
+            </article>
+        </section>
+
+        <section class="dashboard-panels">
+            <article class="dashboard-panel">
+                <div class="panel-title">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 7h18v12H3V7Zm0 4h18M7 15h3" />
+                    </svg>
+                    <h2>Resumo Financeiro</h2>
+                </div>
+
+                <div class="finance-row">
+                    <span>A receber</span>
+                    <strong class="amount-danger">@FormatarMoeda(Resumo.ValorAReceber)</strong>
+                </div>
+
+                <div class="finance-row">
+                    <span>Recebido (mês atual)</span>
+                    <strong class="amount-success">@FormatarMoeda(Resumo.RecebidoMesAtual)</strong>
+                </div>
+            </article>
+
+            <article class="dashboard-panel">
+                <div class="panel-title">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 11v2h4l10 6V5L7 11H3Zm14 1h4M20 7l-2 2m0 6 2 2" />
+                    </svg>
+                    <h2>Últimos Comunicados</h2>
+                </div>
+
+                <div class="announcement-list">
+                    @foreach (var comunicado in Resumo.UltimosComunicados)
+                    {
+                        <div class="announcement-item">
+                            <div>
+                                <strong>@comunicado.Titulo</strong>
+                                <span>@comunicado.Conteudo</span>
+                            </div>
+                            <time datetime="@comunicado.PublicadoEm.ToString("yyyy-MM-dd")">
+                                @comunicado.PublicadoEm.ToString("dd/MM/yyyy", PtBr)
+                            </time>
+                        </div>
+                    }
+                </div>
+            </article>
+        </section>
+
+        <section class="dashboard-panel classes-panel">
+            <div class="panel-title">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m12 3 9 5-9 5-9-5 9-5Zm-7 9 7 4 7-4M5 16l7 4 7-4" />
+                </svg>
+                <h2>Turma em Destaque</h2>
+            </div>
+
+            <div class="class-list">
+                @foreach (var turma in Resumo.TurmasEmDestaque)
+                {
+                    var treinador = Resumo.Treinadores.FirstOrDefault(item => item.Id == turma.TreinadorId);
+
+                    <article class="class-item">
+                        <div>
+                            <strong>@turma.Nome</strong>
+                            <span>@turma.DiasDeTreino - @turma.Horario.ToString("HH:mm", PtBr)</span>
+                        </div>
+                        <small>@treinador?.Nome</small>
+                    </article>
+                }
+            </div>
+        </section>
+    </main>
+</AppAreaShell>
+
+@code {
+    private static readonly CultureInfo PtBr = new("pt-BR");
+    private AdminDashboardResumo Resumo { get; set; } = new();
+    private IReadOnlyList<MenuItemSistema> MenuItems { get; set; } = [];
+
+    protected override void OnInitialized()
+    {
+        Resumo = DashboardService.ObterResumo();
+        MenuItems = MenuService.ObterMenu(FutTech.Models.PerfilUsuario.Administrador);
+    }
+
+    private static string FormatarMoeda(decimal valor)
+    {
+        return valor.ToString("C", PtBr);
+    }
+}

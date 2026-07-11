@@ -1,0 +1,66 @@
+@page "/treinador/dashboard"
+@using FutTech.Services
+@inject DemoMenuService MenuService
+
+<PageTitle>Dashboard do Treinador</PageTitle>
+
+<AppAreaShell NomeEscolinha="Escolinha Brasil FC (Demo)"
+              NomeUsuario="Rafael Costa"
+              CargoUsuario="Treinador Sub-13"
+              TextoPerfil="Treinador"
+              ItemAtivo="dashboard"
+              TituloMenu="Menu do treinador"
+              MenuItems="@MenuItems">
+    <main class="coach-content">
+        <section class="coach-heading">
+            <h1>Dashboard do Treinador</h1>
+            <p>Resumo rápido da sua turma.</p>
+        </section>
+
+        <section class="coach-grid">
+            <article class="summary-card">
+                <span>Minha turma</span>
+                <strong>Sub-13 Tarde</strong>
+                <small>Segunda e quarta, 16:30</small>
+            </article>
+
+            <article class="summary-card">
+                <span>Atletas ativos</span>
+                <strong>1</strong>
+                <small>Lucas Martins</small>
+            </article>
+
+            <article class="summary-card">
+                <span>Presença média</span>
+                <strong>100%</strong>
+                <small>Último treino registrado</small>
+            </article>
+        </section>
+
+        <section class="coach-panel">
+            <div class="panel-title">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M9 11l2 2 4-5M5 4h14v17l-7-3-7 3V4Z" />
+                </svg>
+                <h2>Próximo treino</h2>
+            </div>
+
+            <div class="training-row">
+                <div>
+                    <strong>Sub-13 Tarde</strong>
+                    <span>Campo principal</span>
+                </div>
+                <time datetime="2026-07-13T16:30">13/07/2026 - 16:30</time>
+            </div>
+        </section>
+    </main>
+</AppAreaShell>
+
+@code {
+    private IReadOnlyList<MenuItemSistema> MenuItems { get; set; } = [];
+
+    protected override void OnInitialized()
+    {
+        MenuItems = MenuService.ObterMenu(FutTech.Models.PerfilUsuario.Treinador);
+    }
+}

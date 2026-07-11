@@ -1,0 +1,159 @@
+@page "/treinador/alunos"
+@rendermode InteractiveServer
+@using FutTech.Services
+@inject DemoMenuService MenuService
+@inject DemoTreinadorService TreinadorService
+
+<PageTitle>Alunos do Treinador</PageTitle>
+
+<AppAreaShell NomeEscolinha="Escolinha Brasil FC (Demo)"
+              NomeUsuario="Rafael Costa"
+              CargoUsuario="Treinador Sub-13"
+              TextoPerfil="Treinador"
+              ItemAtivo="alunos"
+              TituloMenu="Menu do treinador"
+              MenuItems="@MenuItems">
+    <main class="students-content">
+        <div class="students-heading">
+            <div>
+                <h1>Alunos</h1>
+                <p>Cadastre e acompanhe os atletas das suas turmas.</p>
+            </div>
+        </div>
+
+        <section class="student-form-panel">
+            <h2>Novo aluno</h2>
+
+            <form class="student-form" @onsubmit="AdicionarAluno" @onsubmit:preventDefault="true">
+                <div class="form-group">
+                    <label for="nome">Nome</label>
+                    <input id="nome" type="text" @bind="NomeAluno" placeholder="Nome do aluno" />
+                </div>
+
+                <div class="form-group">
+                    <label for="responsavel">Responsável</label>
+                    <input id="responsavel" type="text" @bind="Responsavel" placeholder="Nome do responsável" />
+                </div>
+
+                <div class="form-group">
+                    <label for="nascimento">Nascimento</label>
+                    <input id="nascimento" type="date" @bind="DataNascimento" @bind:format="yyyy-MM-dd" />
+                </div>
+
+                <div class="form-group">
+                    <label for="turma">Turma</label>
+                    <select id="turma" @bind="TurmaId">
+                        @foreach (var turma in Turmas)
+                        {
+                            <option value="@turma.Id">@turma.Nome</option>
+                        }
+                    </select>
+                </div>
+
+                <button type="submit">Adicionar aluno</button>
+            </form>
+
+            @if (!string.IsNullOrWhiteSpace(Mensagem))
+            {
+                <p class="@MensagemClasse">@Mensagem</p>
+            }
+        </section>
+
+        <section class="students-table-panel">
+            <h2>Atletas cadastrados</h2>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Idade</th>
+                            <th>Turma</th>
+                            <th>Responsável</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var aluno in AlunosCadastrados)
+                        {
+                            <tr>
+                                <td>@aluno.Nome</td>
+                                <td>@CalcularIdade(aluno.DataNascimento) anos</td>
+                                <td>@TreinadorService.ObterNomeTurma(aluno.TurmaId)</td>
+                                <td>@aluno.Responsavel</td>
+                                <td><span class="status-badge">Ativo</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</AppAreaShell>
+
+@code {
+    private IReadOnlyList<MenuItemSistema> MenuItems { get; set; } = [];
+    private IReadOnlyList<Turma> Turmas { get; set; } = [];
+    private IReadOnlyList<Aluno> AlunosCadastrados { get; set; } = [];
+    private string NomeAluno { get; set; } = string.Empty;
+    private string Responsavel { get; set; } = string.Empty;
+    private DateTime DataNascimento { get; set; } = new(2013, 1, 1);
+    private int TurmaId { get; set; }
+    private string Mensagem { get; set; } = string.Empty;
+    private string MensagemClasse { get; set; } = "form-message";
+
+    protected override void OnInitialized()
+    {
+        MenuItems = MenuService.ObterMenu(FutTech.Models.PerfilUsuario.Treinador);
+        Turmas = TreinadorService.ObterTurmasDoTreinador();
+        TurmaId = Turmas.FirstOrDefault()?.Id ?? 0;
+        AtualizarAlunos();
+    }
+
+    private void AdicionarAluno()
+    {
+        if (string.IsNullOrWhiteSpace(NomeAluno) || string.IsNullOrWhiteSpace(Responsavel))
+        {
+            DefinirMensagem("Preencha nome do aluno e responsável.", false);
+            return;
+        }
+
+        if (TurmaId == 0)
+        {
+            DefinirMensagem("Crie uma turma antes de adicionar alunos.", false);
+            return;
+        }
+
+        var dataNascimento = DateOnly.FromDateTime(DataNascimento);
+        TreinadorService.AdicionarAluno(NomeAluno, Responsavel, dataNascimento, TurmaId);
+        NomeAluno = string.Empty;
+        Responsavel = string.Empty;
+        DataNascimento = new DateTime(2013, 1, 1);
+        AtualizarAlunos();
+        DefinirMensagem("Aluno adicionado com sucesso.", true);
+    }
+
+    private void AtualizarAlunos()
+    {
+        AlunosCadastrados = TreinadorService.ObterAlunosDoTreinador();
+    }
+
+    private static int CalcularIdade(DateOnly nascimento)
+    {
+        var hoje = DateOnly.FromDateTime(DateTime.Today);
+        var idade = hoje.Year - nascimento.Year;
+
+        if (nascimento > hoje.AddYears(-idade))
+        {
+            idade--;
+        }
+
+        return idade;
+    }
+
+    private void DefinirMensagem(string mensagem, bool sucesso)
+    {
+        Mensagem = mensagem;
+        MensagemClasse = sucesso ? "form-message success" : "form-message error";
+    }
+}

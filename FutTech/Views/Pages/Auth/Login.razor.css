@@ -88,6 +88,17 @@
     background: #1230b4;
 }
 
+.login-error {
+    margin: 0 0 16px;
+    padding: 12px 14px;
+    border: 1px solid #ffcdd2;
+    border-radius: 8px;
+    background: #ffebee;
+    color: #b71c1c;
+    font-size: 14px;
+    font-weight: 600;
+}
+
 .forgot-password {
     display: block;
     text-align: center;

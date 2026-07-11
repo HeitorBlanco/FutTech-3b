@@ -1,0 +1,128 @@
+.portal-content {
+    width: min(100%, 1440px);
+    margin: 0 auto;
+    padding: 48px 42px 56px;
+}
+
+.portal-heading {
+    margin-bottom: 26px;
+}
+
+.portal-heading h1 {
+    margin: 0;
+    color: #0b2a93;
+    font-size: 34px;
+    font-weight: 800;
+}
+
+.portal-heading p {
+    margin: 6px 0 0;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.athlete-card,
+.notice-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 9px 24px rgba(15, 23, 42, 0.08);
+}
+
+.athlete-card {
+    min-height: 138px;
+    padding: 28px 30px;
+    border-left: 5px solid #0b2fb8;
+    margin-bottom: 40px;
+}
+
+.athlete-avatar {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: #e8f3ff;
+    color: #0b2fb8;
+}
+
+.athlete-avatar svg,
+.section-title svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.athlete-card strong {
+    display: block;
+    color: #111827;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.athlete-card span,
+.athlete-card small,
+.notice-card span,
+.notice-card time {
+    display: block;
+    margin-top: 5px;
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    color: #0b2a93;
+}
+
+.section-title h2 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.notice-card {
+    justify-content: space-between;
+    padding: 24px 28px;
+    border-left: 4px solid #f97316;
+}
+
+.notice-card strong {
+    display: block;
+    color: #111827;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.notice-card time {
+    flex: 0 0 auto;
+    margin-top: 0;
+}
+
+@media (max-width: 860px) {
+    .portal-content {
+        padding: 30px 20px 40px;
+    }
+
+    .notice-card {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 620px) {
+    .athlete-card {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

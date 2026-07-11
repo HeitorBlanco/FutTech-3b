@@ -1,0 +1,84 @@
+@namespace FutTech.Views.Components
+@using FutTech.Models
+
+<div class="app-shell" style="@AreaStyle">
+    <aside class="app-sidebar">
+        <div class="sidebar-brand">
+            <img src="images/logo.png" alt="FutTech" />
+        </div>
+
+        <nav class="sidebar-nav" aria-label="@TituloMenu">
+            @foreach (var item in MenuItems)
+            {
+                <a href="@item.Url"
+                   class="@ObterClasseMenu(item)"
+                   aria-current="@(item.Chave == ItemAtivo ? "page" : null)"
+                   aria-disabled="@(!item.Disponivel)">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="@item.IconePath" />
+                    </svg>
+                    <span>@item.Texto</span>
+                </a>
+            }
+        </nav>
+
+        <div class="sidebar-user">
+            <div class="user-avatar" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                    <path d="M20 21a8 8 0 0 0-16 0M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10" />
+                </svg>
+            </div>
+            <div>
+                <strong>@NomeUsuario</strong>
+                <span>@CargoUsuario</span>
+                <small>@TextoPerfil</small>
+            </div>
+        </div>
+    </aside>
+
+    <section class="app-main">
+        <header class="app-topbar">
+            <strong>@NomeEscolinha</strong>
+            <a href="/login" class="logout-button">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M10 17l5-5-5-5M15 12H3M21 19V5a2 2 0 0 0-2-2h-5M14 21h5a2 2 0 0 0 2-2" />
+                </svg>
+                <span>Sair</span>
+            </a>
+        </header>
+
+        @ChildContent
+    </section>
+</div>
+
+@code {
+    [Parameter] public string NomeEscolinha { get; set; } = "Escolinha Brasil FC (Demo)";
+    [Parameter] public string NomeUsuario { get; set; } = string.Empty;
+    [Parameter] public string CargoUsuario { get; set; } = string.Empty;
+    [Parameter] public string TextoPerfil { get; set; } = string.Empty;
+    [Parameter] public string ItemAtivo { get; set; } = string.Empty;
+    [Parameter] public string TituloMenu { get; set; } = "Menu do sistema";
+    [Parameter] public string CorPrincipal { get; set; } = "#0b2fb8";
+    [Parameter] public string CorEscura { get; set; } = "#06156f";
+    [Parameter] public IReadOnlyList<MenuItemSistema> MenuItems { get; set; } = [];
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    private string AreaStyle => $"--area-accent: {CorPrincipal}; --area-accent-dark: {CorEscura};";
+
+    private string ObterClasseMenu(MenuItemSistema item)
+    {
+        var classes = "sidebar-link";
+
+        if (item.Chave == ItemAtivo)
+        {
+            classes += " is-active";
+        }
+
+        if (!item.Disponivel)
+        {
+            classes += " is-disabled";
+        }
+
+        return classes;
+    }
+}

@@ -1,0 +1,137 @@
+.coach-content {
+  width: min(100%, 1440px);
+  margin: 0 auto;
+  padding: 48px 42px 56px;
+}
+
+.coach-heading {
+  margin-bottom: 26px;
+}
+
+.coach-heading h1 {
+  margin: 0;
+  color: #0b2a93;
+  font-size: 34px;
+  font-weight: 800;
+}
+
+.coach-heading p {
+  margin: 6px 0 0;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.coach-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  margin-bottom: 28px;
+}
+
+.summary-card,
+.coach-panel {
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 9px 24px rgba(15, 23, 42, 0.08);
+}
+
+.summary-card {
+  min-height: 128px;
+  padding: 26px 28px;
+  border-left: 5px solid #0b2fb8;
+}
+
+.summary-card span,
+.summary-card small,
+.training-row span,
+.training-row time {
+  display: block;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.summary-card span {
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.summary-card strong {
+  display: block;
+  color: #111827;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.summary-card small {
+  margin-top: 8px;
+}
+
+.coach-panel {
+  padding: 28px 30px;
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  color: #0b2a93;
+}
+
+.panel-title svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.panel-title h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.training-row {
+  min-height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 20px;
+  border-radius: 8px;
+  background: #f7f8fc;
+}
+
+.training-row strong {
+  display: block;
+  color: #111827;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.training-row time {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 960px) {
+  .coach-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 860px) {
+  .coach-content {
+    padding: 30px 20px 40px;
+  }
+}
+
+@media (max-width: 620px) {
+  .training-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

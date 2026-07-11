@@ -1,185 +1,199 @@
-.comissao {
-    max-width: 1200px;
-    margin: auto;
-    padding: 50px 40px;
+.team-page {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 56px 28px 72px;
 }
 
-.hero {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 70px;
-    margin-bottom: 90px;
+.team-header {
+    max-width: 720px;
+    margin-bottom: 30px;
 }
 
-.hero-text {
-    flex: 1;
-}
-
-.titulo-menor {
+.team-header span {
     color: #1736c7;
-    font-weight: 700;
-    letter-spacing: 4px;
-    font-size: 18px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
 }
 
-.hero h1 {
-    margin-top: 15px;
-    font-size: 60px;
-    line-height: 65px;
+.team-header h1 {
+    margin: 12px 0 12px;
+    color: #0b2a93;
+    font-size: 42px;
+    line-height: 1.12;
     font-weight: 800;
 }
 
-.hero p {
-    margin-top: 25px;
-    color: #555;
-    font-size: 20px;
-    line-height: 35px;
+.team-header p {
+    margin: 0;
+    color: #5f6675;
+    font-size: 17px;
+    line-height: 1.65;
 }
 
-.btn-contato {
-    display: inline-block;
-    margin-top: 35px;
-    padding: 15px 35px;
-    border: 2px solid #1736c7;
+.founders-panel,
+.team-grid {
+    display: grid;
+    gap: 18px;
+}
+
+.founders-panel {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-bottom: 30px;
+}
+
+.team-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-bottom: 24px;
+}
+
+.founder-card,
+.member-card {
+    display: flex;
+    gap: 16px;
+    padding: 22px;
+    border: 1px solid #e8ecf4;
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 9px 24px rgba(15, 23, 42, 0.07);
+}
+
+.founder-card {
+    min-height: 190px;
+    border-left: 5px solid #1736c7;
+}
+
+.member-card {
+    min-height: 178px;
+}
+
+.member-avatar {
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
     border-radius: 12px;
+    background: #e8f3ff;
     color: #1736c7;
-    text-decoration: none;
-    font-weight: 600;
-    transition: 0.3s;
-}
-
-.btn-contato:hover {
-    background: #1736c7;
-    color: white;
-}
-
-.hero-img {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    background: #1736c7;
-    border-radius: 30px;
-    padding: 40px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-}
-
-.hero-img img {
-    width: 300px;
-}
-
-.card-comissao {
-    margin-top: 70px;
-    background: #1736c7;
-    border-radius: 35px;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 50px;
-    gap: 60px;
-}
-
-.card-comissao.invertido {
-    flex-direction: row-reverse;
-}
-
-.perfil {
-    flex: 1;
-    text-align: center;
-}
-
-.perfil img {
-    width: 280px;
-}
-
-.informacoes {
-    flex: 1;
-}
-
-.informacoes h2 {
-    font-size: 42px;
-    margin-bottom: 10px;
-}
-
-.informacoes h4 {
-    color: #ddd;
-    margin-bottom: 25px;
-}
-
-.informacoes p {
     font-size: 18px;
-    line-height: 30px;
+    font-weight: 800;
 }
 
-.informacoes span {
-    display: inline-block;
-    margin-top: 25px;
-    background: white;
+.founder-card h2,
+.member-card h2 {
+    margin: 0 0 4px;
+    color: #111827;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.founder-card span,
+.member-card span {
+    display: block;
     color: #1736c7;
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-weight: 700;
+    font-size: 13px;
+    font-weight: 800;
 }
 
-.galeria {
-    margin: 70px 0;
-    display: flex;
-    justify-content: center;
-    gap: 40px;
+.founder-card p,
+.member-card p {
+    margin: 12px 0 0;
+    color: #5f6675;
+    font-size: 14px;
+    line-height: 1.6;
 }
 
-.galeria img {
-    width: 320px;
-    border-radius: 25px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
-    transition: 0.3s;
+.support-heading {
+    margin-bottom: 18px;
 }
 
-.galeria img:hover {
-    transform: scale(1.05);
+.support-heading h2 {
+    margin: 0 0 6px;
+    color: #0b2a93;
+    font-size: 24px;
+    font-weight: 800;
 }
 
-@media (max-width: 768px) {
-    .comissao {
-        padding: 35px 20px;
+.support-heading p {
+    margin: 0;
+    color: #5f6675;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.offer-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 28px;
+    align-items: center;
+    padding: 26px 28px;
+    border-radius: 8px;
+    background: #0b2a93;
+    color: #ffffff;
+}
+
+.offer-panel h2 {
+    margin: 0 0 10px;
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.offer-panel p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.offer-panel ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.offer-panel li {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.offer-panel li:last-child {
+    border-bottom: 0;
+}
+
+@media (max-width: 960px) {
+    .founders-panel,
+    .team-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .hero {
-        flex-direction: column;
-        text-align: center;
-        gap: 35px;
-        margin-bottom: 60px;
+    .offer-panel {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 680px) {
+    .team-page {
+        padding: 40px 20px 56px;
     }
 
-    .card-comissao,
-    .card-comissao.invertido {
-        flex-direction: column;
-        text-align: center;
-        padding: 34px 24px;
-        gap: 32px;
+    .team-header h1 {
+        font-size: 34px;
     }
 
-    .galeria {
-        flex-direction: column;
-        align-items: center;
+    .team-grid {
+        grid-template-columns: 1fr;
     }
 
-    .galeria img {
-        width: 100%;
-        max-width: 320px;
+    .founders-panel {
+        grid-template-columns: 1fr;
     }
 
-    .hero h1 {
-        font-size: 42px;
-        line-height: 48px;
-    }
-
-    .hero-img img {
-        width: 220px;
-    }
-
-    .perfil img {
-        width: 220px;
+    .founder-card,
+    .member-card {
+        min-height: auto;
     }
 }
