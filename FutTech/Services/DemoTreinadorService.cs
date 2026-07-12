@@ -14,6 +14,15 @@ public sealed class DemoTreinadorService
             DiasDeTreino = "Segunda e quarta",
             Horario = new TimeOnly(16, 30),
             TreinadorId = 1
+        },
+        new()
+        {
+            Id = 2,
+            Nome = "Sub-15 Manhã",
+            Categoria = "Sub-15",
+            DiasDeTreino = "Terça e quinta",
+            Horario = new TimeOnly(8, 0),
+            TreinadorId = 1
         }
     ];
 
@@ -26,6 +35,14 @@ public sealed class DemoTreinadorService
             Responsavel = "Roberto Pai do Lucas",
             DataNascimento = new DateOnly(2013, 5, 12),
             TurmaId = 1
+        },
+        new()
+        {
+            Id = 2,
+            Nome = "Miguel Andrade",
+            Responsavel = "Patrícia Andrade",
+            DataNascimento = new DateOnly(2011, 9, 21),
+            TurmaId = 2
         }
     ];
 
@@ -67,6 +84,40 @@ public sealed class DemoTreinadorService
 
         _alunos.Add(aluno);
         return aluno;
+    }
+
+    public bool AtualizarTurma(
+        int turmaId,
+        string nome,
+        string categoria,
+        string diasDeTreino,
+        TimeOnly horario)
+    {
+        var turma = _turmas.FirstOrDefault(item => item.Id == turmaId && item.Ativa);
+
+        if (turma is null)
+        {
+            return false;
+        }
+
+        turma.Nome = nome.Trim();
+        turma.Categoria = categoria.Trim();
+        turma.DiasDeTreino = diasDeTreino.Trim();
+        turma.Horario = horario;
+        return true;
+    }
+
+    public bool RemoverTurma(int turmaId)
+    {
+        var turma = _turmas.FirstOrDefault(item => item.Id == turmaId && item.Ativa);
+
+        if (turma is null)
+        {
+            return false;
+        }
+
+        turma.Ativa = false;
+        return true;
     }
 
     public string ObterNomeTurma(int turmaId)
