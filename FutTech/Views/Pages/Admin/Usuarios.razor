@@ -69,6 +69,7 @@
                             <th>Perfil</th>
                             <th>Cargo</th>
                             <th>Status</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -80,6 +81,17 @@
                                 <td>@usuario.PerfilDescricao</td>
                                 <td>@usuario.Cargo</td>
                                 <td><span class="status-badge">Ativo</span></td>
+                                <td>
+                                    <button type="button"
+                                            class="remove-user-button"
+                                            disabled="@EhAdministrador(usuario)"
+                                            @onclick="() => RemoverUsuario(usuario)">
+                                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                                            <path d="M3 6h18M8 6V4h8v2m-9 0 1 14h8l1-14M10 11v5m4-5v5" />
+                                        </svg>
+                                        <span>Remover</span>
+                                    </button>
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -139,6 +151,23 @@
     private void AtualizarUsuarios()
     {
         UsuariosCadastrados = AuthService.ListarUsuarios();
+    }
+
+    private void RemoverUsuario(UsuarioSistema usuario)
+    {
+        if (!AuthService.RemoverUsuario(usuario.Id))
+        {
+            DefinirMensagem("Não foi possível remover este usuário.", false);
+            return;
+        }
+
+        AtualizarUsuarios();
+        DefinirMensagem("Usuário removido com sucesso.", true);
+    }
+
+    private static bool EhAdministrador(UsuarioSistema usuario)
+    {
+        return usuario.Perfil == FutTech.Models.PerfilUsuario.Administrador;
     }
 
     private void DefinirMensagem(string mensagem, bool sucesso)

@@ -94,6 +94,43 @@
     cursor: pointer;
 }
 
+.remove-user-button {
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border: 0;
+    border-radius: 8px;
+    padding: 0 12px;
+    background: #ffebee;
+    color: #c62828;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.remove-user-button:hover:not(:disabled) {
+    background: #ffdfe4;
+}
+
+.remove-user-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.46;
+}
+
+.remove-user-button svg {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
 .form-message {
     margin: 18px 0 0;
     padding: 12px 14px;

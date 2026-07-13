@@ -1,0 +1,25 @@
+@page "/admin/comunicados"
+@rendermode InteractiveServer
+@using FutTech.Services
+@inject DemoMenuService MenuService
+
+<PageTitle>Comunicados</PageTitle>
+
+<AppAreaShell NomeEscolinha="Escolinha Brasil FC (Demo)"
+              NomeUsuario="Carlos Admin"
+              CargoUsuario="Coordenador"
+              TextoPerfil="Administrador"
+              ItemAtivo="comunicados"
+              TituloMenu="Menu administrativo"
+              MenuItems="@MenuItems">
+    <ComunicadosArea PodeGerenciar="true" Autor="Carlos Admin" />
+</AppAreaShell>
+
+@code {
+    private IReadOnlyList<MenuItemSistema> MenuItems { get; set; } = [];
+
+    protected override void OnInitialized()
+    {
+        MenuItems = MenuService.ObterMenu(FutTech.Models.PerfilUsuario.Administrador);
+    }
+}

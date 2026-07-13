@@ -51,6 +51,7 @@ public sealed class DemoAuthService
 
         return _credenciais
             .FirstOrDefault(credencial =>
+                credencial.Usuario.Ativo &&
                 string.Equals(credencial.Usuario.Email, emailInformado, StringComparison.OrdinalIgnoreCase) &&
                 credencial.Senha == senha)
             ?.Usuario;
@@ -60,6 +61,7 @@ public sealed class DemoAuthService
     {
         return _credenciais
             .Select(credencial => credencial.Usuario)
+            .Where(usuario => usuario.Ativo)
             .OrderBy(usuario => usuario.Perfil)
             .ThenBy(usuario => usuario.Nome)
             .ToList();
@@ -68,6 +70,7 @@ public sealed class DemoAuthService
     public bool EmailJaCadastrado(string email)
     {
         return _credenciais.Any(credencial =>
+            credencial.Usuario.Ativo &&
             string.Equals(credencial.Usuario.Email, email.Trim(), StringComparison.OrdinalIgnoreCase));
     }
 
@@ -90,6 +93,21 @@ public sealed class DemoAuthService
 
         _credenciais.Add(new CredencialDemo(senha, usuario));
         return usuario;
+    }
+
+    public bool RemoverUsuario(int usuarioId)
+    {
+        var usuario = _credenciais
+            .Select(credencial => credencial.Usuario)
+            .FirstOrDefault(item => item.Id == usuarioId && item.Ativo);
+
+        if (usuario is null || usuario.Perfil == PerfilUsuario.Administrador)
+        {
+            return false;
+        }
+
+        usuario.Ativo = false;
+        return true;
     }
 
     private sealed record CredencialDemo(string Senha, UsuarioSistema Usuario);

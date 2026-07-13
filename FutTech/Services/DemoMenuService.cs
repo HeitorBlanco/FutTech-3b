@@ -29,14 +29,14 @@ public sealed class DemoMenuService
         Criar("dashboard", "Dashboard", "/admin/dashboard", IconeDashboard),
         Criar("usuarios", "Usuários", "/admin/usuarios", IconeUsuarios),
         Criar("financeiro", "Financeiro", "/admin/financeiro", IconeFinanceiro, false),
-        Criar("comunicados", "Comunicados", "/admin/comunicados", IconeComunicados, false),
+        Criar("comunicados", "Comunicados", "/admin/comunicados", IconeComunicados),
         Criar("avaliacoes", "Avaliações", "/admin/avaliacoes", IconeEstrela, false)
     ];
 
     private static IReadOnlyList<MenuItemSistema> ObterMenuResponsavel() =>
     [
         Criar("atletas", "Meus Atletas", "/responsavel/dashboard", IconeAtleta),
-        Criar("comunicados", "Comunicados", "/responsavel/comunicados", IconeComunicados, false),
+        Criar("comunicados", "Comunicados", "/responsavel/comunicados", IconeComunicados),
         Criar("financeiro", "Financeiro", "/responsavel/financeiro", IconeFinanceiro, false)
     ];
 
@@ -47,7 +47,7 @@ public sealed class DemoMenuService
         Criar("turmas", "Minhas Turmas", "/treinador/turmas", IconeCamadas),
         Criar("presenca", "Presença", "/treinador/presenca", IconePresenca, false),
         Criar("avaliacoes", "Avaliações", "/treinador/avaliacoes", IconeEstrela, false),
-        Criar("comunicados", "Comunicados", "/treinador/comunicados", IconeComunicados, false)
+        Criar("comunicados", "Comunicados", "/treinador/comunicados", IconeComunicados)
     ];
 
     private static MenuItemSistema Criar(

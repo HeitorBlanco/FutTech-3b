@@ -4,6 +4,13 @@ namespace FutTech.Services;
 
 public sealed class DemoAdminDashboardService
 {
+    private readonly DemoComunicadoService _comunicadoService;
+
+    public DemoAdminDashboardService(DemoComunicadoService comunicadoService)
+    {
+        _comunicadoService = comunicadoService;
+    }
+
     public AdminDashboardResumo ObterResumo()
     {
         var periodo = new DateOnly(2026, 7, 1);
@@ -51,19 +58,6 @@ public sealed class DemoAdminDashboardService
             }
         };
 
-        var comunicados = new List<Comunicado>
-        {
-            new()
-            {
-                Id = 1,
-                Titulo = "Treino cancelado amanhã",
-                Conteudo = "Campo em manutenção no período da tarde.",
-                PublicadoEm = new DateOnly(2026, 7, 3),
-                Autor = "Carlos Admin",
-                Destacado = true
-            }
-        };
-
         var presencas = new List<RegistroPresenca>
         {
             new()
@@ -86,7 +80,7 @@ public sealed class DemoAdminDashboardService
             Turmas = turmas,
             Treinadores = treinadores,
             Mensalidades = mensalidades,
-            Comunicados = comunicados,
+            Comunicados = _comunicadoService.ListarComunicados(),
             Presencas = presencas
         };
     }

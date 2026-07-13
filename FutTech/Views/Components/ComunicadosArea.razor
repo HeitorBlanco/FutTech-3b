@@ -1,0 +1,189 @@
+@using System.Globalization
+@using FutTech.Services
+@inject DemoComunicadoService ComunicadoService
+
+<main class="announcements-content">
+    <header class="announcements-heading">
+        <div>
+            <h1>Comunicados</h1>
+            <span>@Comunicados.Count @TextoContador</span>
+        </div>
+
+        @if (PodeGerenciar)
+        {
+            <button type="button" class="new-button" @onclick="AlternarFormulario">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 5v14M5 12h14" />
+                </svg>
+                <span>Novo Comunicado</span>
+            </button>
+        }
+    </header>
+
+    @if (PodeGerenciar && ExibirFormulario)
+    {
+        <section class="announcement-form-panel" aria-label="Novo comunicado">
+            <div class="form-heading">
+                <div>
+                    <h2>Novo comunicado</h2>
+                    <span>Publique um aviso para os usuários da escolinha.</span>
+                </div>
+
+                <button type="button" class="icon-button" @onclick="AlternarFormulario" aria-label="Fechar formulário">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M18 6 6 18M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <form class="announcement-form" @onsubmit="CadastrarComunicado" @onsubmit:preventDefault="true">
+                <div class="form-group">
+                    <label for="@TituloId">Título</label>
+                    <input id="@TituloId" type="text" @bind="Titulo" placeholder="Título do comunicado" />
+                </div>
+
+                <div class="form-group">
+                    <label for="@CategoriaId">Categoria</label>
+                    <input id="@CategoriaId" type="text" @bind="Categoria" placeholder="Geral" />
+                </div>
+
+                <div class="form-group full">
+                    <label for="@ConteudoId">Mensagem</label>
+                    <textarea id="@ConteudoId" @bind="Conteudo" placeholder="Escreva a mensagem"></textarea>
+                </div>
+
+                <button type="submit">Publicar</button>
+            </form>
+        </section>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Mensagem))
+    {
+        <p class="@MensagemClasse">@Mensagem</p>
+    }
+
+    <section class="announcement-list" aria-label="Lista de comunicados">
+        @if (Comunicados.Count == 0)
+        {
+            <article class="empty-card">
+                <strong>Nenhum comunicado publicado</strong>
+                <span>Os avisos aparecerão aqui quando forem cadastrados.</span>
+            </article>
+        }
+        else
+        {
+            @foreach (var comunicado in Comunicados)
+            {
+                <article class="announcement-card">
+                    <div class="announcement-main">
+                        <div class="announcement-text">
+                            <h2>@comunicado.Titulo</h2>
+                            <p>@comunicado.Conteudo</p>
+                        </div>
+
+                        <div class="announcement-meta">
+                            <time datetime="@FormatarDataIso(comunicado)">
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M8 2v4m8-4v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2Z" />
+                                </svg>
+                                <span>@FormatarData(comunicado)</span>
+                            </time>
+                            <span class="category-badge">@comunicado.Categoria</span>
+                        </div>
+                    </div>
+
+                    @if (PodeGerenciar)
+                    {
+                        <button type="button" class="remove-button" @onclick="() => RemoverComunicado(comunicado.Id)">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M3 6h18M8 6V4h8v2m-9 0 1 14h8l1-14M10 11v5m4-5v5" />
+                            </svg>
+                            <span>Excluir</span>
+                        </button>
+                    }
+                </article>
+            }
+        }
+    </section>
+</main>
+
+@code {
+    private static readonly CultureInfo PtBr = new("pt-BR");
+    private readonly string TituloId = $"titulo-comunicado-{Guid.NewGuid():N}";
+    private readonly string CategoriaId = $"categoria-comunicado-{Guid.NewGuid():N}";
+    private readonly string ConteudoId = $"conteudo-comunicado-{Guid.NewGuid():N}";
+
+    [Parameter] public bool PodeGerenciar { get; set; }
+    [Parameter] public string Autor { get; set; } = "Sistema";
+
+    private IReadOnlyList<Comunicado> Comunicados { get; set; } = [];
+    private string Titulo { get; set; } = string.Empty;
+    private string Conteudo { get; set; } = string.Empty;
+    private string Categoria { get; set; } = "Geral";
+    private string Mensagem { get; set; } = string.Empty;
+    private string MensagemClasse { get; set; } = "form-message";
+    private bool ExibirFormulario { get; set; }
+
+    private string TextoContador => Comunicados.Count == 1 ? "comunicado publicado" : "comunicados publicados";
+
+    protected override void OnInitialized()
+    {
+        AtualizarComunicados();
+    }
+
+    private void AtualizarComunicados()
+    {
+        Comunicados = ComunicadoService.ListarComunicados();
+    }
+
+    private void AlternarFormulario()
+    {
+        ExibirFormulario = !ExibirFormulario;
+        Mensagem = string.Empty;
+    }
+
+    private void CadastrarComunicado()
+    {
+        if (string.IsNullOrWhiteSpace(Titulo) || string.IsNullOrWhiteSpace(Conteudo))
+        {
+            DefinirMensagem("Preencha título e mensagem do comunicado.", false);
+            return;
+        }
+
+        ComunicadoService.CadastrarComunicado(Titulo, Conteudo, Categoria, Autor);
+        Titulo = string.Empty;
+        Conteudo = string.Empty;
+        Categoria = "Geral";
+        ExibirFormulario = false;
+        AtualizarComunicados();
+        DefinirMensagem("Comunicado publicado com sucesso.", true);
+    }
+
+    private void RemoverComunicado(int comunicadoId)
+    {
+        if (!ComunicadoService.RemoverComunicado(comunicadoId))
+        {
+            DefinirMensagem("Não foi possível remover o comunicado.", false);
+            return;
+        }
+
+        AtualizarComunicados();
+        DefinirMensagem("Comunicado removido.", true);
+    }
+
+    private static string FormatarData(Comunicado comunicado)
+    {
+        return $"{comunicado.PublicadoEm.ToString("dd/MM/yyyy", PtBr)} {comunicado.PublicadoAs.ToString("HH:mm", PtBr)}";
+    }
+
+    private static string FormatarDataIso(Comunicado comunicado)
+    {
+        return $"{comunicado.PublicadoEm:yyyy-MM-dd}T{comunicado.PublicadoAs:HH\\:mm}";
+    }
+
+    private void DefinirMensagem(string mensagem, bool sucesso)
+    {
+        Mensagem = mensagem;
+        MensagemClasse = sucesso ? "form-message success" : "form-message error";
+    }
+}

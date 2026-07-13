@@ -86,6 +86,19 @@ public sealed class DemoTreinadorService
         return aluno;
     }
 
+    public bool RemoverAluno(int alunoId)
+    {
+        var aluno = _alunos.FirstOrDefault(item => item.Id == alunoId && item.Ativo);
+
+        if (aluno is null)
+        {
+            return false;
+        }
+
+        aluno.Ativo = false;
+        return true;
+    }
+
     public bool AtualizarTurma(
         int turmaId,
         string nome,
