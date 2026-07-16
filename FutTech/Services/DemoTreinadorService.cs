@@ -23,6 +23,15 @@ public sealed class DemoTreinadorService
             DiasDeTreino = "Terça e quinta",
             Horario = new TimeOnly(8, 0),
             TreinadorId = 1
+        },
+        new()
+        {
+            Id = 3,
+            Nome = "Turma Manhã A",
+            Categoria = "Sub-11",
+            DiasDeTreino = "Terça e quinta",
+            Horario = new TimeOnly(9, 0),
+            TreinadorId = 1
         }
     ];
 
@@ -43,6 +52,34 @@ public sealed class DemoTreinadorService
             Responsavel = "Patrícia Andrade",
             DataNascimento = new DateOnly(2011, 9, 21),
             TurmaId = 2
+        },
+        new()
+        {
+            Id = 3,
+            Nome = "Gabriel Santos",
+            Responsavel = "Ana Santos",
+            DataNascimento = new DateOnly(2015, 2, 6),
+            TurmaId = 3
+        }
+    ];
+
+    private readonly List<RegistroPresenca> _presencas =
+    [
+        new()
+        {
+            Id = 1,
+            AlunoId = 1,
+            TurmaId = 1,
+            Data = new DateOnly(2026, 7, 7),
+            Presente = true
+        },
+        new()
+        {
+            Id = 2,
+            AlunoId = 2,
+            TurmaId = 2,
+            Data = new DateOnly(2026, 7, 7),
+            Presente = false
         }
     ];
 
@@ -63,6 +100,42 @@ public sealed class DemoTreinadorService
         return _alunos
             .Where(aluno => aluno.Ativo && turmasDoTreinador.Contains(aluno.TurmaId))
             .OrderBy(aluno => aluno.Nome)
+            .ToList();
+    }
+
+    public IReadOnlyList<Aluno> ObterAlunosDaTurma(int turmaId, int treinadorId = 1)
+    {
+        var turmaDoTreinador = _turmas.Any(turma =>
+            turma.Id == turmaId &&
+            turma.TreinadorId == treinadorId &&
+            turma.Ativa);
+
+        if (!turmaDoTreinador)
+        {
+            return [];
+        }
+
+        return _alunos
+            .Where(aluno => aluno.Ativo && aluno.TurmaId == turmaId)
+            .OrderBy(aluno => aluno.Nome)
+            .ToList();
+    }
+
+    public IReadOnlyList<RegistroPresenca> ObterPresencasDaTurma(int turmaId, DateOnly data, int treinadorId = 1)
+    {
+        return ObterAlunosDaTurma(turmaId, treinadorId)
+            .Select(aluno =>
+                _presencas.FirstOrDefault(presenca =>
+                    presenca.AlunoId == aluno.Id &&
+                    presenca.TurmaId == turmaId &&
+                    presenca.Data == data)
+                ?? new RegistroPresenca
+                {
+                    AlunoId = aluno.Id,
+                    TurmaId = turmaId,
+                    Data = data,
+                    Presente = false
+                })
             .ToList();
     }
 
@@ -96,6 +169,43 @@ public sealed class DemoTreinadorService
         }
 
         aluno.Ativo = false;
+        return true;
+    }
+
+    public bool SalvarChamada(int turmaId, DateOnly data, IReadOnlyDictionary<int, bool> presencasPorAluno)
+    {
+        var alunosDaTurma = ObterAlunosDaTurma(turmaId)
+            .Select(aluno => aluno.Id)
+            .ToHashSet();
+
+        if (alunosDaTurma.Count == 0)
+        {
+            return false;
+        }
+
+        foreach (var alunoId in alunosDaTurma)
+        {
+            var registro = _presencas.FirstOrDefault(presenca =>
+                presenca.AlunoId == alunoId &&
+                presenca.TurmaId == turmaId &&
+                presenca.Data == data);
+
+            if (registro is null)
+            {
+                registro = new RegistroPresenca
+                {
+                    Id = _presencas.Count == 0 ? 1 : _presencas.Max(item => item.Id) + 1,
+                    AlunoId = alunoId,
+                    TurmaId = turmaId,
+                    Data = data
+                };
+
+                _presencas.Add(registro);
+            }
+
+            registro.Presente = presencasPorAluno.TryGetValue(alunoId, out var presente) && presente;
+        }
+
         return true;
     }
 

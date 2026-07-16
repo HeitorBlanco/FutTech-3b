@@ -1,0 +1,249 @@
+@page "/treinador/presenca"
+@rendermode InteractiveServer
+@using System.Globalization
+@using FutTech.Services
+@inject DemoMenuService MenuService
+@inject DemoTreinadorService TreinadorService
+
+<PageTitle>Registro de Presença</PageTitle>
+
+<AppAreaShell NomeEscolinha="Escolinha Brasil FC (Demo)"
+              NomeUsuario="Rafael Costa"
+              CargoUsuario="Treinador Sub-13"
+              TextoPerfil="Treinador"
+              ItemAtivo="presenca"
+              TituloMenu="Menu do treinador"
+              MenuItems="@MenuItems">
+    <main class="attendance-content">
+        <header class="attendance-heading">
+            <div class="attendance-title">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M9 11l2 2 4-5M5 4h14v17l-7-3-7 3V4Z" />
+                </svg>
+                <h1>Registro de Presença</h1>
+            </div>
+        </header>
+
+        <section class="attendance-filters" aria-label="Filtros da chamada">
+            <div class="field-control field-control-wide">
+                <label for="turma">Turma</label>
+                <select id="turma" @bind="TurmaSelecionadaId" @bind:after="CarregarChamada">
+                    @foreach (var turma in Turmas)
+                    {
+                        <option value="@turma.Id">@turma.Nome (@turma.Categoria)</option>
+                    }
+                </select>
+            </div>
+
+            <div class="field-control">
+                <label for="data-presenca">Data</label>
+                <input id="data-presenca"
+                       type="date"
+                       @bind="DataSelecionada"
+                       @bind:format="yyyy-MM-dd"
+                       @bind:after="CarregarChamada" />
+            </div>
+        </section>
+
+        <section class="attendance-panel" aria-label="Chamada da turma">
+            <div class="attendance-panel-heading">
+                <div>
+                    <h2>Chamada - @NomeTurmaSelecionada</h2>
+                    <time datetime="@DataReferencia.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)">
+                        @DataReferencia.ToString("dd/MM/yyyy", PtBr)
+                    </time>
+                </div>
+            </div>
+
+            @if (Turmas.Count == 0)
+            {
+                <div class="attendance-empty">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
+                    </svg>
+                    <strong>Nenhuma turma ativa</strong>
+                    <span>Cadastre uma turma para registrar presença.</span>
+                </div>
+            }
+            else if (AlunosDaTurma.Count == 0)
+            {
+                <div class="attendance-empty">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8m11 10v-2a4 4 0 0 0-3-3.87M17 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    <strong>Nenhum aluno nesta turma</strong>
+                    <span>Adicione alunos antes de salvar a chamada.</span>
+                </div>
+            }
+            else
+            {
+                <div class="attendance-list">
+                    @foreach (var aluno in AlunosDaTurma)
+                    {
+                        var presente = AlunoEstaPresente(aluno.Id);
+
+                        <label class="attendance-row @(presente ? "is-present" : null)">
+                            <input type="checkbox"
+                                   checked="@presente"
+                                   @onchange="args => AlterarPresenca(aluno.Id, args)" />
+                            <span class="check-control" aria-hidden="true">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M20 6 9 17l-5-5" />
+                                </svg>
+                            </span>
+                            <span class="student-name">@aluno.Nome</span>
+                            <strong class="attendance-status">@(presente ? "Presente" : "Ausente")</strong>
+                        </label>
+                    }
+                </div>
+
+                <div class="attendance-summary" aria-label="Resumo da chamada">
+                    <div class="summary-item summary-present">
+                        <span class="summary-icon">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                            </svg>
+                        </span>
+                        <span>@Presentes @TextoPresentes</span>
+                    </div>
+
+                    <div class="summary-item summary-absent">
+                        <span class="summary-icon">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M18 6 6 18M6 6l12 12" />
+                            </svg>
+                        </span>
+                        <span>@Ausentes @TextoAusentes</span>
+                    </div>
+
+                    <div class="summary-item summary-rate">
+                        <span class="summary-icon">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M3 3v18h18M7 16v-5m5 5V8m5 8v-9" />
+                            </svg>
+                        </span>
+                        <span>@PercentualPresenca.ToString("N0", PtBr)% de presença</span>
+                    </div>
+                </div>
+
+                <div class="attendance-actions">
+                    <button type="button" class="action-button primary" @onclick="SalvarChamada">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2ZM7 3v6h8M7 21v-8h10v8" />
+                        </svg>
+                        <span>Salvar Chamada</span>
+                    </button>
+
+                    <button type="button" class="action-button success" @onclick="MarcarTodos">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M20 6 9 17l-5-5M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                        </svg>
+                        <span>Marcar Todos</span>
+                    </button>
+
+                    <button type="button" class="action-button neutral" @onclick="DesmarcarTodos">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M5 12h14M5 5h14v14H5z" />
+                        </svg>
+                        <span>Desmarcar Todos</span>
+                    </button>
+                </div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Mensagem))
+            {
+                <p class="@MensagemClasse">@Mensagem</p>
+            }
+        </section>
+    </main>
+</AppAreaShell>
+
+@code {
+    private static readonly CultureInfo PtBr = new("pt-BR");
+    private IReadOnlyList<MenuItemSistema> MenuItems { get; set; } = [];
+    private IReadOnlyList<Turma> Turmas { get; set; } = [];
+    private IReadOnlyList<Aluno> AlunosDaTurma { get; set; } = [];
+    private Dictionary<int, bool> PresencasPorAluno { get; set; } = [];
+    private int TurmaSelecionadaId { get; set; }
+    private DateTime DataSelecionada { get; set; } = new(2026, 7, 7);
+    private string Mensagem { get; set; } = string.Empty;
+    private string MensagemClasse { get; set; } = "attendance-message";
+
+    private DateOnly DataReferencia => DateOnly.FromDateTime(DataSelecionada);
+    private Turma? TurmaSelecionada => Turmas.FirstOrDefault(turma => turma.Id == TurmaSelecionadaId);
+    private string NomeTurmaSelecionada => TurmaSelecionada is null ? "Turma" : TurmaSelecionada.Nome;
+    private int Presentes => PresencasPorAluno.Count(item => item.Value);
+    private int Ausentes => Math.Max(AlunosDaTurma.Count - Presentes, 0);
+    private decimal PercentualPresenca => AlunosDaTurma.Count == 0 ? 0 : Presentes * 100m / AlunosDaTurma.Count;
+    private string TextoPresentes => Presentes == 1 ? "presente" : "presentes";
+    private string TextoAusentes => Ausentes == 1 ? "ausente" : "ausentes";
+
+    protected override void OnInitialized()
+    {
+        MenuItems = MenuService.ObterMenu(FutTech.Models.PerfilUsuario.Treinador);
+        Turmas = TreinadorService.ObterTurmasDoTreinador();
+        TurmaSelecionadaId = Turmas.FirstOrDefault(turma => turma.Nome.Contains("Manhã A", StringComparison.OrdinalIgnoreCase))?.Id
+            ?? Turmas.FirstOrDefault()?.Id
+            ?? 0;
+
+        CarregarChamada();
+    }
+
+    private void CarregarChamada()
+    {
+        Mensagem = string.Empty;
+        AlunosDaTurma = TreinadorService.ObterAlunosDaTurma(TurmaSelecionadaId);
+
+        PresencasPorAluno = TreinadorService.ObterPresencasDaTurma(TurmaSelecionadaId, DataReferencia)
+            .ToDictionary(presenca => presenca.AlunoId, presenca => presenca.Presente);
+    }
+
+    private bool AlunoEstaPresente(int alunoId)
+    {
+        return PresencasPorAluno.TryGetValue(alunoId, out var presente) && presente;
+    }
+
+    private void AlterarPresenca(int alunoId, ChangeEventArgs args)
+    {
+        PresencasPorAluno[alunoId] = args.Value is bool presente && presente;
+        Mensagem = string.Empty;
+    }
+
+    private void MarcarTodos()
+    {
+        foreach (var aluno in AlunosDaTurma)
+        {
+            PresencasPorAluno[aluno.Id] = true;
+        }
+
+        Mensagem = string.Empty;
+    }
+
+    private void DesmarcarTodos()
+    {
+        foreach (var aluno in AlunosDaTurma)
+        {
+            PresencasPorAluno[aluno.Id] = false;
+        }
+
+        Mensagem = string.Empty;
+    }
+
+    private void SalvarChamada()
+    {
+        if (!TreinadorService.SalvarChamada(TurmaSelecionadaId, DataReferencia, PresencasPorAluno))
+        {
+            DefinirMensagem("Não foi possível salvar a chamada desta turma.", false);
+            return;
+        }
+
+        CarregarChamada();
+        DefinirMensagem("Chamada salva com sucesso.", true);
+    }
+
+    private void DefinirMensagem(string mensagem, bool sucesso)
+    {
+        Mensagem = mensagem;
+        MensagemClasse = sucesso ? "attendance-message success" : "attendance-message error";
+    }
+}

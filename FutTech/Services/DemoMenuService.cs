@@ -45,7 +45,7 @@ public sealed class DemoMenuService
         Criar("dashboard", "Dashboard", "/treinador/dashboard", IconeDashboard),
         Criar("alunos", "Alunos", "/treinador/alunos", IconeUsuarios),
         Criar("turmas", "Minhas Turmas", "/treinador/turmas", IconeCamadas),
-        Criar("presenca", "Presença", "/treinador/presenca", IconePresenca, false),
+        Criar("presenca", "Presença", "/treinador/presenca", IconePresenca),
         Criar("avaliacoes", "Avaliações", "/treinador/avaliacoes", IconeEstrela, false),
         Criar("comunicados", "Comunicados", "/treinador/comunicados", IconeComunicados)
     ];
