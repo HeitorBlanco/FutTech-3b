@@ -1,0 +1,107 @@
+@page "/admin/financeiro"
+
+<PageTitle>Gestão Financeira</PageTitle>
+
+<AppAreaShell NomeEscolinha="FutTech"
+              NomeUsuario="Administrador"
+              CargoUsuario="Coordenador"
+              TextoPerfil="Administrador"
+              Perfil="PerfilUsuario.Administrador"
+              ItemAtivo="financeiro"
+              TituloMenu="Menu administrativo">
+    <main class="finance-content">
+        <header class="finance-heading">
+            <div>
+                <h1>Gestão Financeira</h1>
+                <p>Controle mensalidades, vencimentos e pagamentos da escolinha.</p>
+            </div>
+
+            <button type="button" class="generate-button">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M8 6h8M8 10h8M8 14h4M6 2h9l5 5v15H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm9 0v6h5" />
+                </svg>
+                <span>Gerar Mensalidades</span>
+            </button>
+        </header>
+
+        <section class="finance-metrics" aria-label="Resumo financeiro">
+            <article class="metric-card metric-success">
+                <div class="metric-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5" />
+                    </svg>
+                </div>
+                <div>
+                    <span>Recebido no mês</span>
+                    <strong>R$ 0,00</strong>
+                </div>
+            </article>
+
+            <article class="metric-card metric-warning">
+                <div class="metric-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 6v6l4 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                </div>
+                <div>
+                    <span>Pendentes</span>
+                    <strong>0</strong>
+                </div>
+            </article>
+
+            <article class="metric-card metric-danger">
+                <div class="metric-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" />
+                    </svg>
+                </div>
+                <div>
+                    <span>Total a receber</span>
+                    <strong>R$ 0,00</strong>
+                </div>
+            </article>
+        </section>
+
+        <section class="finance-filters" aria-label="Filtros financeiros">
+            <div class="filter-field">
+                <label for="status">Status</label>
+                <select id="status">
+                    <option>Todos os status</option>
+                    <option>Pagas</option>
+                    <option>Pendentes</option>
+                    <option>Atrasadas</option>
+                </select>
+            </div>
+
+            <div class="filter-field">
+                <label for="mes">Mês</label>
+                <select id="mes">
+                    <option>Todos os meses</option>
+                </select>
+            </div>
+        </section>
+
+        <section class="finance-table-panel" aria-label="Mensalidades">
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Aluno</th>
+                            <th>Turma</th>
+                            <th>Referência</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                            <th>Pagamento</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="7">Nenhuma mensalidade carregada.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</AppAreaShell>

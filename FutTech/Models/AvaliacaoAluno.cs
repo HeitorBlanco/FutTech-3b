@@ -12,6 +12,5 @@ public sealed class AvaliacaoAluno
     public int NotaTatica { get; set; }
     public int NotaComportamental { get; set; }
     public string Observacoes { get; set; } = string.Empty;
-
-    public decimal Media => (NotaTecnica + NotaFisica + NotaTatica + NotaComportamental) / 4m;
+    public decimal Media { get; set; }
 }

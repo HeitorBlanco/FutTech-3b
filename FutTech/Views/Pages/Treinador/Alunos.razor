@@ -1,62 +1,50 @@
 @page "/treinador/alunos"
-@rendermode InteractiveServer
-@using FutTech.Services
-@inject DemoMenuService MenuService
-@inject DemoTreinadorService TreinadorService
 
 <PageTitle>Alunos do Treinador</PageTitle>
 
-<AppAreaShell NomeEscolinha="Escolinha Brasil FC (Demo)"
-              NomeUsuario="Rafael Costa"
-              CargoUsuario="Treinador Sub-13"
+<AppAreaShell NomeEscolinha="FutTech"
+              NomeUsuario="Treinador"
+              CargoUsuario="Treinador"
               TextoPerfil="Treinador"
+              Perfil="PerfilUsuario.Treinador"
               ItemAtivo="alunos"
-              TituloMenu="Menu do treinador"
-              MenuItems="@MenuItems">
+              TituloMenu="Menu do treinador">
     <main class="students-content">
         <div class="students-heading">
             <div>
                 <h1>Alunos</h1>
-                <p>Cadastre e acompanhe os atletas das suas turmas.</p>
+                <p>Estrutura visual para cadastro e acompanhamento dos atletas.</p>
             </div>
         </div>
 
         <section class="student-form-panel">
             <h2>Novo aluno</h2>
 
-            <form class="student-form" @onsubmit="AdicionarAluno" @onsubmit:preventDefault="true">
+            <form class="student-form">
                 <div class="form-group">
                     <label for="nome">Nome</label>
-                    <input id="nome" type="text" @bind="NomeAluno" placeholder="Nome do aluno" />
+                    <input id="nome" type="text" placeholder="Nome do aluno" />
                 </div>
 
                 <div class="form-group">
                     <label for="responsavel">Responsável</label>
-                    <input id="responsavel" type="text" @bind="Responsavel" placeholder="Nome do responsável" />
+                    <input id="responsavel" type="text" placeholder="Nome do responsável" />
                 </div>
 
                 <div class="form-group">
                     <label for="nascimento">Nascimento</label>
-                    <input id="nascimento" type="date" @bind="DataNascimento" @bind:format="yyyy-MM-dd" />
+                    <input id="nascimento" type="date" />
                 </div>
 
                 <div class="form-group">
                     <label for="turma">Turma</label>
-                    <select id="turma" @bind="TurmaId">
-                        @foreach (var turma in Turmas)
-                        {
-                            <option value="@turma.Id">@turma.Nome</option>
-                        }
+                    <select id="turma">
+                        <option>Selecione uma turma</option>
                     </select>
                 </div>
 
-                <button type="submit">Adicionar aluno</button>
+                <button type="button">Adicionar aluno</button>
             </form>
-
-            @if (!string.IsNullOrWhiteSpace(Mensagem))
-            {
-                <p class="@MensagemClasse">@Mensagem</p>
-            }
         </section>
 
         <section class="students-table-panel">
@@ -75,106 +63,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var aluno in AlunosCadastrados)
-                        {
-                            <tr>
-                                <td>@aluno.Nome</td>
-                                <td>@CalcularIdade(aluno.DataNascimento) anos</td>
-                                <td>@TreinadorService.ObterNomeTurma(aluno.TurmaId)</td>
-                                <td>@aluno.Responsavel</td>
-                                <td><span class="status-badge">Ativo</span></td>
-                                <td>
-                                    <button type="button" class="remove-student-button" @onclick="() => RemoverAluno(aluno)">
-                                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                                            <path d="M3 6h18M8 6V4h8v2m-9 0 1 14h8l1-14M10 11v5m4-5v5" />
-                                        </svg>
-                                        <span>Remover</span>
-                                    </button>
-                                </td>
-                            </tr>
-                        }
+                        <tr>
+                            <td colspan="6">Nenhum aluno carregado.</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </section>
     </main>
 </AppAreaShell>
-
-@code {
-    private IReadOnlyList<MenuItemSistema> MenuItems { get; set; } = [];
-    private IReadOnlyList<Turma> Turmas { get; set; } = [];
-    private IReadOnlyList<Aluno> AlunosCadastrados { get; set; } = [];
-    private string NomeAluno { get; set; } = string.Empty;
-    private string Responsavel { get; set; } = string.Empty;
-    private DateTime DataNascimento { get; set; } = new(2013, 1, 1);
-    private int TurmaId { get; set; }
-    private string Mensagem { get; set; } = string.Empty;
-    private string MensagemClasse { get; set; } = "form-message";
-
-    protected override void OnInitialized()
-    {
-        MenuItems = MenuService.ObterMenu(FutTech.Models.PerfilUsuario.Treinador);
-        Turmas = TreinadorService.ObterTurmasDoTreinador();
-        TurmaId = Turmas.FirstOrDefault()?.Id ?? 0;
-        AtualizarAlunos();
-    }
-
-    private void AdicionarAluno()
-    {
-        if (string.IsNullOrWhiteSpace(NomeAluno) || string.IsNullOrWhiteSpace(Responsavel))
-        {
-            DefinirMensagem("Preencha nome do aluno e responsável.", false);
-            return;
-        }
-
-        if (TurmaId == 0)
-        {
-            DefinirMensagem("Crie uma turma antes de adicionar alunos.", false);
-            return;
-        }
-
-        var dataNascimento = DateOnly.FromDateTime(DataNascimento);
-        TreinadorService.AdicionarAluno(NomeAluno, Responsavel, dataNascimento, TurmaId);
-        NomeAluno = string.Empty;
-        Responsavel = string.Empty;
-        DataNascimento = new DateTime(2013, 1, 1);
-        AtualizarAlunos();
-        DefinirMensagem("Aluno adicionado com sucesso.", true);
-    }
-
-    private void AtualizarAlunos()
-    {
-        AlunosCadastrados = TreinadorService.ObterAlunosDoTreinador();
-    }
-
-    private void RemoverAluno(Aluno aluno)
-    {
-        if (!TreinadorService.RemoverAluno(aluno.Id))
-        {
-            DefinirMensagem("Não foi possível remover este aluno.", false);
-            return;
-        }
-
-        AtualizarAlunos();
-        DefinirMensagem("Aluno removido com sucesso.", true);
-    }
-
-    private static int CalcularIdade(DateOnly nascimento)
-    {
-        var hoje = DateOnly.FromDateTime(DateTime.Today);
-        var idade = hoje.Year - nascimento.Year;
-
-        if (nascimento > hoje.AddYears(-idade))
-        {
-            idade--;
-        }
-
-        return idade;
-    }
-
-    private void DefinirMensagem(string mensagem, bool sucesso)
-    {
-        Mensagem = mensagem;
-        MensagemClasse = sucesso ? "form-message success" : "form-message error";
-    }
-}

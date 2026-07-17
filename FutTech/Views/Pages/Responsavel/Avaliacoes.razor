@@ -1,18 +1,14 @@
 @page "/responsavel/avaliacoes"
-@using System.Globalization
-@using FutTech.Services
-@inject DemoMenuService MenuService
-@inject DemoTreinadorService TreinadorService
 
 <PageTitle>Avaliações do Atleta</PageTitle>
 
-<AppAreaShell NomeEscolinha="Escolinha Brasil FC (Demo)"
-              NomeUsuario="Roberto Pai do Lucas"
+<AppAreaShell NomeEscolinha="FutTech"
+              NomeUsuario="Responsável"
               CargoUsuario="Responsável"
               TextoPerfil="Responsável"
+              Perfil="PerfilUsuario.Responsavel"
               ItemAtivo="avaliacoes"
-              TituloMenu="Menu do responsável"
-              MenuItems="@MenuItems">
+              TituloMenu="Menu do responsável">
     <main class="guardian-evaluations-content">
         <header class="guardian-heading">
             <div>
@@ -28,50 +24,45 @@
                 </svg>
             </div>
             <div>
-                <strong>@NomeAluno</strong>
-                <span>@NomeTurma</span>
-                <small>@TextoResumo</small>
+                <strong>Nenhum atleta carregado</strong>
+                <span>Turma não carregada</span>
+                <small>0 avaliações registradas</small>
             </div>
         </section>
 
-        @if (UltimaAvaliacao is not null)
-        {
-            <section class="latest-panel" aria-label="Última avaliação">
-                <div class="latest-heading">
-                    <div>
-                        <h2>Última avaliação</h2>
-                        <time datetime="@UltimaAvaliacao.Data.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)">
-                            @UltimaAvaliacao.Data.ToString("dd/MM/yyyy", PtBr)
-                        </time>
-                    </div>
-                    <div class="latest-score">
-                        <span>Média</span>
-                        <strong>@UltimaAvaliacao.Media.ToString("N1", PtBr)</strong>
-                    </div>
+        <section class="latest-panel" aria-label="Última avaliação">
+            <div class="latest-heading">
+                <div>
+                    <h2>Última avaliação</h2>
+                    <time>Nenhuma avaliação carregada</time>
                 </div>
+                <div class="latest-score">
+                    <span>Média</span>
+                    <strong>0,0</strong>
+                </div>
+            </div>
 
-                <dl class="score-list">
-                    <div>
-                        <dt>Técnica</dt>
-                        <dd>@UltimaAvaliacao.NotaTecnica</dd>
-                    </div>
-                    <div>
-                        <dt>Física</dt>
-                        <dd>@UltimaAvaliacao.NotaFisica</dd>
-                    </div>
-                    <div>
-                        <dt>Tática</dt>
-                        <dd>@UltimaAvaliacao.NotaTatica</dd>
-                    </div>
-                    <div>
-                        <dt>Comportamento</dt>
-                        <dd>@UltimaAvaliacao.NotaComportamental</dd>
-                    </div>
-                </dl>
+            <dl class="score-list">
+                <div>
+                    <dt>Técnica</dt>
+                    <dd>0</dd>
+                </div>
+                <div>
+                    <dt>Física</dt>
+                    <dd>0</dd>
+                </div>
+                <div>
+                    <dt>Tática</dt>
+                    <dd>0</dd>
+                </div>
+                <div>
+                    <dt>Comportamento</dt>
+                    <dd>0</dd>
+                </div>
+            </dl>
 
-                <p>@UltimaAvaliacao.Observacoes</p>
-            </section>
-        }
+            <p>As observações do treinador aparecerão aqui quando o backend for conectado.</p>
+        </section>
 
         <section class="history-panel" aria-label="Histórico de avaliações">
             <div class="section-title">
@@ -81,46 +72,10 @@
                 <h2>Histórico</h2>
             </div>
 
-            @if (ListaAvaliacoes.Count == 0)
-            {
-                <div class="empty-state">
-                    <strong>Nenhuma avaliação publicada</strong>
-                    <span>Quando o treinador registrar uma avaliação, ela aparecerá aqui.</span>
-                </div>
-            }
-            else
-            {
-                <div class="history-list">
-                    @foreach (var avaliacao in ListaAvaliacoes)
-                    {
-                        <article class="history-item">
-                            <div>
-                                <strong>@avaliacao.Data.ToString("dd/MM/yyyy", PtBr)</strong>
-                                <span>@avaliacao.Observacoes</span>
-                            </div>
-                            <small>@avaliacao.Media.ToString("N1", PtBr)</small>
-                        </article>
-                    }
-                </div>
-            }
+            <div class="empty-state">
+                <strong>Nenhuma avaliação publicada</strong>
+                <span>Quando o treinador registrar uma avaliação, ela aparecerá aqui.</span>
+            </div>
         </section>
     </main>
 </AppAreaShell>
-
-@code {
-    private static readonly CultureInfo PtBr = new("pt-BR");
-    private const int AlunoResponsavelId = 1;
-    private IReadOnlyList<MenuItemSistema> MenuItems { get; set; } = [];
-    private IReadOnlyList<AvaliacaoAluno> ListaAvaliacoes { get; set; } = [];
-    private Aluno? AlunoResponsavel => TreinadorService.ObterAluno(AlunoResponsavelId);
-    private AvaliacaoAluno? UltimaAvaliacao => ListaAvaliacoes.FirstOrDefault();
-    private string NomeAluno => AlunoResponsavel?.Nome ?? "Aluno não encontrado";
-    private string NomeTurma => AlunoResponsavel is null ? "Sem turma" : TreinadorService.ObterNomeTurma(AlunoResponsavel.TurmaId);
-    private string TextoResumo => ListaAvaliacoes.Count == 1 ? "1 avaliação registrada" : $"{ListaAvaliacoes.Count} avaliações registradas";
-
-    protected override void OnInitialized()
-    {
-        MenuItems = MenuService.ObterMenu(FutTech.Models.PerfilUsuario.Responsavel);
-        ListaAvaliacoes = TreinadorService.ObterAvaliacoesDoAluno(AlunoResponsavelId);
-    }
-}

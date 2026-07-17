@@ -1,0 +1,64 @@
+@page "/responsavel/financeiro"
+
+<PageTitle>Financeiro do Responsável</PageTitle>
+
+<AppAreaShell NomeEscolinha="FutTech"
+              NomeUsuario="Responsável"
+              CargoUsuario="Responsável"
+              TextoPerfil="Responsável"
+              Perfil="PerfilUsuario.Responsavel"
+              ItemAtivo="financeiro"
+              TituloMenu="Menu do responsável">
+    <main class="guardian-finance-content">
+        <header class="guardian-finance-heading">
+            <div>
+                <h1>Financeiro</h1>
+                <p>Acompanhe mensalidades, vencimentos e pagamentos do atleta vinculado.</p>
+            </div>
+        </header>
+
+        <section class="athlete-summary">
+            <div class="athlete-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 9a7 7 0 0 1 14 0M12 14v7" />
+                </svg>
+            </div>
+            <div>
+                <strong>Nenhum atleta carregado</strong>
+                <span>Turma não carregada</span>
+                <small>0 mensalidades em aberto</small>
+            </div>
+        </section>
+
+        <section class="finance-metrics" aria-label="Resumo financeiro">
+            <article class="metric-card metric-danger">
+                <span>Total em aberto</span>
+                <strong>R$ 0,00</strong>
+            </article>
+
+            <article class="metric-card metric-warning">
+                <span>Pendências</span>
+                <strong>0</strong>
+            </article>
+
+            <article class="metric-card metric-success">
+                <span>Total pago</span>
+                <strong>R$ 0,00</strong>
+            </article>
+        </section>
+
+        <section class="payments-panel" aria-label="Mensalidades do atleta">
+            <div class="section-title">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M3 7h18v12H3V7Zm0 4h18M7 15h3" />
+                </svg>
+                <h2>Mensalidades</h2>
+            </div>
+
+            <div class="empty-state">
+                <strong>Nenhuma mensalidade gerada</strong>
+                <span>Quando a escolinha gerar mensalidades, elas aparecerão aqui.</span>
+            </div>
+        </section>
+    </main>
+</AppAreaShell>

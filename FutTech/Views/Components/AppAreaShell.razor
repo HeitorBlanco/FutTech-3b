@@ -8,7 +8,7 @@
         </div>
 
         <nav class="sidebar-nav" aria-label="@TituloMenu">
-            @foreach (var item in MenuItems)
+            @foreach (var item in ItensMenu)
             {
                 <a href="@item.Url"
                    class="@ObterClasseMenu(item)"
@@ -52,7 +52,7 @@
 </div>
 
 @code {
-    [Parameter] public string NomeEscolinha { get; set; } = "Escolinha Brasil FC (Demo)";
+    [Parameter] public string NomeEscolinha { get; set; } = "FutTech";
     [Parameter] public string NomeUsuario { get; set; } = string.Empty;
     [Parameter] public string CargoUsuario { get; set; } = string.Empty;
     [Parameter] public string TextoPerfil { get; set; } = string.Empty;
@@ -60,10 +60,21 @@
     [Parameter] public string TituloMenu { get; set; } = "Menu do sistema";
     [Parameter] public string CorPrincipal { get; set; } = "#0b2fb8";
     [Parameter] public string CorEscura { get; set; } = "#06156f";
+    [Parameter] public PerfilUsuario Perfil { get; set; } = PerfilUsuario.Administrador;
     [Parameter] public IReadOnlyList<MenuItemSistema> MenuItems { get; set; } = [];
     [Parameter] public RenderFragment? ChildContent { get; set; }
 
+    private const string IconeDashboard = "M4 19h16M7 16V9m5 7V5m5 11v-4M5 13l4-4 4 3 6-7";
+    private const string IconeUsuarios = "M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8m11 10v-2a4 4 0 0 0-3-3.87M17 3.13a4 4 0 0 1 0 7.75";
+    private const string IconeCamadas = "m12 3 9 5-9 5-9-5 9-5Zm-7 9 7 4 7-4M5 16l7 4 7-4";
+    private const string IconePresenca = "M9 11l2 2 4-5M5 4h14v17l-7-3-7 3V4Z";
+    private const string IconeFinanceiro = "M3 7h18v12H3V7Zm0 4h18M7 15h3";
+    private const string IconeComunicados = "M3 11v2h4l10 6V5L7 11H3Zm14 1h4M20 7l-2 2m0 6 2 2";
+    private const string IconeEstrela = "m12 3 2.7 5.48 6.05.88-4.38 4.27 1.03 6.02L12 16.81 6.6 19.65l1.03-6.02-4.38-4.27 6.05-.88L12 3Z";
+    private const string IconeAtleta = "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 9a7 7 0 0 1 14 0M12 14v7";
+
     private string AreaStyle => $"--area-accent: {CorPrincipal}; --area-accent-dark: {CorEscura};";
+    private IReadOnlyList<MenuItemSistema> ItensMenu => MenuItems.Count > 0 ? MenuItems : ObterMenu(Perfil);
 
     private string ObterClasseMenu(MenuItemSistema item)
     {
@@ -80,5 +91,48 @@
         }
 
         return classes;
+    }
+
+    private static IReadOnlyList<MenuItemSistema> ObterMenu(PerfilUsuario perfil)
+    {
+        return perfil switch
+        {
+            PerfilUsuario.Administrador =>
+            [
+                Criar("dashboard", "Dashboard", "/admin/dashboard", IconeDashboard),
+                Criar("usuarios", "Usuários", "/admin/usuarios", IconeUsuarios),
+                Criar("financeiro", "Financeiro", "/admin/financeiro", IconeFinanceiro),
+                Criar("comunicados", "Comunicados", "/admin/comunicados", IconeComunicados)
+            ],
+            PerfilUsuario.Responsavel =>
+            [
+                Criar("atletas", "Meus Atletas", "/responsavel/dashboard", IconeAtleta),
+                Criar("avaliacoes", "Avaliações", "/responsavel/avaliacoes", IconeEstrela),
+                Criar("comunicados", "Comunicados", "/responsavel/comunicados", IconeComunicados),
+                Criar("financeiro", "Financeiro", "/responsavel/financeiro", IconeFinanceiro)
+            ],
+            PerfilUsuario.Treinador =>
+            [
+                Criar("dashboard", "Dashboard", "/treinador/dashboard", IconeDashboard),
+                Criar("alunos", "Alunos", "/treinador/alunos", IconeUsuarios),
+                Criar("turmas", "Minhas Turmas", "/treinador/turmas", IconeCamadas),
+                Criar("presenca", "Presença", "/treinador/presenca", IconePresenca),
+                Criar("avaliacoes", "Avaliações", "/treinador/avaliacoes", IconeEstrela),
+                Criar("comunicados", "Comunicados", "/treinador/comunicados", IconeComunicados)
+            ],
+            _ => []
+        };
+    }
+
+    private static MenuItemSistema Criar(string chave, string texto, string url, string iconePath)
+    {
+        return new MenuItemSistema
+        {
+            Chave = chave,
+            Texto = texto,
+            Url = url,
+            IconePath = iconePath,
+            Disponivel = true
+        };
     }
 }

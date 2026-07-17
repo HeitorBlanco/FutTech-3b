@@ -1,19 +1,14 @@
 @page "/treinador/avaliacoes"
-@rendermode InteractiveServer
-@using System.Globalization
-@using FutTech.Services
-@inject DemoMenuService MenuService
-@inject DemoTreinadorService TreinadorService
 
 <PageTitle>Avaliações dos Alunos</PageTitle>
 
-<AppAreaShell NomeEscolinha="Escolinha Brasil FC (Demo)"
-              NomeUsuario="Rafael Costa"
-              CargoUsuario="Treinador Sub-13"
+<AppAreaShell NomeEscolinha="FutTech"
+              NomeUsuario="Treinador"
+              CargoUsuario="Treinador"
               TextoPerfil="Treinador"
+              Perfil="PerfilUsuario.Treinador"
               ItemAtivo="avaliacoes"
-              TituloMenu="Menu do treinador"
-              MenuItems="@MenuItems">
+              TituloMenu="Menu do treinador">
     <main class="evaluations-content">
         <header class="evaluations-heading">
             <div>
@@ -30,59 +25,53 @@
                 <h2>Nova avaliação</h2>
             </div>
 
-            <form class="evaluation-form" @onsubmit="SalvarAvaliacao" @onsubmit:preventDefault="true">
+            <form class="evaluation-form">
                 <div class="form-group form-group-wide">
                     <label for="aluno">Aluno</label>
-                    <select id="aluno" @bind="AlunoSelecionadoId" @bind:after="CarregarUltimaAvaliacao">
-                        @foreach (var aluno in Alunos)
-                        {
-                            <option value="@aluno.Id">@aluno.Nome - @TreinadorService.ObterNomeTurma(aluno.TurmaId)</option>
-                        }
+                    <select id="aluno">
+                        <option>Selecione um aluno</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="data-avaliacao">Data</label>
-                    <input id="data-avaliacao" type="date" @bind="DataAvaliacao" @bind:format="yyyy-MM-dd" />
+                    <input id="data-avaliacao" type="date" />
                 </div>
 
                 <div class="score-grid">
                     <div class="score-field">
                         <label for="nota-tecnica">Técnica</label>
-                        <input id="nota-tecnica" type="number" min="0" max="10" step="1" @bind="NotaTecnica" />
+                        <input id="nota-tecnica" type="number" min="0" max="10" step="1" />
                     </div>
 
                     <div class="score-field">
                         <label for="nota-fisica">Física</label>
-                        <input id="nota-fisica" type="number" min="0" max="10" step="1" @bind="NotaFisica" />
+                        <input id="nota-fisica" type="number" min="0" max="10" step="1" />
                     </div>
 
                     <div class="score-field">
                         <label for="nota-tatica">Tática</label>
-                        <input id="nota-tatica" type="number" min="0" max="10" step="1" @bind="NotaTatica" />
+                        <input id="nota-tatica" type="number" min="0" max="10" step="1" />
                     </div>
 
                     <div class="score-field">
                         <label for="nota-comportamental">Comportamento</label>
-                        <input id="nota-comportamental" type="number" min="0" max="10" step="1" @bind="NotaComportamental" />
+                        <input id="nota-comportamental" type="number" min="0" max="10" step="1" />
                     </div>
                 </div>
 
                 <div class="form-group form-group-full">
                     <label for="observacoes">Observações</label>
-                    <textarea id="observacoes"
-                              rows="4"
-                              @bind="Observacoes"
-                              placeholder="Descreva pontos fortes, evolução e próximos focos de treino."></textarea>
+                    <textarea id="observacoes" rows="4" placeholder="Descreva pontos fortes, evolução e próximos focos de treino."></textarea>
                 </div>
 
                 <div class="form-footer">
                     <div class="average-preview">
                         <span>Média</span>
-                        <strong>@MediaFormulario.ToString("N1", PtBr)</strong>
+                        <strong>0,0</strong>
                     </div>
 
-                    <button type="submit" class="save-button" disabled="@(Alunos.Count == 0)">
+                    <button type="button" class="save-button">
                         <svg viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2ZM7 3v6h8M7 21v-8h10v8" />
                         </svg>
@@ -90,11 +79,6 @@
                     </button>
                 </div>
             </form>
-
-            @if (!string.IsNullOrWhiteSpace(Mensagem))
-            {
-                <p class="@MensagemClasse">@Mensagem</p>
-            }
         </section>
 
         <section class="evaluations-list-panel" aria-label="Avaliações registradas">
@@ -105,144 +89,10 @@
                 <h2>Avaliações registradas</h2>
             </div>
 
-            @if (ListaAvaliacoes.Count == 0)
-            {
-                <div class="empty-state">
-                    <strong>Nenhuma avaliação registrada</strong>
-                    <span>Salve a primeira avaliação para acompanhar a evolução dos alunos.</span>
-                </div>
-            }
-            else
-            {
-                <div class="evaluation-cards">
-                    @foreach (var avaliacao in ListaAvaliacoes)
-                    {
-                        <article class="evaluation-card">
-                            <div class="evaluation-card-heading">
-                                <div>
-                                    <strong>@TreinadorService.ObterNomeAluno(avaliacao.AlunoId)</strong>
-                                    <span>@TreinadorService.ObterNomeTurma(avaliacao.TurmaId)</span>
-                                </div>
-                                <div class="score-badge">
-                                    <span>Média</span>
-                                    <strong>@avaliacao.Media.ToString("N1", PtBr)</strong>
-                                </div>
-                            </div>
-
-                            <dl class="score-list">
-                                <div>
-                                    <dt>Técnica</dt>
-                                    <dd>@avaliacao.NotaTecnica</dd>
-                                </div>
-                                <div>
-                                    <dt>Física</dt>
-                                    <dd>@avaliacao.NotaFisica</dd>
-                                </div>
-                                <div>
-                                    <dt>Tática</dt>
-                                    <dd>@avaliacao.NotaTatica</dd>
-                                </div>
-                                <div>
-                                    <dt>Comportamento</dt>
-                                    <dd>@avaliacao.NotaComportamental</dd>
-                                </div>
-                            </dl>
-
-                            <p>@avaliacao.Observacoes</p>
-                            <time datetime="@avaliacao.Data.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)">
-                                @avaliacao.Data.ToString("dd/MM/yyyy", PtBr)
-                            </time>
-                        </article>
-                    }
-                </div>
-            }
+            <div class="empty-state">
+                <strong>Nenhuma avaliação carregada</strong>
+                <span>As avaliações aparecerão aqui quando o backend for conectado.</span>
+            </div>
         </section>
     </main>
 </AppAreaShell>
-
-@code {
-    private static readonly CultureInfo PtBr = new("pt-BR");
-    private IReadOnlyList<MenuItemSistema> MenuItems { get; set; } = [];
-    private IReadOnlyList<Aluno> Alunos { get; set; } = [];
-    private IReadOnlyList<AvaliacaoAluno> ListaAvaliacoes { get; set; } = [];
-    private int AlunoSelecionadoId { get; set; }
-    private DateTime DataAvaliacao { get; set; } = new(2026, 7, 17);
-    private int NotaTecnica { get; set; } = 7;
-    private int NotaFisica { get; set; } = 7;
-    private int NotaTatica { get; set; } = 7;
-    private int NotaComportamental { get; set; } = 8;
-    private string Observacoes { get; set; } = string.Empty;
-    private string Mensagem { get; set; } = string.Empty;
-    private string MensagemClasse { get; set; } = "form-message";
-
-    private decimal MediaFormulario => (NotaTecnica + NotaFisica + NotaTatica + NotaComportamental) / 4m;
-
-    protected override void OnInitialized()
-    {
-        MenuItems = MenuService.ObterMenu(FutTech.Models.PerfilUsuario.Treinador);
-        Alunos = TreinadorService.ObterAlunosDoTreinador();
-        AlunoSelecionadoId = Alunos.FirstOrDefault()?.Id ?? 0;
-        AtualizarAvaliacoes();
-        CarregarUltimaAvaliacao();
-    }
-
-    private void SalvarAvaliacao()
-    {
-        if (AlunoSelecionadoId == 0)
-        {
-            DefinirMensagem("Cadastre alunos antes de registrar avaliações.", false);
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(Observacoes))
-        {
-            DefinirMensagem("Informe as observações da avaliação.", false);
-            return;
-        }
-
-        TreinadorService.SalvarAvaliacao(
-            AlunoSelecionadoId,
-            DateOnly.FromDateTime(DataAvaliacao),
-            NotaTecnica,
-            NotaFisica,
-            NotaTatica,
-            NotaComportamental,
-            Observacoes);
-
-        AtualizarAvaliacoes();
-        DefinirMensagem("Avaliação salva com sucesso.", true);
-    }
-
-    private void CarregarUltimaAvaliacao()
-    {
-        Mensagem = string.Empty;
-        var ultima = TreinadorService.ObterUltimaAvaliacaoDoAluno(AlunoSelecionadoId);
-
-        if (ultima is null)
-        {
-            NotaTecnica = 7;
-            NotaFisica = 7;
-            NotaTatica = 7;
-            NotaComportamental = 8;
-            Observacoes = string.Empty;
-            return;
-        }
-
-        NotaTecnica = ultima.NotaTecnica;
-        NotaFisica = ultima.NotaFisica;
-        NotaTatica = ultima.NotaTatica;
-        NotaComportamental = ultima.NotaComportamental;
-        Observacoes = ultima.Observacoes;
-    }
-
-    private void AtualizarAvaliacoes()
-    {
-        ListaAvaliacoes = TreinadorService.ObterAvaliacoesDoTreinador();
-    }
-
-    private void DefinirMensagem(string mensagem, bool sucesso)
-    {
-        Mensagem = mensagem;
-        MensagemClasse = sucesso ? "form-message success" : "form-message error";
-    }
-}

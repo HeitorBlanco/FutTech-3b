@@ -1,21 +1,18 @@
 @page "/responsavel/dashboard"
-@using FutTech.Services
-@inject DemoMenuService MenuService
-@inject DemoTreinadorService TreinadorService
 
 <PageTitle>Área do Responsável</PageTitle>
 
-<AppAreaShell NomeEscolinha="Escolinha Brasil FC (Demo)"
-              NomeUsuario="Roberto Pai do Lucas"
+<AppAreaShell NomeEscolinha="FutTech"
+              NomeUsuario="Responsável"
               CargoUsuario="Responsável"
               TextoPerfil="Responsável"
+              Perfil="PerfilUsuario.Responsavel"
               ItemAtivo="atletas"
-              TituloMenu="Menu do responsável"
-              MenuItems="@MenuItems">
+              TituloMenu="Menu do responsável">
     <main class="portal-content">
         <section class="portal-heading">
             <h1>Meus Atletas</h1>
-            <p>Acompanhe o aluno vinculado à sua conta.</p>
+            <p>Acompanhe os alunos vinculados à sua conta.</p>
         </section>
 
         <section class="athlete-card">
@@ -25,9 +22,9 @@
                 </svg>
             </div>
             <div>
-                <strong>@NomeAluno</strong>
-                <span>@NomeTurma</span>
-                <small>@TextoAvaliacoes</small>
+                <strong>Nenhum atleta carregado</strong>
+                <span>Os atletas vinculados aparecerão aqui.</span>
+                <small>Dados serão preenchidos pelo backend.</small>
             </div>
         </section>
 
@@ -41,28 +38,10 @@
 
             <article class="notice-card">
                 <div>
-                    <strong>Treino cancelado amanhã</strong>
-                    <span>Campo em manutenção no período da tarde.</span>
+                    <strong>Nenhum comunicado publicado</strong>
+                    <span>Os avisos aparecerão aqui quando o backend for conectado.</span>
                 </div>
-                <time datetime="2026-07-03">03/07/2026</time>
             </article>
         </section>
     </main>
 </AppAreaShell>
-
-@code {
-    private const int AlunoResponsavelId = 1;
-    private IReadOnlyList<MenuItemSistema> MenuItems { get; set; } = [];
-    private Aluno? AlunoResponsavel => TreinadorService.ObterAluno(AlunoResponsavelId);
-    private string NomeAluno => AlunoResponsavel?.Nome ?? "Aluno não encontrado";
-    private string NomeTurma => AlunoResponsavel is null ? "Sem turma" : TreinadorService.ObterNomeTurma(AlunoResponsavel.TurmaId);
-    private IReadOnlyList<AvaliacaoAluno> AvaliacoesAluno => TreinadorService.ObterAvaliacoesDoAluno(AlunoResponsavelId);
-    private string TextoAvaliacoes => AvaliacoesAluno.Count == 1
-        ? "1 avaliação registrada"
-        : $"{AvaliacoesAluno.Count} avaliações registradas";
-
-    protected override void OnInitialized()
-    {
-        MenuItems = MenuService.ObterMenu(FutTech.Models.PerfilUsuario.Responsavel);
-    }
-}

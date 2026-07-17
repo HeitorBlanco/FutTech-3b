@@ -1,24 +1,13 @@
 @page "/responsavel/comunicados"
-@using FutTech.Services
-@inject DemoMenuService MenuService
 
 <PageTitle>Comunicados</PageTitle>
 
-<AppAreaShell NomeEscolinha="Escolinha Brasil FC (Demo)"
-              NomeUsuario="Roberto Pai do Lucas"
+<AppAreaShell NomeEscolinha="FutTech"
+              NomeUsuario="Responsável"
               CargoUsuario="Responsável"
               TextoPerfil="Responsável"
+              Perfil="PerfilUsuario.Responsavel"
               ItemAtivo="comunicados"
-              TituloMenu="Menu do responsável"
-              MenuItems="@MenuItems">
+              TituloMenu="Menu do responsável">
     <ComunicadosArea PodeGerenciar="false" />
 </AppAreaShell>
-
-@code {
-    private IReadOnlyList<MenuItemSistema> MenuItems { get; set; } = [];
-
-    protected override void OnInitialized()
-    {
-        MenuItems = MenuService.ObterMenu(FutTech.Models.PerfilUsuario.Responsavel);
-    }
-}

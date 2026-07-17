@@ -1,39 +1,37 @@
 @page "/treinador/dashboard"
-@using FutTech.Services
-@inject DemoMenuService MenuService
 
 <PageTitle>Dashboard do Treinador</PageTitle>
 
-<AppAreaShell NomeEscolinha="Escolinha Brasil FC (Demo)"
-              NomeUsuario="Rafael Costa"
-              CargoUsuario="Treinador Sub-13"
+<AppAreaShell NomeEscolinha="FutTech"
+              NomeUsuario="Treinador"
+              CargoUsuario="Treinador"
               TextoPerfil="Treinador"
+              Perfil="PerfilUsuario.Treinador"
               ItemAtivo="dashboard"
-              TituloMenu="Menu do treinador"
-              MenuItems="@MenuItems">
+              TituloMenu="Menu do treinador">
     <main class="coach-content">
         <section class="coach-heading">
             <h1>Dashboard do Treinador</h1>
-            <p>Resumo rápido da sua turma.</p>
+            <p>Resumo rápido das turmas e atletas.</p>
         </section>
 
         <section class="coach-grid">
             <article class="summary-card">
-                <span>Minha turma</span>
-                <strong>Sub-13 Tarde</strong>
-                <small>Segunda e quarta, 16:30</small>
+                <span>Minhas turmas</span>
+                <strong>0</strong>
+                <small>Turmas vinculadas aparecerão aqui.</small>
             </article>
 
             <article class="summary-card">
                 <span>Atletas ativos</span>
-                <strong>1</strong>
-                <small>Lucas Martins</small>
+                <strong>0</strong>
+                <small>Alunos cadastrados aparecerão aqui.</small>
             </article>
 
             <article class="summary-card">
                 <span>Presença média</span>
-                <strong>100%</strong>
-                <small>Último treino registrado</small>
+                <strong>0%</strong>
+                <small>Presenças registradas aparecerão aqui.</small>
             </article>
         </section>
 
@@ -47,20 +45,10 @@
 
             <div class="training-row">
                 <div>
-                    <strong>Sub-13 Tarde</strong>
-                    <span>Campo principal</span>
+                    <strong>Nenhum treino carregado</strong>
+                    <span>O backend preencherá esta informação.</span>
                 </div>
-                <time datetime="2026-07-13T16:30">13/07/2026 - 16:30</time>
             </div>
         </section>
     </main>
 </AppAreaShell>
-
-@code {
-    private IReadOnlyList<MenuItemSistema> MenuItems { get; set; } = [];
-
-    protected override void OnInitialized()
-    {
-        MenuItems = MenuService.ObterMenu(FutTech.Models.PerfilUsuario.Treinador);
-    }
-}

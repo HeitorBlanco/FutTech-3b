@@ -1,26 +1,21 @@
 @page "/dashboard"
 @page "/admin/dashboard"
-@using System.Globalization
-@using FutTech.Services
-@inject DemoAdminDashboardService DashboardService
-@inject DemoMenuService MenuService
 
 <PageTitle>Dashboard Administrativo</PageTitle>
 
-<AppAreaShell NomeEscolinha="@Resumo.NomeEscolinha"
-              NomeUsuario="@Resumo.NomeAdministrador"
-              CargoUsuario="@Resumo.CargoAdministrador"
+<AppAreaShell NomeEscolinha="FutTech"
+              NomeUsuario="Administrador"
+              CargoUsuario="Coordenador"
               TextoPerfil="Administrador"
+              Perfil="PerfilUsuario.Administrador"
               ItemAtivo="dashboard"
-              TituloMenu="Menu administrativo"
-              MenuItems="@MenuItems">
+              TituloMenu="Menu administrativo">
     <main class="dashboard-content">
         <div class="dashboard-heading">
             <div>
                 <h1>Dashboard</h1>
-                <span>@Resumo.PeriodoReferencia.ToString("MMMM/yyyy", PtBr)</span>
+                <span>Painel administrativo</span>
             </div>
-            <p>Olá, @Resumo.NomeAdministrador (@Resumo.CargoAdministrador)!</p>
         </div>
 
         <section class="metric-grid" aria-label="Resumo administrativo">
@@ -32,7 +27,7 @@
                 </div>
                 <div>
                     <span>Alunos ativos</span>
-                    <strong>@Resumo.AlunosAtivos</strong>
+                    <strong>0</strong>
                 </div>
             </article>
 
@@ -44,7 +39,7 @@
                 </div>
                 <div>
                     <span>Turmas</span>
-                    <strong>@Resumo.TurmasAtivas</strong>
+                    <strong>0</strong>
                 </div>
             </article>
 
@@ -56,7 +51,7 @@
                 </div>
                 <div>
                     <span>Mensalidades pendentes</span>
-                    <strong>@Resumo.MensalidadesPendentes</strong>
+                    <strong>0</strong>
                 </div>
             </article>
 
@@ -68,7 +63,7 @@
                 </div>
                 <div>
                     <span>Frequência média</span>
-                    <strong>@Resumo.FrequenciaMediaPercentual.ToString("N0", PtBr)%</strong>
+                    <strong>0%</strong>
                 </div>
             </article>
         </section>
@@ -84,12 +79,12 @@
 
                 <div class="finance-row">
                     <span>A receber</span>
-                    <strong class="amount-danger">@FormatarMoeda(Resumo.ValorAReceber)</strong>
+                    <strong class="amount-danger">R$ 0,00</strong>
                 </div>
 
                 <div class="finance-row">
-                    <span>Recebido (mês atual)</span>
-                    <strong class="amount-success">@FormatarMoeda(Resumo.RecebidoMesAtual)</strong>
+                    <span>Recebido</span>
+                    <strong class="amount-success">R$ 0,00</strong>
                 </div>
             </article>
 
@@ -102,61 +97,14 @@
                 </div>
 
                 <div class="announcement-list">
-                    @foreach (var comunicado in Resumo.UltimosComunicados)
-                    {
-                        <div class="announcement-item">
-                            <div>
-                                <strong>@comunicado.Titulo</strong>
-                                <span>@comunicado.Conteudo</span>
-                            </div>
-                            <time datetime="@comunicado.PublicadoEm.ToString("yyyy-MM-dd")">
-                                @comunicado.PublicadoEm.ToString("dd/MM/yyyy", PtBr)
-                            </time>
+                    <div class="announcement-item">
+                        <div>
+                            <strong>Nenhum comunicado publicado</strong>
+                            <span>Os avisos aparecerão aqui quando o backend for conectado.</span>
                         </div>
-                    }
+                    </div>
                 </div>
             </article>
         </section>
-
-        <section class="dashboard-panel classes-panel">
-            <div class="panel-title">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="m12 3 9 5-9 5-9-5 9-5Zm-7 9 7 4 7-4M5 16l7 4 7-4" />
-                </svg>
-                <h2>Turma em Destaque</h2>
-            </div>
-
-            <div class="class-list">
-                @foreach (var turma in Resumo.TurmasEmDestaque)
-                {
-                    var treinador = Resumo.Treinadores.FirstOrDefault(item => item.Id == turma.TreinadorId);
-
-                    <article class="class-item">
-                        <div>
-                            <strong>@turma.Nome</strong>
-                            <span>@turma.DiasDeTreino - @turma.Horario.ToString("HH:mm", PtBr)</span>
-                        </div>
-                        <small>@treinador?.Nome</small>
-                    </article>
-                }
-            </div>
-        </section>
     </main>
 </AppAreaShell>
-
-@code {
-    private static readonly CultureInfo PtBr = new("pt-BR");
-    private AdminDashboardResumo Resumo { get; set; } = new();
-    private IReadOnlyList<MenuItemSistema> MenuItems { get; set; } = [];
-
-    protected override void OnInitialized()
-    {
-        Resumo = DashboardService.ObterResumo();
-        MenuItems = MenuService.ObterMenu(FutTech.Models.PerfilUsuario.Administrador);
-    }
-
-    private static string FormatarMoeda(decimal valor)
-    {
-        return valor.ToString("C", PtBr);
-    }
-}

@@ -5,11 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-builder.Services.AddSingleton<DemoComunicadoService>();
-builder.Services.AddSingleton<DemoAdminDashboardService>();
-builder.Services.AddSingleton<DemoAuthService>();
-builder.Services.AddSingleton<DemoMenuService>();
-builder.Services.AddSingleton<DemoTreinadorService>();
+builder.Services.AddSingleton<AuthService>();
 
 var app = builder.Build();
 

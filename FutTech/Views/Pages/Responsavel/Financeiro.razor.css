@@ -1,0 +1,319 @@
+.guardian-finance-content {
+    width: min(100%, 1440px);
+    margin: 0 auto;
+    padding: 48px 42px 56px;
+}
+
+.guardian-finance-heading {
+    margin-bottom: 26px;
+}
+
+.guardian-finance-heading h1 {
+    margin: 0;
+    color: #0b2a93;
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.guardian-finance-heading p {
+    margin: 6px 0 0;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.athlete-summary,
+.metric-card,
+.payments-panel {
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 9px 24px rgba(15, 23, 42, 0.08);
+}
+
+.athlete-summary {
+    min-height: 132px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    border-left: 5px solid #0b2fb8;
+    margin-bottom: 24px;
+    padding: 26px 30px;
+}
+
+.athlete-icon {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: #e8f3ff;
+    color: #0b2fb8;
+}
+
+.athlete-icon svg,
+.section-title svg,
+.pay-button svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex: 0 0 auto;
+}
+
+.athlete-summary strong {
+    display: block;
+    color: #111827;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.athlete-summary span,
+.athlete-summary small {
+    display: block;
+    margin-top: 5px;
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.finance-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.metric-card {
+    min-height: 116px;
+    border-left: 5px solid #0b2fb8;
+    padding: 24px 26px;
+}
+
+.metric-card span {
+    display: block;
+    margin-bottom: 9px;
+    color: #6b7280;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.metric-card strong {
+    display: block;
+    color: #111827;
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.metric-success strong {
+    color: #1f7a45;
+}
+
+.metric-warning strong {
+    color: #f97316;
+}
+
+.metric-danger strong {
+    color: #c62828;
+}
+
+.finance-message {
+    margin: 0 0 18px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.finance-message.success {
+    background: #e8f5e9;
+    color: #18733d;
+}
+
+.finance-message.error {
+    background: #ffebee;
+    color: #b71c1c;
+}
+
+.payments-panel {
+    padding: 28px 30px;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    color: #0b2a93;
+}
+
+.section-title h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.payments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.payment-card {
+    border: 1px solid #edf0f5;
+    border-radius: 8px;
+    background: #fbfcff;
+    padding: 18px;
+}
+
+.payment-main,
+.payment-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.payment-main {
+    margin-bottom: 16px;
+}
+
+.payment-main strong {
+    display: block;
+    color: #111827;
+    font-size: 17px;
+    font-weight: 800;
+    text-transform: capitalize;
+}
+
+.payment-main span,
+.payment-footer small {
+    display: block;
+    margin-top: 5px;
+    color: #6b7280;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.payment-amount {
+    color: #1f7a45;
+    font-size: 22px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    border-radius: 999px;
+    padding: 0 12px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.status-badge.paid {
+    background: #e8f5e9;
+    color: #18733d;
+}
+
+.status-badge.pending {
+    background: #fff1df;
+    color: #b45309;
+}
+
+.status-badge.overdue {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.pay-button {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 0;
+    border-radius: 8px;
+    padding: 0 16px;
+    background: #0b2fb8;
+    color: #ffffff;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.pay-button:hover {
+    background: #09258f;
+}
+
+.pay-button svg {
+    width: 18px;
+    height: 18px;
+}
+
+.empty-state {
+    border: 1px dashed #ccd3df;
+    border-radius: 8px;
+    background: #fbfcff;
+    padding: 28px;
+    text-align: center;
+}
+
+.empty-state strong,
+.empty-state span {
+    display: block;
+}
+
+.empty-state strong {
+    color: #111827;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.empty-state span {
+    margin-top: 6px;
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+@media (max-width: 960px) {
+    .finance-metrics {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 860px) {
+    .guardian-finance-content {
+        padding: 30px 20px 40px;
+    }
+
+    .guardian-finance-heading h1 {
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 620px) {
+    .athlete-summary,
+    .payment-main,
+    .payment-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .payments-panel {
+        padding: 24px 20px;
+    }
+
+    .pay-button {
+        width: 100%;
+    }
+}

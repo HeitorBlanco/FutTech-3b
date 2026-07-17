@@ -1,60 +1,51 @@
 @page "/admin/usuarios"
-@rendermode InteractiveServer
-@using FutTech.Services
-@inject DemoAuthService AuthService
-@inject DemoMenuService MenuService
 
 <PageTitle>Usuários</PageTitle>
 
-<AppAreaShell NomeEscolinha="Escolinha Brasil FC (Demo)"
-              NomeUsuario="Carlos Admin"
+<AppAreaShell NomeEscolinha="FutTech"
+              NomeUsuario="Administrador"
               CargoUsuario="Coordenador"
               TextoPerfil="Administrador"
+              Perfil="PerfilUsuario.Administrador"
               ItemAtivo="usuarios"
-              TituloMenu="Menu administrativo"
-              MenuItems="@MenuItems">
+              TituloMenu="Menu administrativo">
     <main class="users-content">
         <div class="users-heading">
             <div>
                 <h1>Usuários</h1>
-                <p>Crie acessos para treinadores e responsáveis.</p>
+                <p>Estrutura visual para criação e gestão de acessos.</p>
             </div>
         </div>
 
         <section class="user-form-panel">
             <h2>Novo acesso</h2>
 
-            <form class="user-form" @onsubmit="CadastrarUsuario" @onsubmit:preventDefault="true">
+            <form class="user-form">
                 <div class="form-group">
                     <label for="nome">Nome</label>
-                    <input id="nome" type="text" @bind="Nome" placeholder="Nome completo" />
+                    <input id="nome" type="text" placeholder="Nome completo" />
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input id="email" type="email" @bind="Email" placeholder="email@futtech.com" />
+                    <input id="email" type="email" placeholder="email@futtech.com" />
                 </div>
 
                 <div class="form-group">
                     <label for="senha">Senha</label>
-                    <input id="senha" type="text" @bind="Senha" placeholder="Senha inicial" />
+                    <input id="senha" type="text" placeholder="Senha inicial" />
                 </div>
 
                 <div class="form-group">
                     <label for="perfil">Perfil</label>
-                    <select id="perfil" @bind="PerfilSelecionado">
-                        <option value="Treinador">Treinador</option>
-                        <option value="Responsavel">Responsável</option>
+                    <select id="perfil">
+                        <option>Treinador</option>
+                        <option>Responsável</option>
                     </select>
                 </div>
 
-                <button type="submit">Criar login</button>
+                <button type="button">Criar login</button>
             </form>
-
-            @if (!string.IsNullOrWhiteSpace(Mensagem))
-            {
-                <p class="@MensagemClasse">@Mensagem</p>
-            }
         </section>
 
         <section class="users-table-panel">
@@ -73,106 +64,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var usuario in UsuariosCadastrados)
-                        {
-                            <tr>
-                                <td>@usuario.Nome</td>
-                                <td>@usuario.Email</td>
-                                <td>@usuario.PerfilDescricao</td>
-                                <td>@usuario.Cargo</td>
-                                <td><span class="status-badge">Ativo</span></td>
-                                <td>
-                                    <button type="button"
-                                            class="remove-user-button"
-                                            disabled="@EhAdministrador(usuario)"
-                                            @onclick="() => RemoverUsuario(usuario)">
-                                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                                            <path d="M3 6h18M8 6V4h8v2m-9 0 1 14h8l1-14M10 11v5m4-5v5" />
-                                        </svg>
-                                        <span>Remover</span>
-                                    </button>
-                                </td>
-                            </tr>
-                        }
+                        <tr>
+                            <td colspan="6">Nenhum usuário carregado.</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </section>
     </main>
 </AppAreaShell>
-
-@code {
-    private IReadOnlyList<MenuItemSistema> MenuItems { get; set; } = [];
-    private IReadOnlyList<UsuarioSistema> UsuariosCadastrados { get; set; } = [];
-    private string Nome { get; set; } = string.Empty;
-    private string Email { get; set; } = string.Empty;
-    private string Senha { get; set; } = string.Empty;
-    private string PerfilSelecionado { get; set; } = nameof(FutTech.Models.PerfilUsuario.Treinador);
-    private string Mensagem { get; set; } = string.Empty;
-    private string MensagemClasse { get; set; } = "form-message";
-
-    protected override void OnInitialized()
-    {
-        MenuItems = MenuService.ObterMenu(FutTech.Models.PerfilUsuario.Administrador);
-        AtualizarUsuarios();
-    }
-
-    private void CadastrarUsuario()
-    {
-        if (string.IsNullOrWhiteSpace(Nome) ||
-            string.IsNullOrWhiteSpace(Email) ||
-            string.IsNullOrWhiteSpace(Senha))
-        {
-            DefinirMensagem("Preencha nome, email e senha.", false);
-            return;
-        }
-
-        if (AuthService.EmailJaCadastrado(Email))
-        {
-            DefinirMensagem("Já existe um usuário com esse email.", false);
-            return;
-        }
-
-        var perfil = PerfilSelecionado == nameof(FutTech.Models.PerfilUsuario.Responsavel)
-            ? FutTech.Models.PerfilUsuario.Responsavel
-            : FutTech.Models.PerfilUsuario.Treinador;
-
-        var cargo = perfil == FutTech.Models.PerfilUsuario.Treinador ? "Treinador" : "Responsável";
-
-        AuthService.CadastrarUsuario(Nome, Email, Senha, perfil, cargo);
-        AtualizarUsuarios();
-        Nome = string.Empty;
-        Email = string.Empty;
-        Senha = string.Empty;
-        PerfilSelecionado = nameof(FutTech.Models.PerfilUsuario.Treinador);
-        DefinirMensagem("Login criado com sucesso.", true);
-    }
-
-    private void AtualizarUsuarios()
-    {
-        UsuariosCadastrados = AuthService.ListarUsuarios();
-    }
-
-    private void RemoverUsuario(UsuarioSistema usuario)
-    {
-        if (!AuthService.RemoverUsuario(usuario.Id))
-        {
-            DefinirMensagem("Não foi possível remover este usuário.", false);
-            return;
-        }
-
-        AtualizarUsuarios();
-        DefinirMensagem("Usuário removido com sucesso.", true);
-    }
-
-    private static bool EhAdministrador(UsuarioSistema usuario)
-    {
-        return usuario.Perfil == FutTech.Models.PerfilUsuario.Administrador;
-    }
-
-    private void DefinirMensagem(string mensagem, bool sucesso)
-    {
-        Mensagem = mensagem;
-        MensagemClasse = sucesso ? "form-message success" : "form-message error";
-    }
-}

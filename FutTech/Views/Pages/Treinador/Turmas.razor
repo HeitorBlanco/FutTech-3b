@@ -1,24 +1,19 @@
 @page "/treinador/turmas"
-@rendermode InteractiveServer
-@using System.Globalization
-@using FutTech.Services
-@inject DemoMenuService MenuService
-@inject DemoTreinadorService TreinadorService
 
 <PageTitle>Minhas Turmas</PageTitle>
 
-<AppAreaShell NomeEscolinha="Escolinha Brasil FC (Demo)"
-              NomeUsuario="Rafael Costa"
-              CargoUsuario="Treinador Sub-13"
+<AppAreaShell NomeEscolinha="FutTech"
+              NomeUsuario="Treinador"
+              CargoUsuario="Treinador"
               TextoPerfil="Treinador"
+              Perfil="PerfilUsuario.Treinador"
               ItemAtivo="turmas"
-              TituloMenu="Menu do treinador"
-              MenuItems="@MenuItems">
+              TituloMenu="Menu do treinador">
     <main class="classes-content">
         <header class="classes-heading">
             <div>
                 <h1>Minhas Turmas</h1>
-                <span>@ListaTurmas.Count @TextoTurmasAtivas</span>
+                <span>0 turmas ativas</span>
             </div>
 
             <a href="/treinador/alunos" class="heading-action">
@@ -29,55 +24,41 @@
             </a>
         </header>
 
-        @if (EditandoTurma)
-        {
-            <section class="edit-panel" aria-label="Editar turma">
-                <div class="edit-panel-heading">
-                    <div>
-                        <h2>Editar turma</h2>
-                        <span>Atualize os dados principais da turma selecionada.</span>
-                    </div>
+        <section class="edit-panel" aria-label="Editar turma">
+            <div class="edit-panel-heading">
+                <div>
+                    <h2>Dados da turma</h2>
+                    <span>Estrutura visual preparada para edição pelo backend.</span>
+                </div>
+            </div>
 
-                    <button type="button" class="icon-button" @onclick="CancelarEdicao" aria-label="Fechar edição">
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M18 6 6 18M6 6l12 12" />
-                        </svg>
-                    </button>
+            <form class="class-form">
+                <div class="form-group">
+                    <label for="nome-turma">Nome</label>
+                    <input id="nome-turma" type="text" placeholder="Nome da turma" />
                 </div>
 
-                <form class="class-form" @onsubmit="SalvarEdicao" @onsubmit:preventDefault="true">
-                    <div class="form-group">
-                        <label for="nome-turma">Nome</label>
-                        <input id="nome-turma" type="text" @bind="NomeEdicao" />
-                    </div>
+                <div class="form-group">
+                    <label for="categoria-turma">Categoria</label>
+                    <input id="categoria-turma" type="text" placeholder="Categoria" />
+                </div>
 
-                    <div class="form-group">
-                        <label for="categoria-turma">Categoria</label>
-                        <input id="categoria-turma" type="text" @bind="CategoriaEdicao" />
-                    </div>
+                <div class="form-group">
+                    <label for="dias-turma">Dias</label>
+                    <input id="dias-turma" type="text" placeholder="Dias de treino" />
+                </div>
 
-                    <div class="form-group">
-                        <label for="dias-turma">Dias</label>
-                        <input id="dias-turma" type="text" @bind="DiasEdicao" />
-                    </div>
+                <div class="form-group">
+                    <label for="horario-turma">Horário</label>
+                    <input id="horario-turma" type="time" />
+                </div>
 
-                    <div class="form-group">
-                        <label for="horario-turma">Horário</label>
-                        <input id="horario-turma" type="time" value="@HorarioEdicao" @onchange="AtualizarHorario" />
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="submit" class="save-button">Salvar</button>
-                        <button type="button" class="remove-button" @onclick="RemoverTurma">Remover</button>
-                    </div>
-                </form>
-            </section>
-        }
-
-        @if (!string.IsNullOrWhiteSpace(Mensagem))
-        {
-            <p class="@MensagemClasse">@Mensagem</p>
-        }
+                <div class="form-actions">
+                    <button type="button" class="save-button">Salvar</button>
+                    <button type="button" class="remove-button">Remover</button>
+                </div>
+            </form>
+        </section>
 
         <section class="classes-table-panel" aria-label="Turmas do treinador">
             <div class="table-wrapper">
@@ -93,158 +74,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var turma in ListaTurmas)
-                        {
-                            <tr>
-                                <td class="class-name">@turma.Nome</td>
-                                <td>
-                                    <span class="category-badge">@turma.Categoria</span>
-                                </td>
-                                <td>@FormatarHorario(turma.Horario)</td>
-                                <td>@turma.DiasDeTreino</td>
-                                <td>@QuantidadeAlunos(turma.Id)</td>
-                                <td>
-                                    <div class="actions">
-                                        <button type="button" class="action-button primary" @onclick="() => IniciarEdicao(turma)" aria-label="Editar turma @turma.Nome">
-                                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                                <path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5Z" />
-                                            </svg>
-                                            <span>Editar</span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
+                        <tr>
+                            <td colspan="6">Nenhuma turma carregada.</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </section>
     </main>
 </AppAreaShell>
-
-@code {
-    private static readonly CultureInfo PtBr = new("pt-BR");
-    private IReadOnlyList<MenuItemSistema> MenuItems { get; set; } = [];
-    private IReadOnlyList<Turma> ListaTurmas { get; set; } = [];
-    private IReadOnlyList<Aluno> Alunos { get; set; } = [];
-    private int TurmaIdEdicao { get; set; }
-    private string NomeEdicao { get; set; } = string.Empty;
-    private string CategoriaEdicao { get; set; } = string.Empty;
-    private string DiasEdicao { get; set; } = string.Empty;
-    private string HorarioEdicao { get; set; } = string.Empty;
-    private string Mensagem { get; set; } = string.Empty;
-    private string MensagemClasse { get; set; } = "feedback-message";
-
-    private string TextoTurmasAtivas => ListaTurmas.Count == 1 ? "turma ativa" : "turmas ativas";
-    private bool EditandoTurma => TurmaIdEdicao > 0;
-
-    protected override void OnInitialized()
-    {
-        MenuItems = MenuService.ObterMenu(FutTech.Models.PerfilUsuario.Treinador);
-        AtualizarDados();
-    }
-
-    private void AtualizarDados()
-    {
-        ListaTurmas = TreinadorService.ObterTurmasDoTreinador();
-        Alunos = TreinadorService.ObterAlunosDoTreinador();
-    }
-
-    private int QuantidadeAlunos(int turmaId)
-    {
-        return Alunos.Count(aluno => aluno.TurmaId == turmaId);
-    }
-
-    private static string FormatarHorario(TimeOnly inicio)
-    {
-        var termino = inicio.Add(TimeSpan.FromMinutes(90));
-        return $"{inicio.ToString("HH:mm", PtBr)} - {termino.ToString("HH:mm", PtBr)}";
-    }
-
-    private void IniciarEdicao(Turma turma)
-    {
-        TurmaIdEdicao = turma.Id;
-        NomeEdicao = turma.Nome;
-        CategoriaEdicao = turma.Categoria;
-        DiasEdicao = turma.DiasDeTreino;
-        HorarioEdicao = turma.Horario.ToString("HH:mm", PtBr);
-        Mensagem = string.Empty;
-    }
-
-    private void CancelarEdicao()
-    {
-        TurmaIdEdicao = 0;
-        Mensagem = string.Empty;
-    }
-
-    private void SalvarEdicao()
-    {
-        if (!ValidarFormulario(out var horario))
-        {
-            return;
-        }
-
-        var atualizou = TreinadorService.AtualizarTurma(
-            TurmaIdEdicao,
-            NomeEdicao,
-            CategoriaEdicao,
-            DiasEdicao,
-            horario);
-
-        if (!atualizou)
-        {
-            DefinirMensagem("Não foi possível encontrar a turma selecionada.", false);
-            return;
-        }
-
-        AtualizarDados();
-        DefinirMensagem("Turma atualizada com sucesso.", true);
-    }
-
-    private void RemoverTurma()
-    {
-        var removeu = TreinadorService.RemoverTurma(TurmaIdEdicao);
-
-        if (!removeu)
-        {
-            DefinirMensagem("Não foi possível remover a turma selecionada.", false);
-            return;
-        }
-
-        TurmaIdEdicao = 0;
-        AtualizarDados();
-        DefinirMensagem("Turma removida da lista.", true);
-    }
-
-    private void AtualizarHorario(ChangeEventArgs args)
-    {
-        HorarioEdicao = args.Value?.ToString() ?? string.Empty;
-    }
-
-    private bool ValidarFormulario(out TimeOnly horario)
-    {
-        horario = default;
-
-        if (string.IsNullOrWhiteSpace(NomeEdicao) ||
-            string.IsNullOrWhiteSpace(CategoriaEdicao) ||
-            string.IsNullOrWhiteSpace(DiasEdicao))
-        {
-            DefinirMensagem("Preencha nome, categoria e dias da turma.", false);
-            return false;
-        }
-
-        if (!TimeOnly.TryParseExact(HorarioEdicao, "HH:mm", PtBr, DateTimeStyles.None, out horario))
-        {
-            DefinirMensagem("Informe um horário válido.", false);
-            return false;
-        }
-
-        return true;
-    }
-
-    private void DefinirMensagem(string mensagem, bool sucesso)
-    {
-        Mensagem = mensagem;
-        MensagemClasse = sucesso ? "feedback-message success" : "feedback-message error";
-    }
-}

@@ -8,20 +8,6 @@ public sealed class UsuarioSistema
     public PerfilUsuario Perfil { get; set; }
     public string Cargo { get; set; } = string.Empty;
     public bool Ativo { get; set; } = true;
-
-    public string PerfilDescricao => Perfil switch
-    {
-        PerfilUsuario.Administrador => "Administrador",
-        PerfilUsuario.Responsavel => "Responsável",
-        PerfilUsuario.Treinador => "Treinador",
-        _ => "Usuário"
-    };
-
-    public string RotaInicial => Perfil switch
-    {
-        PerfilUsuario.Administrador => "/admin/dashboard",
-        PerfilUsuario.Responsavel => "/responsavel/dashboard",
-        PerfilUsuario.Treinador => "/treinador/dashboard",
-        _ => "/login"
-    };
+    public string PerfilDescricao { get; set; } = string.Empty;
+    public string RotaInicial { get; set; } = "/login";
 }
