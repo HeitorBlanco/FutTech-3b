@@ -1,0 +1,383 @@
+.evaluations-content {
+    width: min(100%, 1440px);
+    margin: 0 auto;
+    padding: 48px 42px 56px;
+}
+
+.evaluations-heading {
+    margin-bottom: 26px;
+}
+
+.evaluations-heading h1 {
+    margin: 0;
+    color: #0b2a93;
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.evaluations-heading p {
+    margin: 6px 0 0;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.evaluation-form-panel,
+.evaluations-list-panel {
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 9px 24px rgba(15, 23, 42, 0.08);
+    padding: 28px 30px;
+}
+
+.evaluation-form-panel {
+    margin-bottom: 24px;
+    border-left: 5px solid #0b2fb8;
+}
+
+.panel-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    color: #0b2a93;
+}
+
+.panel-title h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.panel-title svg,
+.save-button svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex: 0 0 auto;
+}
+
+.evaluation-form {
+    display: grid;
+    grid-template-columns: minmax(260px, 1.1fr) 220px;
+    gap: 18px;
+}
+
+.form-group,
+.score-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.form-group-wide,
+.form-group-full,
+.score-grid,
+.form-footer {
+    grid-column: 1 / -1;
+}
+
+.form-group label,
+.score-field label {
+    color: #4b5563;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea,
+.score-field input {
+    width: 100%;
+    border: 1px solid #d9dee8;
+    border-radius: 8px;
+    color: #111827;
+    font: inherit;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select,
+.score-field input {
+    height: 44px;
+    padding: 0 12px;
+}
+
+.form-group textarea {
+    min-height: 116px;
+    resize: vertical;
+    padding: 12px;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus,
+.score-field input:focus {
+    border-color: #0b2fb8;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(11, 47, 184, 0.12);
+}
+
+.score-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.score-field input {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.form-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.average-preview {
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 8px;
+    background: #f7f8fc;
+    padding: 0 16px;
+}
+
+.average-preview span {
+    color: #6b7280;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.average-preview strong {
+    color: #0b2a93;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.save-button {
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 0;
+    border-radius: 8px;
+    padding: 0 22px;
+    background: #0b2fb8;
+    color: #ffffff;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.save-button:hover {
+    background: #09258f;
+}
+
+.save-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.form-message {
+    margin: 18px 0 0;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.form-message.success {
+    background: #e8f5e9;
+    color: #18733d;
+}
+
+.form-message.error {
+    background: #ffebee;
+    color: #b71c1c;
+}
+
+.evaluation-cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.evaluation-card {
+    border: 1px solid #edf0f5;
+    border-radius: 8px;
+    background: #fbfcff;
+    padding: 20px;
+}
+
+.evaluation-card-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.evaluation-card-heading strong {
+    display: block;
+    color: #111827;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.evaluation-card-heading span {
+    display: block;
+    margin-top: 4px;
+    color: #6b7280;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.score-badge {
+    min-width: 76px;
+    border-radius: 8px;
+    background: #e8f3ff;
+    color: #0b2fb8;
+    padding: 8px 10px;
+    text-align: center;
+}
+
+.score-badge span {
+    margin: 0;
+    color: inherit;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.score-badge strong {
+    color: inherit;
+    font-size: 22px;
+}
+
+.score-list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin: 0 0 16px;
+}
+
+.score-list div {
+    min-height: 64px;
+    border-radius: 8px;
+    background: #ffffff;
+    padding: 10px;
+}
+
+.score-list dt {
+    color: #6b7280;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.score-list dd {
+    margin: 6px 0 0;
+    color: #111827;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.evaluation-card p {
+    margin: 0 0 14px;
+    color: #4b5563;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.evaluation-card time {
+    color: #8b95a7;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.empty-state {
+    border: 1px dashed #ccd3df;
+    border-radius: 8px;
+    background: #fbfcff;
+    padding: 28px;
+    text-align: center;
+}
+
+.empty-state strong,
+.empty-state span {
+    display: block;
+}
+
+.empty-state strong {
+    color: #111827;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.empty-state span {
+    margin-top: 6px;
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+@media (max-width: 1100px) {
+    .evaluation-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 860px) {
+    .evaluations-content {
+        padding: 30px 20px 40px;
+    }
+
+    .evaluation-form {
+        grid-template-columns: 1fr;
+    }
+
+    .score-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 620px) {
+    .evaluations-heading h1 {
+        font-size: 30px;
+    }
+
+    .evaluation-form-panel,
+    .evaluations-list-panel {
+        padding: 24px 20px;
+    }
+
+    .score-grid,
+    .score-list {
+        grid-template-columns: 1fr;
+    }
+
+    .form-footer,
+    .evaluation-card-heading {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .save-button,
+    .average-preview {
+        width: 100%;
+        justify-content: center;
+    }
+}

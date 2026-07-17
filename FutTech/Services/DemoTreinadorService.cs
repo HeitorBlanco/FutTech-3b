@@ -83,6 +83,36 @@ public sealed class DemoTreinadorService
         }
     ];
 
+    private readonly List<AvaliacaoAluno> _avaliacoes =
+    [
+        new()
+        {
+            Id = 1,
+            AlunoId = 1,
+            TurmaId = 1,
+            TreinadorId = 1,
+            Data = new DateOnly(2026, 7, 10),
+            NotaTecnica = 8,
+            NotaFisica = 7,
+            NotaTatica = 8,
+            NotaComportamental = 9,
+            Observacoes = "Boa evolução no domínio de bola e participação constante nos treinos."
+        },
+        new()
+        {
+            Id = 2,
+            AlunoId = 3,
+            TurmaId = 3,
+            TreinadorId = 1,
+            Data = new DateOnly(2026, 7, 12),
+            NotaTecnica = 7,
+            NotaFisica = 8,
+            NotaTatica = 7,
+            NotaComportamental = 8,
+            Observacoes = "Precisa manter atenção no posicionamento, mas demonstra bom ritmo e disciplina."
+        }
+    ];
+
     public IReadOnlyList<Turma> ObterTurmasDoTreinador(int treinadorId = 1)
     {
         return _turmas
@@ -209,6 +239,88 @@ public sealed class DemoTreinadorService
         return true;
     }
 
+    public IReadOnlyList<AvaliacaoAluno> ObterAvaliacoesDoTreinador(int treinadorId = 1)
+    {
+        var alunosDoTreinador = ObterAlunosDoTreinador(treinadorId)
+            .Select(aluno => aluno.Id)
+            .ToHashSet();
+
+        return _avaliacoes
+            .Where(avaliacao => avaliacao.TreinadorId == treinadorId && alunosDoTreinador.Contains(avaliacao.AlunoId))
+            .OrderByDescending(avaliacao => avaliacao.Data)
+            .ThenBy(avaliacao => ObterNomeAluno(avaliacao.AlunoId))
+            .ToList();
+    }
+
+    public IReadOnlyList<AvaliacaoAluno> ObterAvaliacoesDoAluno(int alunoId)
+    {
+        return _avaliacoes
+            .Where(avaliacao => avaliacao.AlunoId == alunoId)
+            .OrderByDescending(avaliacao => avaliacao.Data)
+            .ToList();
+    }
+
+    public AvaliacaoAluno? ObterUltimaAvaliacaoDoAluno(int alunoId)
+    {
+        return ObterAvaliacoesDoAluno(alunoId).FirstOrDefault();
+    }
+
+    public AvaliacaoAluno SalvarAvaliacao(
+        int alunoId,
+        DateOnly data,
+        int notaTecnica,
+        int notaFisica,
+        int notaTatica,
+        int notaComportamental,
+        string observacoes,
+        int treinadorId = 1)
+    {
+        var aluno = ObterAlunosDoTreinador(treinadorId)
+            .FirstOrDefault(item => item.Id == alunoId);
+
+        if (aluno is null)
+        {
+            throw new InvalidOperationException("Aluno não encontrado para este treinador.");
+        }
+
+        var avaliacao = _avaliacoes.FirstOrDefault(item =>
+            item.AlunoId == alunoId &&
+            item.TreinadorId == treinadorId &&
+            item.Data == data);
+
+        if (avaliacao is null)
+        {
+            avaliacao = new AvaliacaoAluno
+            {
+                Id = _avaliacoes.Count == 0 ? 1 : _avaliacoes.Max(item => item.Id) + 1,
+                AlunoId = alunoId,
+                TurmaId = aluno.TurmaId,
+                TreinadorId = treinadorId,
+                Data = data
+            };
+
+            _avaliacoes.Add(avaliacao);
+        }
+
+        avaliacao.NotaTecnica = LimitarNota(notaTecnica);
+        avaliacao.NotaFisica = LimitarNota(notaFisica);
+        avaliacao.NotaTatica = LimitarNota(notaTatica);
+        avaliacao.NotaComportamental = LimitarNota(notaComportamental);
+        avaliacao.Observacoes = observacoes.Trim();
+
+        return avaliacao;
+    }
+
+    public string ObterNomeAluno(int alunoId)
+    {
+        return _alunos.FirstOrDefault(aluno => aluno.Id == alunoId)?.Nome ?? "Aluno não encontrado";
+    }
+
+    public Aluno? ObterAluno(int alunoId)
+    {
+        return _alunos.FirstOrDefault(aluno => aluno.Id == alunoId && aluno.Ativo);
+    }
+
     public bool AtualizarTurma(
         int turmaId,
         string nome,
@@ -246,5 +358,10 @@ public sealed class DemoTreinadorService
     public string ObterNomeTurma(int turmaId)
     {
         return _turmas.FirstOrDefault(turma => turma.Id == turmaId)?.Nome ?? "Sem turma";
+    }
+
+    private static int LimitarNota(int nota)
+    {
+        return Math.Clamp(nota, 0, 10);
     }
 }

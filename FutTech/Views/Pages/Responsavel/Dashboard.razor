@@ -1,6 +1,7 @@
 @page "/responsavel/dashboard"
 @using FutTech.Services
 @inject DemoMenuService MenuService
+@inject DemoTreinadorService TreinadorService
 
 <PageTitle>Área do Responsável</PageTitle>
 
@@ -24,9 +25,9 @@
                 </svg>
             </div>
             <div>
-                <strong>Lucas Martins</strong>
-                <span>Turma Sub-13 Tarde</span>
-                <small>Treinos: segunda e quarta, 16:30</small>
+                <strong>@NomeAluno</strong>
+                <span>@NomeTurma</span>
+                <small>@TextoAvaliacoes</small>
             </div>
         </section>
 
@@ -50,7 +51,15 @@
 </AppAreaShell>
 
 @code {
+    private const int AlunoResponsavelId = 1;
     private IReadOnlyList<MenuItemSistema> MenuItems { get; set; } = [];
+    private Aluno? AlunoResponsavel => TreinadorService.ObterAluno(AlunoResponsavelId);
+    private string NomeAluno => AlunoResponsavel?.Nome ?? "Aluno não encontrado";
+    private string NomeTurma => AlunoResponsavel is null ? "Sem turma" : TreinadorService.ObterNomeTurma(AlunoResponsavel.TurmaId);
+    private IReadOnlyList<AvaliacaoAluno> AvaliacoesAluno => TreinadorService.ObterAvaliacoesDoAluno(AlunoResponsavelId);
+    private string TextoAvaliacoes => AvaliacoesAluno.Count == 1
+        ? "1 avaliação registrada"
+        : $"{AvaliacoesAluno.Count} avaliações registradas";
 
     protected override void OnInitialized()
     {

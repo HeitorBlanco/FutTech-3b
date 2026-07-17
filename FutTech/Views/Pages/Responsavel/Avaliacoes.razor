@@ -1,0 +1,126 @@
+@page "/responsavel/avaliacoes"
+@using System.Globalization
+@using FutTech.Services
+@inject DemoMenuService MenuService
+@inject DemoTreinadorService TreinadorService
+
+<PageTitle>Avaliações do Atleta</PageTitle>
+
+<AppAreaShell NomeEscolinha="Escolinha Brasil FC (Demo)"
+              NomeUsuario="Roberto Pai do Lucas"
+              CargoUsuario="Responsável"
+              TextoPerfil="Responsável"
+              ItemAtivo="avaliacoes"
+              TituloMenu="Menu do responsável"
+              MenuItems="@MenuItems">
+    <main class="guardian-evaluations-content">
+        <header class="guardian-heading">
+            <div>
+                <h1>Avaliações</h1>
+                <p>Acompanhe a evolução registrada pelo treinador.</p>
+            </div>
+        </header>
+
+        <section class="athlete-summary">
+            <div class="athlete-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 9a7 7 0 0 1 14 0M12 14v7" />
+                </svg>
+            </div>
+            <div>
+                <strong>@NomeAluno</strong>
+                <span>@NomeTurma</span>
+                <small>@TextoResumo</small>
+            </div>
+        </section>
+
+        @if (UltimaAvaliacao is not null)
+        {
+            <section class="latest-panel" aria-label="Última avaliação">
+                <div class="latest-heading">
+                    <div>
+                        <h2>Última avaliação</h2>
+                        <time datetime="@UltimaAvaliacao.Data.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)">
+                            @UltimaAvaliacao.Data.ToString("dd/MM/yyyy", PtBr)
+                        </time>
+                    </div>
+                    <div class="latest-score">
+                        <span>Média</span>
+                        <strong>@UltimaAvaliacao.Media.ToString("N1", PtBr)</strong>
+                    </div>
+                </div>
+
+                <dl class="score-list">
+                    <div>
+                        <dt>Técnica</dt>
+                        <dd>@UltimaAvaliacao.NotaTecnica</dd>
+                    </div>
+                    <div>
+                        <dt>Física</dt>
+                        <dd>@UltimaAvaliacao.NotaFisica</dd>
+                    </div>
+                    <div>
+                        <dt>Tática</dt>
+                        <dd>@UltimaAvaliacao.NotaTatica</dd>
+                    </div>
+                    <div>
+                        <dt>Comportamento</dt>
+                        <dd>@UltimaAvaliacao.NotaComportamental</dd>
+                    </div>
+                </dl>
+
+                <p>@UltimaAvaliacao.Observacoes</p>
+            </section>
+        }
+
+        <section class="history-panel" aria-label="Histórico de avaliações">
+            <div class="section-title">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
+                </svg>
+                <h2>Histórico</h2>
+            </div>
+
+            @if (ListaAvaliacoes.Count == 0)
+            {
+                <div class="empty-state">
+                    <strong>Nenhuma avaliação publicada</strong>
+                    <span>Quando o treinador registrar uma avaliação, ela aparecerá aqui.</span>
+                </div>
+            }
+            else
+            {
+                <div class="history-list">
+                    @foreach (var avaliacao in ListaAvaliacoes)
+                    {
+                        <article class="history-item">
+                            <div>
+                                <strong>@avaliacao.Data.ToString("dd/MM/yyyy", PtBr)</strong>
+                                <span>@avaliacao.Observacoes</span>
+                            </div>
+                            <small>@avaliacao.Media.ToString("N1", PtBr)</small>
+                        </article>
+                    }
+                </div>
+            }
+        </section>
+    </main>
+</AppAreaShell>
+
+@code {
+    private static readonly CultureInfo PtBr = new("pt-BR");
+    private const int AlunoResponsavelId = 1;
+    private IReadOnlyList<MenuItemSistema> MenuItems { get; set; } = [];
+    private IReadOnlyList<AvaliacaoAluno> ListaAvaliacoes { get; set; } = [];
+    private Aluno? AlunoResponsavel => TreinadorService.ObterAluno(AlunoResponsavelId);
+    private AvaliacaoAluno? UltimaAvaliacao => ListaAvaliacoes.FirstOrDefault();
+    private string NomeAluno => AlunoResponsavel?.Nome ?? "Aluno não encontrado";
+    private string NomeTurma => AlunoResponsavel is null ? "Sem turma" : TreinadorService.ObterNomeTurma(AlunoResponsavel.TurmaId);
+    private string TextoResumo => ListaAvaliacoes.Count == 1 ? "1 avaliação registrada" : $"{ListaAvaliacoes.Count} avaliações registradas";
+
+    protected override void OnInitialized()
+    {
+        MenuItems = MenuService.ObterMenu(FutTech.Models.PerfilUsuario.Responsavel);
+        ListaAvaliacoes = TreinadorService.ObterAvaliacoesDoAluno(AlunoResponsavelId);
+    }
+}

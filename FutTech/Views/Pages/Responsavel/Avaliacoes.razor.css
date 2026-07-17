@@ -1,0 +1,285 @@
+.guardian-evaluations-content {
+    width: min(100%, 1440px);
+    margin: 0 auto;
+    padding: 48px 42px 56px;
+}
+
+.guardian-heading {
+    margin-bottom: 26px;
+}
+
+.guardian-heading h1 {
+    margin: 0;
+    color: #0b2a93;
+    font-size: 34px;
+    font-weight: 800;
+}
+
+.guardian-heading p {
+    margin: 6px 0 0;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.athlete-summary,
+.latest-panel,
+.history-panel {
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 9px 24px rgba(15, 23, 42, 0.08);
+}
+
+.athlete-summary {
+    min-height: 132px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    border-left: 5px solid #0b2fb8;
+    margin-bottom: 24px;
+    padding: 26px 30px;
+}
+
+.athlete-icon {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: #e8f3ff;
+    color: #0b2fb8;
+}
+
+.athlete-icon svg,
+.section-title svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.athlete-summary strong {
+    display: block;
+    color: #111827;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.athlete-summary span,
+.athlete-summary small {
+    display: block;
+    margin-top: 5px;
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.latest-panel,
+.history-panel {
+    padding: 28px 30px;
+}
+
+.latest-panel {
+    margin-bottom: 24px;
+}
+
+.latest-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.latest-heading h2,
+.section-title h2 {
+    margin: 0;
+    color: #0b2a93;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.latest-heading time {
+    display: block;
+    margin-top: 5px;
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.latest-score {
+    min-width: 86px;
+    border-radius: 8px;
+    background: #e8f3ff;
+    color: #0b2fb8;
+    padding: 10px 12px;
+    text-align: center;
+}
+
+.latest-score span {
+    display: block;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.latest-score strong {
+    display: block;
+    margin-top: 3px;
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.score-list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin: 0 0 20px;
+}
+
+.score-list div {
+    border-radius: 8px;
+    background: #f7f8fc;
+    padding: 14px;
+}
+
+.score-list dt {
+    color: #6b7280;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.score-list dd {
+    margin: 7px 0 0;
+    color: #111827;
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.latest-panel p {
+    margin: 0;
+    color: #4b5563;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.55;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    color: #0b2a93;
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.history-item {
+    min-height: 78px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 18px;
+    border: 1px solid #edf0f5;
+    border-radius: 8px;
+    background: #fbfcff;
+    padding: 16px 18px;
+}
+
+.history-item strong {
+    display: block;
+    color: #111827;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.history-item span {
+    display: block;
+    margin-top: 5px;
+    color: #6b7280;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.45;
+}
+
+.history-item small {
+    min-width: 52px;
+    border-radius: 8px;
+    background: #e8f3ff;
+    color: #0b2fb8;
+    padding: 8px 10px;
+    font-size: 18px;
+    font-weight: 800;
+    text-align: center;
+}
+
+.empty-state {
+    border: 1px dashed #ccd3df;
+    border-radius: 8px;
+    background: #fbfcff;
+    padding: 28px;
+    text-align: center;
+}
+
+.empty-state strong,
+.empty-state span {
+    display: block;
+}
+
+.empty-state strong {
+    color: #111827;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.empty-state span {
+    margin-top: 6px;
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+@media (max-width: 860px) {
+    .guardian-evaluations-content {
+        padding: 30px 20px 40px;
+    }
+
+    .score-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 620px) {
+    .guardian-heading h1 {
+        font-size: 30px;
+    }
+
+    .athlete-summary,
+    .latest-heading,
+    .history-item {
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .latest-panel,
+    .history-panel {
+        padding: 24px 20px;
+    }
+
+    .score-list {
+        grid-template-columns: 1fr;
+    }
+
+    .latest-score,
+    .history-item small {
+        width: 100%;
+    }
+}
