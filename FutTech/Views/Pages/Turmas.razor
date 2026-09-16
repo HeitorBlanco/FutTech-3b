@@ -1,0 +1,46 @@
+﻿@page "/turmas"
+
+@using FutTech.DAO
+@using FutTech.Models
+
+@inject TurmaDAO TurmasDAO
+
+<h1>Turmas</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Categoria</th>
+            <th>Dias de Treino</th>
+            <th>Horário</th>
+            <th>Treinador</th>
+            <th>Ativa</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var turma in Turma)
+        {
+            <tr>
+                <td>@turma.Id</td>
+                <td>@turma.Nome</td>
+                <td>@turma.Categoria</td>
+                <td>@turma.DiasDeTreino</td>
+                <td>@turma.Horario.ToString("HH:mm")</td>
+                <td>@turma.TreinadorId</td>
+                <td>@(turma.Ativa ? "Sim" : "Não")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<Turma> Turma = new();
+
+    protected override void OnInitialized()
+    {
+        Turma = TurmasDAO.Listar();
+    }
+}
