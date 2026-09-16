@@ -1,41 +1,53 @@
 ﻿using FutTech.Configs;
 using FutTech.Models;
-using FutTech.Configs;
 using MySql.Data.MySqlClient;
 
-namespace FutTech.DAO
+namespace FutTech.DAO;
+
+public class AlunoDAO
 {
-    public class AlunoDAO
+    private readonly Conexao _conexao;
+
+    public AlunoDAO(Conexao conexao)
     {
-        private readonly Conexao _conexao;
+        _conexao = conexao;
+    }
 
-        public AlunoDAO(Conexao conexao)
+    public List<Aluno> Listar()
+    {
+        var lista = new List<Aluno>();
+
+        using var comando = _conexao.CreateCommand(
+            "SELECT * FROM Aluno;"
+        );
+
+        using var leitor = (MySqlDataReader)comando.ExecuteReader();
+
+        while (leitor.Read())
         {
-            _conexao = conexao;
+            lista.Add(MapearAluno(leitor));
         }
 
-        // READ — lista todos os alunos
-        public List<Aluno> Listar()
+        return lista;
+    }
+
+    private static Aluno MapearAluno(MySqlDataReader leitor)
+    {
+        return new Aluno
         {
-            var lista = new List<Aluno>();
-            var comando = _conexao.CreateCommand("SELECT * FROM Aluno;");
+            Id = leitor.GetInt32("id_alu"),
 
-            var leitor = (MySqlDataReader)comando.ExecuteReader();
+            Nome = leitor.GetString("nome_alu"),
 
-            while (leitor.Read())
-            {
-                lista.Add(MapearAluno(leitor));
-            }
+            Responsavel = leitor.GetString("responsavel_alu"),
 
-            return lista;
-        }
+            DataNascimento = DateOnly.FromDateTime(
+                leitor.GetDateTime("data_nascimento_alu")
+            ),
 
-        // Método auxiliar: converte a linha atual do leitor em um objeto Aluno
-        private static Aluno MapearAluno(MySqlDataReader leitor)
-        {
-            return new Aluno
-            {
-            };
-        }
+            TurmaId = leitor.GetInt32("id_tur_fk"),
+
+            Ativo = leitor.GetBoolean("ativo_alu")
+        };
     }
 }
