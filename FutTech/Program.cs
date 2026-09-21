@@ -14,7 +14,7 @@ builder.Services.AddScoped<Conexao>();
 builder.Services.AddScoped<AlunoDAO>();
 builder.Services.AddScoped<TurmaDAO>();
 builder.Services.AddScoped<EscolinhasDAO>();
-
+builder.Services.AddScoped<ComunicadosDAO>();
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

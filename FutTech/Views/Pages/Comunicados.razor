@@ -1,0 +1,52 @@
+﻿
+@page "/comunicados"
+
+@using FutTech.DAO
+@using FutTech.Models
+
+@inject ComunicadosDAO ComunicadoDAO
+
+<h1>Comunicados</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Conteúdo</th>
+            <th>Publicado em</th>
+            <th>Publicado às</th>
+            <th>Autor</th>
+            <th>Categoria</th>
+            <th>Destacado</th>
+            <th>Ativo</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var comunicado in Comunicado)
+        {
+            <tr>
+                <td>@comunicado.Id</td>
+                <td>@comunicado.Titulo</td>
+                <td>@comunicado.Conteudo</td>
+                <td>@comunicado.PublicadoEm</td>
+                <td>@comunicado.PublicadoAs</td>
+                <td>@comunicado.Autor</td>
+                <td>@comunicado.Categoria</td>
+                <td>@(comunicado.Destacado ? "Sim" : "Não")</td>
+                <td>@(comunicado.Ativo ? "Sim" : "Não")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<Comunicado> Comunicado = new();
+
+    protected override void OnInitialized()
+    {
+        Comunicado = ComunicadoDAO.Listar();
+    }
+}
+
