@@ -15,6 +15,7 @@ builder.Services.AddScoped<AlunoDAO>();
 builder.Services.AddScoped<TurmaDAO>();
 builder.Services.AddScoped<EscolinhasDAO>();
 builder.Services.AddScoped<ComunicadosDAO>();
+builder.Services.AddScoped<FinanceiroResumosDAO>();
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

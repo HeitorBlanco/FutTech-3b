@@ -1,0 +1,40 @@
+﻿@page "/resumofinanceiro"
+
+@using FutTech.DAO
+@using FutTech.Models
+
+@inject FinanceiroResumosDAO FinanceiroResumoDAO
+
+<h1>Resumo Financeiro</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Recebido no Mês Atual</th>
+            <th>Pendentes</th>
+            <th>Total a Receber</th>
+            <th>Total Pago</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var financeiro in FinanceiroResumo)
+        {
+            <tr>
+                <td>R$ @financeiro.RecebidoMesAtual.ToString("F2")</td>
+                <td>@financeiro.Pendentes</td>
+                <td>R$ @financeiro.TotalAReceber.ToString("F2")</td>
+                <td>R$ @financeiro.TotalPago.ToString("F2")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<FinanceiroResumo> FinanceiroResumo = new();
+
+    protected override void OnInitialized()
+    {
+        FinanceiroResumo = FinanceiroResumoDAO.Listar();
+    }
+}

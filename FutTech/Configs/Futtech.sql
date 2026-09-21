@@ -112,6 +112,15 @@ foreign key(id_esc_fk) references Escolinha(id_esc),
 foreign key(id_usu_fk) references UsuarioSistema(id_usu)
 );
 
+create table Financeiro(
+id_fin int primary key auto_increment,
+recebido_mes_atual_fin decimal(10,2),
+pendentes_fin int,
+total_a_receber_fin decimal(10,2),
+total_pago_fin decimal(10,2)
+);
+
+
 insert into Escolinha values(null, 'FutTech Academy', '12.345.678/0001-90', true);
 insert into Escolinha values(null, 'Arena Bola Kids', '98.765.432/0001-10', true);
 insert into Escolinha values(null, 'Escolinha Pimentel', '11.111.111/0001-11', true);
@@ -165,3 +174,9 @@ insert into Comunicado values(null, 'Treino especial', 'No sabado teremos treino
 insert into Comunicado values(null, 'Aviso de Guilherme Pimentel', 'Guilherme Pimentel confirmou a reuniao tecnica da semana.', '2026-08-04', '08:30:00', 'Guilherme Pimentel', 'Geral', false, true, 1, 3);
 insert into Comunicado values(null, 'Aviso de Heitor Blanco', 'Heitor Blanco informou treino de fundamentos para a turma Sub-15.', '2026-08-04', '10:00:00', 'Heitor Blanco', 'Treinos', true, true, 1, 4);
 insert into Comunicado values(null, 'Aviso de Luís Gustavo', 'Luís Gustavo pediu atencao aos vencimentos das mensalidades.', '2026-08-04', '11:00:00', 'Luís Gustavo', 'Financeiro', false, true, 1, 5);
+
+insert into Financeiro values(null, 310.00, 3, 480.00, 310.00);
+insert into Financeiro values(null, 450.00, 2, 620.00, 450.00);
+insert into Financeiro values(null, 600.00, 4, 850.00, 600.00);
+insert into Financeiro values(null, 780.00, 3, 1020.00, 780.00);
+insert into Financeiro values(null, 950.00, 2, 1150.00, 950.00);
