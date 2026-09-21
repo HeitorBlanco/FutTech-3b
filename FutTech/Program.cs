@@ -13,6 +13,7 @@ builder.Services.AddSingleton<AuthService>();
 builder.Services.AddScoped<Conexao>();
 builder.Services.AddScoped<AlunoDAO>();
 builder.Services.AddScoped<TurmaDAO>();
+builder.Services.AddScoped<EscolinhasDAO>();
 
 var app = builder.Build();
 

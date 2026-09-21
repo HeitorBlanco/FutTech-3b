@@ -1,0 +1,40 @@
+﻿@page "/escolinhas"
+
+@using FutTech.DAO
+@using FutTech.Models
+
+@inject EscolinhasDAO EscolinhaDAO
+
+<h1>Escolinhas</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>CNPJ</th>
+            <th>Ativa</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var escolinha in Escolinha)
+        {
+            <tr>
+                <td>@escolinha.Id</td>
+                <td>@escolinha.Nome</td>
+                <td>@escolinha.Cnpj</td>
+                <td>@(escolinha.Ativo ? "Sim" : "Não")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<Escolinha> Escolinha = new();
+
+    protected override void OnInitialized()
+    {
+        Escolinha = EscolinhaDAO.Listar();
+    }
+}
