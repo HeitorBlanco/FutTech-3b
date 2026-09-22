@@ -1,5 +1,40 @@
-﻿<h3>Treinador</h3>
+﻿@page "/treinadores"
+
+@using FutTech.DAO
+@using FutTech.Models
+
+@inject TreinadoresDAO TreinadoresDAO
+
+<h1>Treinadores</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Cargo</th>
+            <th>Ativo</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var treinador in Treinador)
+        {
+            <tr>
+                <td>@treinador.Id</td>
+                <td>@treinador.Nome</td>
+                <td>@treinador.Cargo</td>
+                <td>@(treinador.Ativo ? "Sim" : "Não")</td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 @code {
+    private List<global::FutTech.Models.Treinador> Treinador = new();
 
+    protected override void OnInitialized()
+    {
+        Treinador = TreinadoresDAO.Listar();
+    }
 }
