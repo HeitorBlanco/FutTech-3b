@@ -1,0 +1,44 @@
+﻿@page "/usuarios-sistema"
+
+@using FutTech.DAO
+@using FutTech.Models
+
+@inject UsuariosSistemaDAO UsuariosSistemaDAO
+
+<h1>Usuários do Sistema</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Perfil</th>
+            <th>Cargo</th>
+            <th>Ativo</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var usuario in Usuarios)
+        {
+            <tr>
+                <td>@usuario.Id</td>
+                <td>@usuario.Nome</td>
+                <td>@usuario.Email</td>
+                <td>@usuario.PerfilDescricao</td>
+                <td>@usuario.Cargo</td>
+                <td>@(usuario.Ativo ? "Sim" : "Não")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<global::FutTech.Models.UsuarioSistema> Usuarios = new();
+
+    protected override void OnInitialized()
+    {
+        Usuarios = UsuariosSistemaDAO.Listar();
+    }
+}
