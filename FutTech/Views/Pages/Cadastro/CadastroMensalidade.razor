@@ -1,0 +1,210 @@
+﻿@page "/mensalidade/cadastro"
+@rendermode InteractiveServer
+
+@using FutTech.DAO
+@using FutTech.Models
+
+@inject MensalidadeDAO MensalidadesDAO
+@inject AlunoDAO AlunosDAO
+@inject NavigationManager NavigationManager
+
+<PageTitle>Cadastro de Mensalidade - FutTech</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h2 class="fw-bold mb-1">
+            Cadastro de Mensalidade
+        </h2>
+
+        <p class="text-muted mb-0">
+            Cadastre uma nova mensalidade.
+        </p>
+    </div>
+
+</div>
+
+
+<div class="custom-table-card p-4">
+
+    <EditForm Model="mensalidade"
+              OnValidSubmit="Salvar">
+
+        <DataAnnotationsValidator />
+
+        <ValidationSummary class="alert alert-danger" />
+
+
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Aluno
+                </label>
+
+                <InputSelect @bind-Value="mensalidade.AlunoId"
+                             class="form-select">
+
+                    <option value="0">
+                        Selecione o aluno
+                    </option>
+
+                    @foreach (var aluno in Alunos)
+                    {
+                        <option value="@aluno.Id">
+                            @aluno.Nome
+                        </option>
+                    }
+
+                </InputSelect>
+
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Valor
+                </label>
+
+                <InputNumber @bind-Value="mensalidade.Valor"
+                             class="form-control" />
+
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Competência
+                </label>
+
+                <InputDate @bind-Value="mensalidade.Competencia"
+                           class="form-control" />
+
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Vencimento
+                </label>
+
+                <InputDate @bind-Value="mensalidade.Vencimento"
+                           class="form-control" />
+
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Data do pagamento
+                </label>
+
+                <InputDate @bind-Value="mensalidade.DataPagamento"
+                           class="form-control" />
+
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Status
+                </label>
+
+                <InputSelect @bind-Value="mensalidade.Status"
+                             class="form-select">
+
+                    <option value="@StatusMensalidade.Pendente">
+                        Pendente
+                    </option>
+
+                    <option value="@StatusMensalidade.Pago">
+                        Pago
+                    </option>
+
+                    <option value="@StatusMensalidade.Atrasada">
+                        Atrasada
+                    </option>
+
+                </InputSelect>
+
+            </div>
+
+        </div>
+
+
+        <div class="d-flex gap-2 mt-3">
+
+            <button type="submit"
+                    class="btn btn-primary">
+
+                Cadastrar
+
+            </button>
+
+
+            <button type="button"
+                    class="btn btn-secondary"
+                    @onclick="Voltar">
+
+                Cancelar
+
+            </button>
+
+        </div>
+
+    </EditForm>
+
+</div>
+
+
+@code {
+
+    private Mensalidade mensalidade = new()
+    {
+        Competencia = new DateOnly(
+            DateTime.Today.Year,
+            DateTime.Today.Month,
+            1
+        ),
+
+        Vencimento = DateOnly.FromDateTime(
+            DateTime.Today
+        ),
+
+        Status = StatusMensalidade.Pendente
+    };
+
+
+    private List<Aluno> Alunos = new();
+
+
+    protected override void OnInitialized()
+    {
+        Alunos = AlunosDAO.Listar();
+    }
+
+
+    private void Salvar()
+    {
+        MensalidadesDAO.Inserir(mensalidade);
+
+        NavigationManager.NavigateTo(
+            "/mensalidades"
+        );
+    }
+
+
+    private void Voltar()
+    {
+        NavigationManager.NavigateTo(
+            "/mensalidades"
+        );
+    }
+
+}
