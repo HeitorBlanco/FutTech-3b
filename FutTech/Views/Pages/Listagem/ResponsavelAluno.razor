@@ -1,0 +1,43 @@
+﻿@page "/responsavel-aluno"
+
+@using FutTech.DAO
+@using FutTech.Models
+@using ResponsavelAlunoModel = FutTech.Models.ResponsavelAluno
+
+@inject ResponsavelAlunoDAO ResponsavelAlunoDAO
+
+<h1>Responsáveis dos Alunos</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Usuário</th>
+            <th>Aluno</th>
+            <th>Parentesco</th>
+            <th>Principal</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var responsavel in Responsaveis)
+        {
+            <tr>
+                <td>@responsavel.Id</td>
+                <td>@responsavel.NomeUsuario</td>
+                <td>@responsavel.NomeAluno</td>
+                <td>@responsavel.Parentesco</td>
+                <td>@(responsavel.Principal ? "Sim" : "Não")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<ResponsavelAlunoModel> Responsaveis = new();
+
+    protected override void OnInitialized()
+    {
+        Responsaveis = ResponsavelAlunoDAO.Listar();
+    }
+}

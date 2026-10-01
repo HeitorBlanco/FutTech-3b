@@ -20,6 +20,8 @@ builder.Services.AddScoped<MensalidadeDAO>();
 builder.Services.AddScoped<RegistroPresencaDAO>();
 builder.Services.AddScoped<TreinadoresDAO>();
 builder.Services.AddScoped<UsuariosSistemaDAO>();
+builder.Services.AddScoped<ResponsavelAlunoDAO>();
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

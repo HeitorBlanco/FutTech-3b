@@ -1,85 +1,89 @@
-@page "/treinador/turmas"
+@page "/responsavel-aluno"
 
-<PageTitle>Minhas Turmas</PageTitle>
+@using FutTech.DAO
+@using FutTech.Models
+@inject AlunoDAO AlunoDAO
+@inject ResponsavelAlunoDAO ResponsavelAlunoDAO
+@rendermode InteractiveServer
+
+<PageTitle>Responsáveis dos Alunos</PageTitle>
 
 <AppAreaShell NomeEscolinha="FutTech"
-              NomeUsuario="Treinador"
-              CargoUsuario="Treinador"
-              TextoPerfil="Treinador"
-              Perfil="PerfilUsuario.Treinador"
-              ItemAtivo="turmas"
-              TituloMenu="Menu do treinador">
-    <main class="classes-content">
-        <header class="classes-heading">
-            <div>
-                <h1>Minhas Turmas</h1>
-                <span>0 turmas ativas</span>
-            </div>
-
-            <a href="/treinador/alunos" class="heading-action">
+              NomeUsuario="Usuário"
+              CargoUsuario="Responsável"
+              TextoPerfil="Responsável"
+              Perfil="PerfilUsuario.Responsavel"
+              ItemAtivo="responsavel"
+              TituloMenu="Menu do responsável">
+    <main class="attendance-content">
+        <header class="attendance-heading">
+            <div class="attendance-title">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8m11 10v-2a4 4 0 0 0-3-3.87M17 3.13a4 4 0 0 1 0 7.75" />
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8m7-4a4 4 0 1 1 0 8m4 6v-2a4 4 0 0 0-3-3.87" />
                 </svg>
-                <span>Alunos</span>
-            </a>
+                <h1>Responsáveis dos Alunos</h1>
+            </div>
         </header>
 
-        <section class="edit-panel" aria-label="Editar turma">
-            <div class="edit-panel-heading">
+        <section class="attendance-panel" aria-label="Lista de responsáveis">
+            <div class="attendance-panel-heading">
                 <div>
-                    <h2>Dados da turma</h2>
-                    <span>Estrutura visual preparada para edição pelo backend.</span>
+                    <h2>Responsáveis</h2>
+                    <span>Alunos cadastrados</span>
                 </div>
             </div>
 
-            <form class="class-form">
-                <div class="form-group">
-                    <label for="nome-turma">Nome</label>
-                    <input id="nome-turma" type="text" placeholder="Nome da turma" />
+            @if (responsaveis.Count == 0)
+            {
+                <div class="attendance-empty">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8m11 10v-2a4 4 0 0 0-3-3.87M17 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    <strong>Nenhum responsável encontrado</strong>
+                    <span>Nenhum responsável está cadastrado para os alunos.</span>
                 </div>
+            }
+            else
+            {
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Usuário</th>
+                                <th>Aluno</th>
+                                <th>Parentesco</th>
+                                <th>Principal</th>
+                            </tr>
+                        </thead>
 
-                <div class="form-group">
-                    <label for="categoria-turma">Categoria</label>
-                    <input id="categoria-turma" type="text" placeholder="Categoria" />
+                        <tbody>
+                            @foreach (var responsavel in responsaveis)
+                            {
+                                <tr>
+                                    <td>@responsavel.NomeUsuario</td>
+                                    <td>@responsavel.NomeAluno</td>
+                                    <td>@responsavel.Parentesco</td>
+                                    <td>
+                                        @(responsavel.Principal ? "Sim" : "Não")
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
-
-                <div class="form-group">
-                    <label for="dias-turma">Dias</label>
-                    <input id="dias-turma" type="text" placeholder="Dias de treino" />
-                </div>
-
-                <div class="form-group">
-                    <label for="horario-turma">Horário</label>
-                    <input id="horario-turma" type="time" />
-                </div>
-
-                <div class="form-actions">
-                    <button type="button" class="save-button">Salvar</button>
-                    <button type="button" class="remove-button">Remover</button>
-                </div>
-            </form>
-        </section>
-
-        <section class="classes-table-panel" aria-label="Turmas do treinador">
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Categoria</th>
-                            <th>Horário</th>
-                            <th>Dias</th>
-                            <th>Alunos</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td colspan="6">Nenhuma turma carregada.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            }
         </section>
     </main>
 </AppAreaShell>
+
+@code {
+    private List<ResponsavelAluno> responsaveis = [];
+
+    protected override void OnInitialized()
+    {
+        responsaveis = ResponsavelAlunoDAO.Listar()
+            .OrderBy(r => r.NomeAluno)
+            .ThenByDescending(r => r.Principal)
+            .ToList();
+    }
+}
