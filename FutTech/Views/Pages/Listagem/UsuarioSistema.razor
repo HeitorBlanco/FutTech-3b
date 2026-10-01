@@ -20,7 +20,7 @@
     </thead>
 
     <tbody>
-        @foreach (var usuario in Usuarios)
+        @foreach (FutTech.Models.UsuarioSistema usuario in Usuarios)
         {
             <tr>
                 <td>@usuario.Id</td>
@@ -35,7 +35,7 @@
 </table>
 
 @code {
-    private List<global::FutTech.Models.UsuarioSistema> Usuarios = new();
+    private List<FutTech.Models.UsuarioSistema> Usuarios = new();
 
     protected override void OnInitialized()
     {

@@ -1,0 +1,167 @@
+﻿@page "/alunos/cadastro"
+@rendermode InteractiveServer
+
+@using FutTech.DAO
+@using FutTech.Models
+
+@inject AlunoDAO AlunosDAO
+@inject TurmaDAO TurmasDAO
+@inject NavigationManager NavigationManager
+
+<PageTitle>Novo Aluno - FutTech</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h2 class="fw-bold mb-1">Cadastro de Aluno</h2>
+        <p class="text-muted">
+            Cadastre um novo aluno na escolinha.
+        </p>
+    </div>
+
+</div>
+
+<div class="custom-table-card p-4">
+
+    <EditForm Model="aluno" OnValidSubmit="Salvar">
+
+        <DataAnnotationsValidator />
+
+        <ValidationSummary class="alert alert-danger" />
+
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Nome
+                </label>
+
+                <InputText class="form-control"
+                           @bind-Value="aluno.Nome"
+                           placeholder="Nome completo" />
+
+                <ValidationMessage For="() => aluno.Nome" />
+
+            </div>
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Responsável
+                </label>
+
+                <InputText class="form-control"
+                           @bind-Value="aluno.Responsavel"
+                           placeholder="Nome do responsável" />
+
+                <ValidationMessage For="() => aluno.Responsavel" />
+
+            </div>
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Data de nascimento
+                </label>
+
+                <InputDate class="form-control"
+                           @bind-Value="aluno.DataNascimento" />
+
+                <ValidationMessage For="() => aluno.DataNascimento" />
+
+            </div>
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Turma
+                </label>
+
+                <InputSelect class="form-select"
+                             @bind-Value="aluno.TurmaId">
+
+                    <option value="0">
+                        Selecione uma turma
+                    </option>
+
+                    @foreach (var turma in Turmas)
+                    {
+                        <option value="@turma.Id">
+                            @turma.Nome
+                        </option>
+                    }
+
+                </InputSelect>
+
+                <ValidationMessage For="() => aluno.TurmaId" />
+
+            </div>
+
+            <div class="col-md-6 mb-3">
+
+                <div class="form-check mt-4">
+
+                    <InputCheckbox class="form-check-input"
+                                   @bind-Value="aluno.Ativo" />
+
+                    <label class="form-check-label">
+                        Aluno ativo
+                    </label>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="d-flex gap-2 mt-3">
+
+            <button type="submit"
+                    class="btn btn-primary">
+
+                <i class="bi bi-check-lg"></i>
+                Cadastrar
+
+            </button>
+
+            <button type="button"
+                    class="btn btn-secondary"
+                    @onclick="Voltar">
+
+                Cancelar
+
+            </button>
+
+        </div>
+
+    </EditForm>
+
+</div>
+
+@code {
+
+    private Aluno aluno = new()
+    {
+        Ativo = true
+    };
+
+    private List<Turma> Turmas = new();
+
+    protected override void OnInitialized()
+    {
+        Turmas = TurmasDAO.Listar();
+    }
+
+    private void Salvar()
+    {
+        AlunosDAO.Inserir(aluno);
+
+        NavigationManager.NavigateTo("/alunos");
+    }
+
+    private void Voltar()
+    {
+        NavigationManager.NavigateTo("/alunos");
+    }
+}
