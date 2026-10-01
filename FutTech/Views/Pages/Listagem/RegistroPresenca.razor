@@ -1,0 +1,43 @@
+@page "/presencas"
+
+@using FutTech.DAO
+@using FutTech.Models
+@using RegistroPresencaModel = FutTech.Models.RegistroPresenca
+
+@inject RegistroPresencaDAO RegistroPresencaDAO
+
+<h1>Registros de Presença</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Aluno</th>
+            <th>Turma</th>
+            <th>Data</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var registro in Registros)
+        {
+            <tr>
+                <td>@registro.Id</td>
+                <td>@registro.NomeAluno</td>
+                <td>@registro.NomeTurma</td>
+                <td>@registro.Data.ToString("dd/MM/yyyy")</td>
+                <td>@(registro.Presente ? "Presente" : "Ausente")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<RegistroPresencaModel> Registros = new();
+
+    protected override void OnInitialized()
+    {
+        Registros = RegistroPresencaDAO.Listar();
+    }
+}

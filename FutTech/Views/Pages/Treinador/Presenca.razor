@@ -1,4 +1,10 @@
 @page "/treinador/presenca"
+@using FutTech.DAO
+@using FutTech.Models
+@inject TurmaDAO TurmaDAO
+@inject AlunoDAO AlunoDAO
+@inject RegistroPresencaDAO RegistroPresencaDAO
+@rendermode InteractiveServer
 
 <PageTitle>Registro de Presença</PageTitle>
 
@@ -22,14 +28,18 @@
         <section class="attendance-filters" aria-label="Filtros da chamada">
             <div class="field-control field-control-wide">
                 <label for="turma">Turma</label>
-                <select id="turma">
-                    <option>Selecione uma turma</option>
+                <select id="turma" value="@turmaSelecionada" @onchange="OnTurmaSelecionadaChanged">
+                    <option value="0">Selecione uma turma</option>
+                    @foreach (var turma in turmas)
+                    {
+                        <option value="@turma.Id">@turma.Nome</option>
+                    }
                 </select>
             </div>
 
             <div class="field-control">
                 <label for="data-presenca">Data</label>
-                <input id="data-presenca" type="date" />
+                <input id="data-presenca" type="date" value="@dataSelecionada.ToString("yyyy-MM-dd")" @onchange="OnDataSelecionadaChanged" />
             </div>
         </section>
 
@@ -37,17 +47,51 @@
             <div class="attendance-panel-heading">
                 <div>
                     <h2>Chamada</h2>
-                    <time>Selecione turma e data</time>
+                    <time>@dataSelecionada.ToString("dd/MM/yyyy")</time>
                 </div>
             </div>
 
-            <div class="attendance-empty">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8m11 10v-2a4 4 0 0 0-3-3.87M17 3.13a4 4 0 0 1 0 7.75" />
-                </svg>
-                <strong>Nenhum aluno carregado</strong>
-                <span>A lista de chamada será preenchida pelo backend.</span>
-            </div>
+            @if (alunosDaTurma.Count == 0)
+            {
+                <div class="attendance-empty">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8m11 10v-2a4 4 0 0 0-3-3.87M17 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    <strong>Nenhum aluno carregado</strong>
+                    <span>Selecione uma turma para visualizar a chamada.</span>
+                </div>
+            }
+            else
+            {
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Aluno</th>
+                                <th>Responsável</th>
+                                <th>Presente</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var aluno in alunosDaTurma)
+                            {
+                                var registro = registros.FirstOrDefault(r => r.AlunoId == aluno.Id);
+                                var presente = registro?.Presente ?? false;
+
+                                <tr>
+                                    <td>@aluno.Nome</td>
+                                    <td>@aluno.Responsavel</td>
+                                    <td>
+                                        <input type="checkbox"
+                                               checked="@presente"
+                                               @onchange="@(e => AtualizarPresenca(aluno.Id, e))" />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
 
             <div class="attendance-summary" aria-label="Resumo da chamada">
                 <div class="summary-item summary-present">
@@ -56,7 +100,7 @@
                             <path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
                         </svg>
                     </span>
-                    <span>0 presentes</span>
+                    <span>@Presentes presentes</span>
                 </div>
 
                 <div class="summary-item summary-absent">
@@ -65,7 +109,7 @@
                             <path d="M18 6 6 18M6 6l12 12" />
                         </svg>
                     </span>
-                    <span>0 ausentes</span>
+                    <span>@Ausentes ausentes</span>
                 </div>
 
                 <div class="summary-item summary-rate">
@@ -74,26 +118,26 @@
                             <path d="M3 3v18h18M7 16v-5m5 5V8m5 8v-9" />
                         </svg>
                     </span>
-                    <span>0% de presença</span>
+                    <span>@PercentualPresenca% de presença</span>
                 </div>
             </div>
 
             <div class="attendance-actions">
-                <button type="button" class="action-button primary">
+                <button type="button" class="action-button primary" @onclick="SalvarChamada">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2ZM7 3v6h8M7 21v-8h10v8" />
                     </svg>
                     <span>Salvar Chamada</span>
                 </button>
 
-                <button type="button" class="action-button success">
+                <button type="button" class="action-button success" @onclick="() => MarcarTodos(true)">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M20 6 9 17l-5-5M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
                     </svg>
                     <span>Marcar Todos</span>
                 </button>
 
-                <button type="button" class="action-button neutral">
+                <button type="button" class="action-button neutral" @onclick="() => MarcarTodos(false)">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M5 12h14M5 5h14v14H5z" />
                     </svg>
@@ -103,3 +147,102 @@
         </section>
     </main>
 </AppAreaShell>
+
+@code {
+    private List<Turma> turmas = [];
+    private List<Aluno> alunosDaTurma = [];
+    private List<RegistroPresenca> registros = [];
+    private int turmaSelecionada;
+    private DateOnly dataSelecionada = DateOnly.FromDateTime(DateTime.Today);
+
+    protected override void OnInitialized()
+    {
+        turmas = TurmaDAO.Listar().Where(t => t.Ativa).OrderBy(t => t.Nome).ToList();
+
+        if (turmas.Count > 0)
+        {
+            turmaSelecionada = turmas[0].Id;
+            CarregarChamada();
+        }
+    }
+
+    private int Presentes => registros.Count(r => r.Presente);
+    private int Ausentes => registros.Count - Presentes;
+    private double PercentualPresenca => registros.Count == 0 ? 0 : Math.Round(Presentes * 100d / registros.Count, 1);
+
+    private void OnTurmaSelecionadaChanged(ChangeEventArgs args)
+    {
+        turmaSelecionada = int.TryParse(args.Value?.ToString(), out var turmaId) ? turmaId : 0;
+        CarregarChamada();
+    }
+
+    private void OnDataSelecionadaChanged(ChangeEventArgs args)
+    {
+        if (DateOnly.TryParse(args.Value?.ToString(), out var data))
+        {
+            dataSelecionada = data;
+            CarregarChamada();
+        }
+    }
+
+    private void CarregarChamada()
+    {
+        alunosDaTurma = turmaSelecionada <= 0
+            ? []
+            : AlunoDAO.Listar()
+                .Where(a => a.TurmaId == turmaSelecionada && a.Ativo)
+                .OrderBy(a => a.Nome)
+                .ToList();
+
+        var registrosExistentes = turmaSelecionada > 0
+            ? RegistroPresencaDAO.ListarPorTurma(turmaSelecionada, dataSelecionada)
+            : [];
+
+        registros = alunosDaTurma
+            .Select(aluno =>
+            {
+                var registroExistente = registrosExistentes.FirstOrDefault(r => r.AlunoId == aluno.Id);
+                return new RegistroPresenca
+                {
+                    AlunoId = aluno.Id,
+                    TurmaId = turmaSelecionada,
+                    Data = dataSelecionada,
+                    Presente = registroExistente?.Presente ?? false,
+                    NomeAluno = aluno.Nome,
+                    NomeTurma = turmas.FirstOrDefault(t => t.Id == turmaSelecionada)?.Nome ?? string.Empty
+                };
+            })
+            .ToList();
+    }
+
+    private void AtualizarPresenca(int alunoId, ChangeEventArgs args)
+    {
+        var registro = registros.FirstOrDefault(r => r.AlunoId == alunoId);
+
+        if (registro is null)
+        {
+            return;
+        }
+
+        registro.Presente = args.Value is bool valor && valor;
+    }
+
+    private void MarcarTodos(bool presente)
+    {
+        foreach (var registro in registros)
+        {
+            registro.Presente = presente;
+        }
+    }
+
+    private void SalvarChamada()
+    {
+        if (turmaSelecionada <= 0 || registros.Count == 0)
+        {
+            return;
+        }
+
+        RegistroPresencaDAO.SalvarChamada(turmaSelecionada, dataSelecionada, registros);
+        CarregarChamada();
+    }
+}
