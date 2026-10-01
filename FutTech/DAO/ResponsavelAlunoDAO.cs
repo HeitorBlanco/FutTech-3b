@@ -8,8 +8,7 @@ public class ResponsavelAlunoDAO
 {
     private readonly Conexao _conexao;
 
-```
-public ResponsavelAlunoDAO(Conexao conexao)
+    public ResponsavelAlunoDAO(Conexao conexao)
     {
         _conexao = conexao;
     }
@@ -77,13 +76,13 @@ public ResponsavelAlunoDAO(Conexao conexao)
         if (responsavel.Id > 0)
         {
             const string sqlAtualizar = """
-            UPDATE ResponsavelAluno
-            SET id_usu_fk = @usuarioId,
-                id_alu_fk = @alunoId,
-                parentesco_res_alu = @parentesco,
-                principal_res_alu = @principal
-            WHERE id_res_alu = @id;
-            """;
+                UPDATE ResponsavelAluno
+                SET id_usu_fk = @usuarioId,
+                    id_alu_fk = @alunoId,
+                    parentesco_res_alu = @parentesco,
+                    principal_res_alu = @principal
+                WHERE id_res_alu = @id;
+                """;
 
             using var comandoAtualizar = _conexao.CreateCommand(sqlAtualizar);
 
@@ -99,21 +98,21 @@ public ResponsavelAlunoDAO(Conexao conexao)
         }
 
         const string sqlInserir = """
-        INSERT INTO ResponsavelAluno
-        (
-            id_usu_fk,
-            id_alu_fk,
-            parentesco_res_alu,
-            principal_res_alu
-        )
-        VALUES
-        (
-            @usuarioId,
-            @alunoId,
-            @parentesco,
-            @principal
-        );
-        """;
+            INSERT INTO ResponsavelAluno
+            (
+                id_usu_fk,
+                id_alu_fk,
+                parentesco_res_alu,
+                principal_res_alu
+            )
+            VALUES
+            (
+                @usuarioId,
+                @alunoId,
+                @parentesco,
+                @principal
+            );
+            """;
 
         using var comandoInserir = _conexao.CreateCommand(sqlInserir);
 
@@ -128,9 +127,9 @@ public ResponsavelAlunoDAO(Conexao conexao)
     public void Excluir(int id)
     {
         const string sql = """
-        DELETE FROM ResponsavelAluno
-        WHERE id_res_alu = @id;
-        """;
+            DELETE FROM ResponsavelAluno
+            WHERE id_res_alu = @id;
+            """;
 
         using var comando = _conexao.CreateCommand(sql);
 
@@ -147,9 +146,9 @@ public ResponsavelAlunoDAO(Conexao conexao)
             UsuarioId = leitor.GetInt32("id_usu_fk"),
             AlunoId = leitor.GetInt32("id_alu_fk"),
             Parentesco = DAOHelper.GetString(leitor, "parentesco_res_alu"),
-            Principal = leitor.GetBoolean("principal_res_alu")
+            Principal = leitor.GetBoolean("principal_res_alu"),
+            NomeUsuario = DAOHelper.GetString(leitor, "nome_usu"),
+            NomeAluno = DAOHelper.GetString(leitor, "nome_alu")
         };
     }
-```
-
 }

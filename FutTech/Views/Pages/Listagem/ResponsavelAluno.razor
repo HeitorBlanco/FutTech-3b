@@ -1,43 +1,130 @@
-﻿@page "/responsavel-aluno"
+﻿```razor
+@page "/responsavel-aluno"
 
 @using FutTech.DAO
 @using FutTech.Models
 @using ResponsavelAlunoModel = FutTech.Models.ResponsavelAluno
 
 @inject ResponsavelAlunoDAO ResponsavelAlunoDAO
+@rendermode InteractiveServer
 
-<h1>Responsáveis dos Alunos</h1>
+<PageTitle>Responsáveis dos Alunos</PageTitle>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Usuário</th>
-            <th>Aluno</th>
-            <th>Parentesco</th>
-            <th>Principal</th>
-        </tr>
-    </thead>
+<AppAreaShell NomeEscolinha="FutTech"
+              NomeUsuario="Usuário"
+              CargoUsuario="Responsável"
+              TextoPerfil="Responsável"
+              Perfil="PerfilUsuario.Responsavel"
+              ItemAtivo="responsavel"
+              TituloMenu="Menu do responsável">
 
-    <tbody>
-        @foreach (var responsavel in Responsaveis)
-        {
-            <tr>
-                <td>@responsavel.Id</td>
-                <td>@responsavel.NomeUsuario</td>
-                <td>@responsavel.NomeAluno</td>
-                <td>@responsavel.Parentesco</td>
-                <td>@(responsavel.Principal ? "Sim" : "Não")</td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <main class="attendance-content">
+
+        <header class="attendance-heading">
+            <div class="attendance-title">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0-0-8 4 4 0 0 0 0 8m7-4a4 4 0 1 1 0 8m4 6v-2a4 4 0 0 0-3-3.87" />
+                </svg>
+
+                <h1>Responsáveis dos Alunos</h1>
+            </div>
+        </header>
+
+        <section class="attendance-panel">
+
+            <div class="attendance-panel-heading">
+                <div>
+                    <h2>Responsáveis</h2>
+                    <span>Lista de responsáveis vinculados aos alunos</span>
+                </div>
+            </div>
+
+            @if (Responsaveis.Count == 0)
+            {
+                <div class="attendance-empty">
+
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8m11 10v-2a4 4 0 0 0-3-3.87M17 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+
+                    <strong>Nenhum responsável encontrado</strong>
+
+                    <span>
+                        Nenhum responsável está cadastrado para os alunos.
+                    </span>
+
+                </div>
+            }
+            else
+            {
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Usuário</th>
+                                <th>Aluno</th>
+                                <th>Parentesco</th>
+                                <th>Principal</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var responsavel in Responsaveis)
+                            {
+                                <tr>
+
+                                    <td>
+                                        @responsavel.Id
+                                    </td>
+
+                                    <td>
+                                        @responsavel.NomeUsuario
+                                    </td>
+
+                                    <td>
+                                        @responsavel.NomeAluno
+                                    </td>
+
+                                    <td>
+                                        @responsavel.Parentesco
+                                    </td>
+
+                                    <td>
+                                        <span class="status-principal">
+                                            @(responsavel.Principal ? "Sim" : "Não")
+                                        </span>
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </section>
+
+    </main>
+
+</AppAreaShell>
 
 @code {
+
     private List<ResponsavelAlunoModel> Responsaveis = new();
 
     protected override void OnInitialized()
     {
-        Responsaveis = ResponsavelAlunoDAO.Listar();
+        Responsaveis = ResponsavelAlunoDAO.Listar()
+            .OrderBy(r => r.NomeAluno)
+            .ThenByDescending(r => r.Principal)
+            .ToList();
     }
 }
+```
