@@ -12,7 +12,72 @@ public class MensalidadeDAO
     {
         _conexao = conexao;
     }
+    public void Inserir(Mensalidade mensalidade)
+    {
+        const string sql = """
+            INSERT INTO Mensalidade
+            (
+                id_alu_fk,
+                competencia_men,
+                valor_men,
+                vencimento_men,
+                data_pagamento_men,
+                status_men
+            )
+            VALUES
+            (
+                @aluno,
+                @competencia,
+                @valor,
+                @vencimento,
+                @dataPagamento,
+                @status
+            );
+            """;
 
+        using var comando =
+            _conexao.CreateCommand(sql);
+
+        comando.Parameters.AddWithValue(
+            "@aluno",
+            mensalidade.AlunoId
+        );
+
+        comando.Parameters.AddWithValue(
+            "@competencia",
+            mensalidade.Competencia.ToDateTime(
+                TimeOnly.MinValue
+            )
+        );
+
+        comando.Parameters.AddWithValue(
+            "@valor",
+            mensalidade.Valor
+        );
+
+        comando.Parameters.AddWithValue(
+            "@vencimento",
+            mensalidade.Vencimento.ToDateTime(
+                TimeOnly.MinValue
+            )
+        );
+
+        comando.Parameters.AddWithValue(
+            "@dataPagamento",
+            mensalidade.DataPagamento.HasValue
+                ? mensalidade.DataPagamento.Value.ToDateTime(
+                    TimeOnly.MinValue
+                )
+                : DBNull.Value
+        );
+
+        comando.Parameters.AddWithValue(
+            "@status",
+            mensalidade.Status.ToString()
+        );
+
+        comando.ExecuteNonQuery();
+    }
     public List<MensalidadeDetalhe> Listar()
     {
         var lista = new List<MensalidadeDetalhe>();

@@ -1,0 +1,143 @@
+﻿@page "/usuarios-sistema/cadastro"
+@rendermode InteractiveServer
+
+@using FutTech.DAO
+@using FutTech.Models
+
+@inject UsuariosSistemaDAO dao
+@inject NavigationManager NavigationManager
+
+<PageTitle>Novo Usuário - FutTech</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Cadastro de Usuário</h2>
+    </div>
+</div>
+
+<div class="custom-table-card p-4">
+
+    <EditForm Model="usuario" OnValidSubmit="Salvar">
+
+        <DataAnnotationsValidator />
+
+        <ValidationSummary class="alert alert-danger" />
+
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">
+                    Nome
+                </label>
+
+                <InputText @bind-Value="usuario.Nome"
+                           class="form-control" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">
+                    Email
+                </label>
+
+                <InputText @bind-Value="usuario.Email"
+                           class="form-control" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">
+                    Perfil
+                </label>
+
+                <InputSelect @bind-Value="usuario.Perfil"
+                             class="form-control">
+
+                    <option value="">Selecione um perfil</option>
+                    <option value="@PerfilUsuario.Administrador">
+                        Administrador
+                    </option>
+                    <option value="@PerfilUsuario.Responsavel">
+                        Responsável
+                    </option>
+                    <option value="@PerfilUsuario.Treinador">
+                        Treinador
+                    </option>
+
+                </InputSelect>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">
+                    Cargo
+                </label>
+
+                <InputText @bind-Value="usuario.Cargo"
+                           class="form-control" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">
+                    Descrição do perfil
+                </label>
+
+                <InputText @bind-Value="usuario.PerfilDescricao"
+                           class="form-control" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">
+                    Rota inicial
+                </label>
+
+                <InputText @bind-Value="usuario.RotaInicial"
+                           class="form-control" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div class="form-check mt-4">
+
+                    <InputCheckbox @bind-Value="usuario.Ativo"
+                                   class="form-check-input" />
+
+                    <label class="form-check-label">
+                        Usuário ativo
+                    </label>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="d-flex gap-2 mt-3">
+
+            <button type="submit" class="btn btn-primary">
+                Cadastrar
+            </button>
+
+            <button type="button"
+                    class="btn btn-secondary"
+                    @onclick="Voltar">
+                Cancelar
+            </button>
+
+        </div>
+
+    </EditForm>
+
+</div>
+
+@code {
+
+    private UsuarioSistema usuario = new();
+
+    private void Salvar()
+    {
+        dao.Inserir(usuario);
+
+        NavigationManager.NavigateTo("/usuarios-sistema");
+    }
+
+    private void Voltar()
+    {
+        NavigationManager.NavigateTo("/usuarios-sistema");
+    }
+}

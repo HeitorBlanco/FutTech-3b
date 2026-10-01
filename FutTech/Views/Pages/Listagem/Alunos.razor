@@ -4,38 +4,75 @@
 @using FutTech.Models
 
 @inject AlunoDAO AlunosDAO
+@inject NavigationManager NavigationManager
 
-<h1>Alunos</h1>
+<PageTitle>Alunos - FutTech</PageTitle>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Responsável</th>
-            <th>Data de Nascimento</th>
-            <th>Turma</th>
-            <th>Ativo</th>
-        </tr>
-    </thead>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-    <tbody>
-        @foreach (var aluno in Aluno)
-        {
+    <div>
+        <h1>Alunos</h1>
+        <p>Consulta dos alunos cadastrados na escolinha.</p>
+    </div>
+
+    <div>
+        <a href="/alunos/cadastro" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i>
+            Novo Aluno
+        </a>
+    </div>
+
+</div>
+
+<div class="table-responsive">
+
+    <table class="table">
+
+        <thead>
             <tr>
-                <td>@aluno.Id</td>
-                <td>@aluno.Nome</td>
-                <td>@aluno.Responsavel</td>
-                <td>@aluno.DataNascimento.ToString("dd/MM/yyyy")</td>
-                <td>@aluno.TurmaId</td>
-                <td>@(aluno.Ativo ? "Sim" : "Não")</td>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Responsável</th>
+                <th>Data de Nascimento</th>
+                <th>Turma</th>
+                <th>Ativo</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+
+        <tbody>
+
+            @foreach (var aluno in Aluno)
+            {
+                <tr>
+                    <td>@aluno.Id</td>
+
+                    <td>@aluno.Nome</td>
+
+                    <td>@aluno.Responsavel</td>
+
+                    <td>
+                        @aluno.DataNascimento?.ToString("dd/MM/yyyy")
+                    </td>
+
+                    <td>
+                        @aluno.TurmaId
+                    </td>
+
+                    <td>
+                        @(aluno.Ativo ? "Sim" : "Não")
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>
 
 @code {
-    private List<Aluno> Aluno = new();
+
+    private List<global::FutTech.Models.Aluno> Aluno = new();
 
     protected override void OnInitialized()
     {

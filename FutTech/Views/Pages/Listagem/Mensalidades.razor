@@ -1,0 +1,165 @@
+﻿@page "/mensalidades"
+@rendermode InteractiveServer
+
+@using FutTech.DAO
+@using FutTech.Models
+
+@inject MensalidadeDAO MensalidadesDAO
+@inject NavigationManager NavigationManager
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+
+        <h1>
+            Mensalidades
+        </h1>
+
+        <p class="text-muted mb-0">
+            Lista de mensalidades cadastradas.
+        </p>
+
+    </div>
+
+    <button class="btn btn-primary"
+            @onclick="NovaMensalidade">
+
+        <i class="bi bi-plus-lg"></i>
+
+        Nova Mensalidade
+
+    </button>
+
+</div>
+
+<table class="table">
+    <thead>
+
+        <tr>
+
+            <th>ID</th>
+
+            <th>Aluno</th>
+
+            <th>Competência</th>
+
+            <th>Valor</th>
+
+            <th>Vencimento</th>
+
+            <th>Pagamento</th>
+
+            <th>Status</th>
+
+        </tr>
+
+    </thead>
+
+
+    <tbody>
+
+        @if (ListaMensalidades.Count == 0)
+        {
+            <tr>
+
+                <td colspan="7"
+                    class="text-center">
+
+                    Nenhuma mensalidade cadastrada.
+
+                </td>
+
+            </tr>
+        }
+        else
+        {
+            @foreach (var item in ListaMensalidades)
+            {
+                <tr>
+
+                    <td>
+                        @item.Mensalidade.Id
+                    </td>
+
+                    <td>
+                        @item.NomeAluno
+                    </td>
+
+                    <td>
+                        @item.Mensalidade.Competencia.ToString("MM/yyyy")
+                    </td>
+
+                    <td>
+                        R$ @item.Mensalidade.Valor.ToString("F2")
+                    </td>
+
+                    <td>
+                        @item.Mensalidade.Vencimento.ToString("dd/MM/yyyy")
+                    </td>
+
+                    <td>
+                        @if (item.Mensalidade.DataPagamento.HasValue)
+                        {
+                            @item.Mensalidade.DataPagamento.Value.ToString("dd/MM/yyyy")
+                        }
+                        else
+                        {
+                            <span>
+                                Não pago
+                            </span>
+                        }
+                    </td>
+
+                    <td>
+
+                        @switch (item.Mensalidade.Status)
+                        {
+                            case StatusMensalidade.Pago:
+
+                                <span class="badge bg-success">
+                                    Pago
+                                </span>
+
+                                break;
+
+                            case StatusMensalidade.Atrasada:
+
+                                <span class="badge bg-danger">
+                                    Atrasada
+                                </span>
+
+                                break;
+
+                            default:
+
+                                <span class="badge bg-warning text-dark">
+                                    Pendente
+                                </span>
+
+                                break;
+                        }
+
+                    </td>
+
+                </tr>
+            }
+        }
+
+    </tbody>
+
+</table>
+
+@code {
+private List<MensalidadeDetalhe> ListaMensalidades = new();
+
+
+    protected override void OnInitialized()
+    {
+        ListaMensalidades = MensalidadesDAO.Listar();
+    }
+
+
+    private void NovaMensalidade()
+    {
+        NavigationManager.NavigateTo("/mensalidade/cadastro");
+    }
+}
