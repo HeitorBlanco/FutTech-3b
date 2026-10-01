@@ -1,0 +1,99 @@
+﻿@page "/resumofinanceiro/cadastro"
+@rendermode InteractiveServer
+
+@using FutTech.DAO
+@using FutTech.Models
+
+@inject FinanceiroResumosDAO dao
+@inject NavigationManager NavigationManager
+
+<PageTitle>Novo Financeiro - FutTech</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Cadastro Financeiro</h2>
+    </div>
+</div>
+
+<div class="custom-table-card p-4">
+
+    <EditForm Model="financeiro" OnValidSubmit="Salvar">
+
+        <DataAnnotationsValidator />
+
+        <ValidationSummary class="alert alert-danger" />
+
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">
+                    Recebido no mês atual
+                </label>
+
+                <InputNumber @bind-Value="financeiro.RecebidoMesAtual"
+                             class="form-control" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">
+                    Pendentes
+                </label>
+
+                <InputNumber @bind-Value="financeiro.Pendentes"
+                             class="form-control" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">
+                    Total a receber
+                </label>
+
+                <InputNumber @bind-Value="financeiro.TotalAReceber"
+                             class="form-control" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">
+                    Total pago
+                </label>
+
+                <InputNumber @bind-Value="financeiro.TotalPago"
+                             class="form-control" />
+            </div>
+
+        </div>
+
+        <div class="d-flex gap-2 mt-3">
+
+            <button type="submit" class="btn btn-primary">
+                Cadastrar
+            </button>
+
+            <button type="button"
+                    class="btn btn-secondary"
+                    @onclick="Voltar">
+                Cancelar
+            </button>
+
+        </div>
+
+    </EditForm>
+
+</div>
+
+@code {
+
+    private FinanceiroResumo financeiro = new();
+
+    private void Salvar()
+    {
+        dao.Inserir(financeiro);
+
+        NavigationManager.NavigateTo("/resumofinanceiro");
+    }
+
+    private void Voltar()
+    {
+        NavigationManager.NavigateTo("/resumofinanceiro");
+    }
+}

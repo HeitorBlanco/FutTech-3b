@@ -1,11 +1,22 @@
 ﻿@page "/resumofinanceiro"
+@rendermode InteractiveServer
 
 @using FutTech.DAO
 @using FutTech.Models
 
 @inject FinanceiroResumosDAO FinanceiroResumoDAO
+@inject NavigationManager NavigationManager
 
-<h1>Resumo Financeiro</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1>Resumo Financeiro</h1>
+    </div>
+
+    <button class="btn btn-primary"
+            @onclick="NovoCadastro">
+        <i class="bi bi-plus-lg"></i> Novo Cadastro
+    </button>
+</div>
 
 <table class="table">
     <thead>
@@ -36,5 +47,10 @@
     protected override void OnInitialized()
     {
         FinanceiroResumo = FinanceiroResumoDAO.Listar();
+    }
+
+    private void NovoCadastro()
+    {
+        NavigationManager.NavigateTo("/resumofinanceiro/cadastro");
     }
 }
