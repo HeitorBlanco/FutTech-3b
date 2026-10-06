@@ -48,4 +48,101 @@ public class AvaliacaoAlunoDAO
             Media = leitor.GetDecimal("media_ava")
         };
     }
+
+    // CREATE — cadastra uma nova avaliação de aluno
+    public void Inserir(AvaliacaoAluno avaliacao)
+    {
+        try
+        {
+            using var con = _conexao.GetConnection();
+
+            string sql = @"
+            INSERT INTO AvaliacaoAluno
+            (
+                id_alu_fk,
+                id_tur_fk,
+                id_trei_fk,
+                data_ava,
+                nota_tecnica_ava,
+                nota_fisica_ava,
+                nota_tatica_ava,
+                nota_comportamental_ava,
+                observacoes_ava,
+                media_ava
+            )
+            VALUES
+            (
+                @aluno,
+                @turma,
+                @treinador,
+                @data,
+                @notaTecnica,
+                @notaFisica,
+                @notaTatica,
+                @notaComportamental,
+                @observacoes,
+                @media
+            )";
+
+            using var comando = con.CreateCommand();
+
+            comando.CommandText = sql;
+
+            comando.Parameters.AddWithValue(
+                "@aluno",
+                avaliacao.AlunoId
+            );
+
+            comando.Parameters.AddWithValue(
+                "@turma",
+                avaliacao.TurmaId
+            );
+
+            comando.Parameters.AddWithValue(
+                "@treinador",
+                avaliacao.TreinadorId
+            );
+
+            comando.Parameters.AddWithValue(
+                "@data",
+                avaliacao.Data
+            );
+
+            comando.Parameters.AddWithValue(
+                "@notaTecnica",
+                avaliacao.NotaTecnica
+            );
+
+            comando.Parameters.AddWithValue(
+                "@notaFisica",
+                avaliacao.NotaFisica
+            );
+
+            comando.Parameters.AddWithValue(
+                "@notaTatica",
+                avaliacao.NotaTatica
+            );
+
+            comando.Parameters.AddWithValue(
+                "@notaComportamental",
+                avaliacao.NotaComportamental
+            );
+
+            comando.Parameters.AddWithValue(
+                "@observacoes",
+                avaliacao.Observacoes
+            );
+
+            comando.Parameters.AddWithValue(
+                "@media",
+                avaliacao.Media
+            );
+
+            comando.ExecuteNonQuery();
+        }
+        catch
+        {
+            throw;
+        }
+    }
 }
