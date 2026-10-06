@@ -1,0 +1,75 @@
+﻿@page "/treinadores/cadastro"
+@rendermode InteractiveServer
+
+@using FutTech.DAO
+@using FutTech.Models
+
+@inject TreinadoresDAO TreinadoresDAO
+@inject NavigationManager NavigationManager
+
+<h1>Novo Treinador</h1>
+
+<div class="card">
+    <div class="card-body">
+
+        <EditForm Model="@novoTreinador" OnValidSubmit="Cadastrar">
+
+            <div class="mb-3">
+                <label class="form-label">
+                    Nome
+                </label>
+
+                <InputText class="form-control"
+                           @bind-Value="novoTreinador.Nome" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">
+                    Cargo
+                </label>
+
+                <InputText class="form-control"
+                           @bind-Value="novoTreinador.Cargo" />
+            </div>
+
+            <div class="form-check mb-3">
+                <InputCheckbox class="form-check-input"
+                               @bind-Value="novoTreinador.Ativo" />
+
+                <label class="form-check-label">
+                    Ativo
+                </label>
+            </div>
+
+            <button type="submit"
+                    class="btn btn-primary">
+                <i class="bi bi-check-lg"></i>
+                Cadastrar
+            </button>
+
+            <button type="button"
+                    class="btn btn-secondary ms-2"
+                    @onclick="Voltar">
+                Cancelar
+            </button>
+
+        </EditForm>
+
+    </div>
+</div>
+
+@code {
+    private Treinador novoTreinador = new();
+
+    private void Cadastrar()
+    {
+        TreinadoresDAO.Inserir(novoTreinador);
+
+        NavigationManager.NavigateTo("/treinadores");
+    }
+
+    private void Voltar()
+    {
+        NavigationManager.NavigateTo("/treinadores");
+    }
+}

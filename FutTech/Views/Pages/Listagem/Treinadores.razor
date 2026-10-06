@@ -1,11 +1,26 @@
 ﻿@page "/treinadores"
+@rendermode InteractiveServer
 
 @using FutTech.DAO
 @using FutTech.Models
 
 @inject TreinadoresDAO TreinadoresDAO
+@inject NavigationManager NavigationManager
 
-<h1>Treinadores</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h1>Treinadores</h1>
+    </div>
+
+    <button type="button"
+            class="btn btn-primary"
+            @onclick="NovoCadastro">
+        <i class="bi bi-plus-lg"></i>
+        Novo Cadastro
+    </button>
+
+</div>
 
 <table class="table">
     <thead>
@@ -14,27 +29,55 @@
             <th>Nome</th>
             <th>Cargo</th>
             <th>Ativo</th>
+            <th>Ações</th>
         </tr>
     </thead>
 
     <tbody>
-        @foreach (var treinador in Treinador)
+        @foreach (var treinador in listaTreinadores)
         {
             <tr>
                 <td>@treinador.Id</td>
+
                 <td>@treinador.Nome</td>
+
                 <td>@treinador.Cargo</td>
-                <td>@(treinador.Ativo ? "Sim" : "Não")</td>
+
+                <td>
+                    @(treinador.Ativo ? "Sim" : "Não")
+                </td>
+
+                <td>
+                    <button type="button"
+                            class="btn btn-danger btn-sm"
+                            @onclick="() => Excluir(treinador.Id)">
+                        <i class="bi bi-trash"></i>
+                        Excluir
+                    </button>
+                </td>
             </tr>
         }
     </tbody>
 </table>
 
 @code {
-    private List<global::FutTech.Models.Treinador> Treinador = new();
+
+    private List<Treinador> listaTreinadores = new();
 
     protected override void OnInitialized()
     {
-        Treinador = TreinadoresDAO.Listar();
+        listaTreinadores = TreinadoresDAO.Listar();
+    }
+
+    private void NovoCadastro()
+    {
+        NavigationManager.NavigateTo("/treinadores/cadastro");
+    }
+
+    private void Excluir(int id)
+    {
+        TreinadoresDAO.Excluir(id);
+
+        listaTreinadores = TreinadoresDAO.Listar();
     }
 }
