@@ -1,5 +1,54 @@
-﻿<h3>AvaliacaoAluno</h3>
+﻿@page "/avaliacoes"
+
+@using FutTech.DAO
+@using FutTech.Models
+
+@inject AvaliacaoAlunoDAO AvaliacaoAlunoDAO
+
+<h1>Avaliações dos Alunos</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Aluno</th>
+            <th>Turma</th>
+            <th>Treinador</th>
+            <th>Data</th>
+            <th>Nota Técnica</th>
+            <th>Nota Física</th>
+            <th>Nota Tática</th>
+            <th>Nota Comportamental</th>
+            <th>Observações</th>
+            <th>Média</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var avaliacao in Avaliacoes)
+        {
+            <tr>
+                <td>@avaliacao.Id</td>
+                <td>@avaliacao.AlunoId</td>
+                <td>@avaliacao.TurmaId</td>
+                <td>@avaliacao.TreinadorId</td>
+                <td>@avaliacao.Data</td>
+                <td>@avaliacao.NotaTecnica</td>
+                <td>@avaliacao.NotaFisica</td>
+                <td>@avaliacao.NotaTatica</td>
+                <td>@avaliacao.NotaComportamental</td>
+                <td>@avaliacao.Observacoes</td>
+                <td>@avaliacao.Media</td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 @code {
+    private List<FutTech.Models.AvaliacaoAluno> Avaliacoes = new();
 
+    protected override void OnInitialized()
+    {
+        Avaliacoes = AvaliacaoAlunoDAO.Listar();
+    }
 }
