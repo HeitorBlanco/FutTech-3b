@@ -21,6 +21,7 @@ builder.Services.AddScoped<RegistroPresencaDAO>();
 builder.Services.AddScoped<TreinadoresDAO>();
 builder.Services.AddScoped<UsuariosSistemaDAO>();
 builder.Services.AddScoped<ResponsavelAlunoDAO>();
+builder.Services.AddScoped<AvaliacaoAlunoDAO>();
 
 var app = builder.Build();
 
