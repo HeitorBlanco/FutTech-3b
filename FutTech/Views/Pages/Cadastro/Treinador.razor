@@ -1,0 +1,136 @@
+﻿@page "/presencas/cadastro"
+@rendermode InteractiveServer
+
+@using FutTech.DAO
+@using FutTech.Models
+
+@inject RegistroPresencaDAO RegistroPresencaDAO
+@inject NavigationManager NavigationManager
+
+<h1>Novo Registro de Presença</h1>
+
+<div class="card">
+
+    <div class="card-body">
+
+        <EditForm Model="@novoRegistro" OnValidSubmit="Cadastrar">
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Aluno
+                </label>
+
+                <select class="form-select"
+                        @bind="novoRegistro.AlunoId">
+
+                    <option value="0">
+                        Selecione o aluno
+                    </option>
+
+                    @foreach (var aluno in alunos)
+                    {
+                        <option value="@aluno.Id">
+                            @aluno.Nome
+                        </option>
+                    }
+
+                </select>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Turma
+                </label>
+
+                <select class="form-select"
+                        @bind="novoRegistro.TurmaId">
+
+                    <option value="0">
+                        Selecione a turma
+                    </option>
+
+                    @foreach (var turma in turmas)
+                    {
+                        <option value="@turma.Id">
+                            @turma.Nome
+                        </option>
+                    }
+
+                </select>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Data
+                </label>
+
+                <InputDate class="form-control"
+                           @bind-Value="novoRegistro.Data" />
+
+            </div>
+
+            <div class="form-check mb-3">
+
+                <InputCheckbox class="form-check-input"
+                               @bind-Value="novoRegistro.Presente" />
+
+                <label class="form-check-label">
+                    Presente
+                </label>
+
+            </div>
+
+            <button type="submit"
+                    class="btn btn-primary">
+
+                <i class="bi bi-check-lg"></i>
+                Cadastrar
+
+            </button>
+
+            <button type="button"
+                    class="btn btn-secondary ms-2"
+                    @onclick="Voltar">
+
+                Cancelar
+
+            </button>
+
+        </EditForm>
+
+    </div>
+
+</div>
+
+@code {
+
+    private RegistroPresenca novoRegistro = new();
+
+    private List<Aluno> alunos = new();
+
+    private List<Turma> turmas = new();
+
+    protected override void OnInitialized()
+    {
+        alunos = RegistroPresencaDAO.ListarAlunos();
+
+        turmas = RegistroPresencaDAO.ListarTurmas();
+    }
+
+    private void Cadastrar()
+    {
+        RegistroPresencaDAO.Inserir(novoRegistro);
+
+        NavigationManager.NavigateTo("/presencas");
+    }
+
+    private void Voltar()
+    {
+        NavigationManager.NavigateTo("/presencas");
+    }
+}

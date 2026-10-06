@@ -1,5 +1,4 @@
 ﻿@page "/treinadores/cadastro"
-@rendermode InteractiveServer
 
 @using FutTech.DAO
 @using FutTech.Models
@@ -12,45 +11,43 @@
 <div class="card">
     <div class="card-body">
 
-        <EditForm Model="@novoTreinador" OnValidSubmit="Cadastrar">
+        <EditForm Model="@novoTreinador" OnValidSubmit="@Cadastrar">
 
             <div class="mb-3">
-                <label class="form-label">
-                    Nome
-                </label>
+                <label class="form-label">Nome</label>
 
                 <InputText class="form-control"
                            @bind-Value="novoTreinador.Nome" />
             </div>
 
             <div class="mb-3">
-                <label class="form-label">
-                    Cargo
-                </label>
+                <label class="form-label">Cargo</label>
 
                 <InputText class="form-control"
                            @bind-Value="novoTreinador.Cargo" />
             </div>
 
             <div class="form-check mb-3">
+
                 <InputCheckbox class="form-check-input"
                                @bind-Value="novoTreinador.Ativo" />
 
                 <label class="form-check-label">
                     Ativo
                 </label>
+
             </div>
 
-            <button type="submit"
-                    class="btn btn-primary">
-                <i class="bi bi-check-lg"></i>
+            <button type="submit" class="btn btn-primary">
                 Cadastrar
             </button>
 
             <button type="button"
                     class="btn btn-secondary ms-2"
                     @onclick="Voltar">
-                Cancelar
+
+                Voltar
+
             </button>
 
         </EditForm>
@@ -59,7 +56,8 @@
 </div>
 
 @code {
-    private Treinador novoTreinador = new();
+
+    private FutTech.Models.Treinador novoTreinador = new();
 
     private void Cadastrar()
     {

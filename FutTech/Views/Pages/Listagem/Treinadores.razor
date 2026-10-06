@@ -1,29 +1,28 @@
 ﻿@page "/treinadores"
-@rendermode InteractiveServer
 
 @using FutTech.DAO
-@using FutTech.Models
+@using TreinadorModel = FutTech.Models.Treinador
 
 @inject TreinadoresDAO TreinadoresDAO
 @inject NavigationManager NavigationManager
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<h1>Treinadores</h1>
 
-    <div>
-        <h1>Treinadores</h1>
-    </div>
+<div class="mb-3">
 
-    <button type="button"
-            class="btn btn-primary"
+    <button class="btn btn-primary"
             @onclick="NovoCadastro">
-        <i class="bi bi-plus-lg"></i>
+
         Novo Cadastro
+
     </button>
 
 </div>
 
 <table class="table">
+
     <thead>
+
         <tr>
             <th>ID</th>
             <th>Nome</th>
@@ -31,42 +30,57 @@
             <th>Ativo</th>
             <th>Ações</th>
         </tr>
+
     </thead>
 
     <tbody>
-        @foreach (var treinador in listaTreinadores)
+
+        @foreach (var treinador in ListaTreinadores)
         {
             <tr>
-                <td>@treinador.Id</td>
 
-                <td>@treinador.Nome</td>
+                <td>
+                    @treinador.Id
+                </td>
 
-                <td>@treinador.Cargo</td>
+                <td>
+                    @treinador.Nome
+                </td>
+
+                <td>
+                    @treinador.Cargo
+                </td>
 
                 <td>
                     @(treinador.Ativo ? "Sim" : "Não")
                 </td>
 
                 <td>
+
                     <button type="button"
                             class="btn btn-danger btn-sm"
                             @onclick="() => Excluir(treinador.Id)">
-                        <i class="bi bi-trash"></i>
+
                         Excluir
+
                     </button>
+
                 </td>
+
             </tr>
         }
+
     </tbody>
+
 </table>
 
 @code {
 
-    private List<Treinador> listaTreinadores = new();
+    private List<TreinadorModel> ListaTreinadores = new();
 
     protected override void OnInitialized()
     {
-        listaTreinadores = TreinadoresDAO.Listar();
+        ListaTreinadores = TreinadoresDAO.Listar();
     }
 
     private void NovoCadastro()
@@ -78,6 +92,6 @@
     {
         TreinadoresDAO.Excluir(id);
 
-        listaTreinadores = TreinadoresDAO.Listar();
+        ListaTreinadores = TreinadoresDAO.Listar();
     }
 }

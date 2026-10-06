@@ -18,21 +18,26 @@ public class TreinadoresDAO
         var lista = new List<Treinador>();
 
         using var comando = _conexao.CreateCommand(
-            "SELECT id_trei, nome_trei, cargo_trei, ativo_trei FROM Treinador"
+            @"SELECT 
+                id_trei,
+                nome_trei,
+                cargo_trei,
+                ativo_trei
+              FROM Treinador
+              ORDER BY nome_trei;"
         );
 
         using var leitor = (MySqlDataReader)comando.ExecuteReader();
 
         while (leitor.Read())
         {
-            var treinador = new Treinador();
-
-            treinador.Id = leitor.GetInt32("id_trei");
-            treinador.Nome = leitor.GetString("nome_trei");
-            treinador.Cargo = leitor.GetString("cargo_trei");
-            treinador.Ativo = leitor.GetBoolean("ativo_trei");
-
-            lista.Add(treinador);
+            lista.Add(new Treinador
+            {
+                Id = leitor.GetInt32("id_trei"),
+                Nome = leitor.GetString("nome_trei"),
+                Cargo = leitor.GetString("cargo_trei"),
+                Ativo = leitor.GetBoolean("ativo_trei")
+            });
         }
 
         return lista;
@@ -40,10 +45,8 @@ public class TreinadoresDAO
 
     public void Inserir(Treinador treinador)
     {
-        using var conexao = _conexao.GetConnection();
-
-        string sql = @"
-            INSERT INTO Treinador
+        using var comando = _conexao.CreateCommand(
+            @"INSERT INTO Treinador
             (
                 nome_trei,
                 cargo_trei,
@@ -54,30 +57,33 @@ public class TreinadoresDAO
                 @nome,
                 @cargo,
                 @ativo
-            )";
+            );"
+        );
 
-        using var comando = conexao.CreateCommand();
+        comando.Parameters.AddWithValue(
+            "@nome",
+            treinador.Nome
+        );
 
-        comando.CommandText = sql;
+        comando.Parameters.AddWithValue(
+            "@cargo",
+            treinador.Cargo
+        );
 
-        comando.Parameters.AddWithValue("@nome", treinador.Nome);
-        comando.Parameters.AddWithValue("@cargo", treinador.Cargo);
-        comando.Parameters.AddWithValue("@ativo", treinador.Ativo);
+        comando.Parameters.AddWithValue(
+            "@ativo",
+            treinador.Ativo
+        );
 
         comando.ExecuteNonQuery();
     }
 
     public void Excluir(int id)
     {
-        using var conexao = _conexao.GetConnection();
-
-        string sql = @"
-            DELETE FROM Treinador
-            WHERE id_trei = @id";
-
-        using var comando = conexao.CreateCommand();
-
-        comando.CommandText = sql;
+        using var comando = _conexao.CreateCommand(
+            @"DELETE FROM Treinador
+              WHERE id_trei = @id;"
+        );
 
         comando.Parameters.AddWithValue("@id", id);
 

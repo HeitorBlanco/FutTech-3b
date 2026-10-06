@@ -1,14 +1,30 @@
 @page "/presencas"
+@rendermode InteractiveServer
 
 @using FutTech.DAO
 @using FutTech.Models
 @using RegistroPresencaModel = FutTech.Models.RegistroPresenca
 
 @inject RegistroPresencaDAO RegistroPresencaDAO
+@inject NavigationManager NavigationManager
 
-<h1>Registros de Presença</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h1>Registros de Presença</h1>
+    </div>
+
+    <button type="button"
+            class="btn btn-primary"
+            @onclick="NovoCadastro">
+        <i class="bi bi-plus-lg"></i>
+        Novo Cadastro
+    </button>
+
+</div>
 
 <table class="table">
+
     <thead>
         <tr>
             <th>ID</th>
@@ -16,28 +32,70 @@
             <th>Turma</th>
             <th>Data</th>
             <th>Status</th>
+            <th>Ações</th>
         </tr>
     </thead>
 
     <tbody>
+
         @foreach (var registro in Registros)
         {
             <tr>
-                <td>@registro.Id</td>
-                <td>@registro.NomeAluno</td>
-                <td>@registro.NomeTurma</td>
-                <td>@registro.Data.ToString("dd/MM/yyyy")</td>
-                <td>@(registro.Presente ? "Presente" : "Ausente")</td>
+
+                <td>
+                    @registro.Id
+                </td>
+
+                <td>
+                    @registro.NomeAluno
+                </td>
+
+                <td>
+                    @registro.NomeTurma
+                </td>
+
+                <td>
+                    @registro.Data.ToString("dd/MM/yyyy")
+                </td>
+
+                <td>
+                    @(registro.Presente ? "Presente" : "Ausente")
+                </td>
+
+                <td>
+                    <button type="button"
+                            class="btn btn-danger btn-sm"
+                            @onclick="() => Excluir(registro.Id)">
+                        <i class="bi bi-trash"></i>
+                        Excluir
+                    </button>
+                </td>
+
             </tr>
         }
+
     </tbody>
+
 </table>
 
 @code {
+
     private List<RegistroPresencaModel> Registros = new();
 
     protected override void OnInitialized()
     {
+        Registros = RegistroPresencaDAO.Listar();
+    }
+
+    private void NovoCadastro()
+    {
+        NavigationManager.NavigateTo("/presencas/cadastro");
+    }
+
+    private void Excluir(int id)
+    {
+        RegistroPresencaDAO.Excluir(id);
+
         Registros = RegistroPresencaDAO.Listar();
     }
 }
