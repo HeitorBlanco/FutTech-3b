@@ -1,0 +1,148 @@
+﻿@page "/comunicados/cadastro"
+@rendermode InteractiveServer
+
+@using FutTech.DAO
+@using FutTech.Models
+
+@inject ComunicadosDAO dao
+@inject NavigationManager NavigationManager
+
+<PageTitle>Novo Comunicado - FutTech</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Cadastro de Comunicado</h2>
+    </div>
+</div>
+
+<div class="custom-table-card p-4">
+
+    <EditForm Model="comunicado" OnValidSubmit="Salvar">
+
+        <DataAnnotationsValidator />
+
+        <ValidationSummary class="alert alert-danger" />
+
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">
+                    Título
+                </label>
+
+                <InputText @bind-Value="comunicado.Titulo"
+                           class="form-control" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">
+                    Autor
+                </label>
+
+                <InputText @bind-Value="comunicado.Autor"
+                           class="form-control" />
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <label class="form-label">
+                    Conteúdo
+                </label>
+
+                <InputTextArea @bind-Value="comunicado.Conteudo"
+                               class="form-control" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">
+                    Data de publicação
+                </label>
+
+                <InputDate @bind-Value="comunicado.PublicadoEm"
+                           class="form-control" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">
+                    Hora de publicação
+                </label>
+
+                <input type="time"
+                       @bind="comunicado.PublicadoAs"
+                       class="form-control" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">
+                    Categoria
+                </label>
+
+                <InputText @bind-Value="comunicado.Categoria"
+                           class="form-control" />
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <label class="form-label">
+                    Destacado
+                </label>
+
+                <div class="form-check">
+                    <InputCheckbox @bind-Value="comunicado.Destacado"
+                                   class="form-check-input" />
+
+                    <label class="form-check-label">
+                        Sim
+                    </label>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <label class="form-label">
+                    Ativo
+                </label>
+
+                <div class="form-check">
+                    <InputCheckbox @bind-Value="comunicado.Ativo"
+                                   class="form-check-input" />
+
+                    <label class="form-check-label">
+                        Sim
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="d-flex gap-2 mt-3">
+
+            <button type="submit" class="btn btn-primary">
+                Cadastrar
+            </button>
+
+            <button type="button"
+                    class="btn btn-secondary"
+                    @onclick="Voltar">
+                Cancelar
+            </button>
+
+        </div>
+
+    </EditForm>
+
+</div>
+
+@code {
+
+    private Comunicado comunicado = new();
+
+    private void Salvar()
+    {
+        dao.Inserir(comunicado);
+
+        NavigationManager.NavigateTo("/comunicados");
+    }
+
+    private void Voltar()
+    {
+        NavigationManager.NavigateTo("/comunicados");
+    }
+}
