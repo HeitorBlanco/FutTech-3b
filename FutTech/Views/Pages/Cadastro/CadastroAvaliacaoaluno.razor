@@ -1,0 +1,153 @@
+﻿@page "/avaliacoes/cadastro"
+@rendermode InteractiveServer
+
+@using FutTech.DAO
+@using FutTech.Models
+
+@inject AvaliacaoAlunoDAO dao
+@inject NavigationManager NavigationManager
+
+<PageTitle>Nova Avaliação - FutTech</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Cadastro de Avaliação</h2>
+    </div>
+</div>
+
+<div class="custom-table-card p-4">
+
+    <EditForm Model="avaliacao" OnValidSubmit="Salvar">
+
+        <DataAnnotationsValidator />
+
+        <ValidationSummary class="alert alert-danger" />
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label">
+                    Aluno
+                </label>
+
+                <InputNumber @bind-Value="avaliacao.AlunoId"
+                             class="form-control" />
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label">
+                    Turma
+                </label>
+
+                <InputNumber @bind-Value="avaliacao.TurmaId"
+                             class="form-control" />
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label">
+                    Treinador
+                </label>
+
+                <InputNumber @bind-Value="avaliacao.TreinadorId"
+                             class="form-control" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">
+                    Data
+                </label>
+
+                <InputDate @bind-Value="avaliacao.Data"
+                           class="form-control" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">
+                    Nota Técnica
+                </label>
+
+                <InputNumber @bind-Value="avaliacao.NotaTecnica"
+                             class="form-control" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">
+                    Nota Física
+                </label>
+
+                <InputNumber @bind-Value="avaliacao.NotaFisica"
+                             class="form-control" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">
+                    Nota Tática
+                </label>
+
+                <InputNumber @bind-Value="avaliacao.NotaTatica"
+                             class="form-control" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">
+                    Nota Comportamental
+                </label>
+
+                <InputNumber @bind-Value="avaliacao.NotaComportamental"
+                             class="form-control" />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">
+                    Média
+                </label>
+
+                <InputNumber @bind-Value="avaliacao.Media"
+                             class="form-control" />
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <label class="form-label">
+                    Observações
+                </label>
+
+                <InputTextArea @bind-Value="avaliacao.Observacoes"
+                               class="form-control" />
+            </div>
+
+        </div>
+
+        <div class="d-flex gap-2 mt-3">
+
+            <button type="submit" class="btn btn-primary">
+                Cadastrar
+            </button>
+
+            <button type="button"
+                    class="btn btn-secondary"
+                    @onclick="Voltar">
+                Cancelar
+            </button>
+
+        </div>
+
+    </EditForm>
+
+</div>
+
+@code {
+
+    private AvaliacaoAluno avaliacao = new();
+
+    private void Salvar()
+    {
+        dao.Inserir(avaliacao);
+
+        NavigationManager.NavigateTo("/avaliacoes");
+    }
+
+    private void Voltar()
+    {
+        NavigationManager.NavigateTo("/avaliacoes");
+    }
+}

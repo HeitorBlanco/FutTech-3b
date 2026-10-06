@@ -60,4 +60,87 @@ public class ComunicadosDAO
             Ativo = leitor.GetBoolean("ativo_com")
         };
     }
+        // CREATE — cadastra um novo comunicado
+public void Inserir(Comunicado comunicado)
+    {
+        try
+        {
+            using var con = _conexao.GetConnection();
+
+            string sql = @"
+            INSERT INTO Comunicado
+            (
+                titulo_com,
+                conteudo_com,
+                publicado_em_com,
+                publicado_as_com,
+                autor_com,
+                categoria_com,
+                destacado_com,
+                ativo_com
+            )
+            VALUES
+            (
+                @titulo,
+                @conteudo,
+                @data,
+                @hora,
+                @autor,
+                @categoria,
+                @destacado,
+                @ativo
+            )";
+
+            using var comando = con.CreateCommand();
+
+            comando.CommandText = sql;
+
+            comando.Parameters.AddWithValue(
+                "@titulo",
+                comunicado.Titulo
+            );
+
+            comando.Parameters.AddWithValue(
+                "@conteudo",
+                comunicado.Conteudo
+            );
+
+            comando.Parameters.AddWithValue(
+                "@data",
+                comunicado.PublicadoEm
+            );
+
+            comando.Parameters.AddWithValue(
+                "@hora",
+                comunicado.PublicadoAs
+            );
+
+            comando.Parameters.AddWithValue(
+                "@autor",
+                comunicado.Autor
+            );
+
+            comando.Parameters.AddWithValue(
+                "@categoria",
+                comunicado.Categoria
+            );
+
+            comando.Parameters.AddWithValue(
+                "@destacado",
+                comunicado.Destacado
+            );
+
+            comando.Parameters.AddWithValue(
+                "@ativo",
+                comunicado.Ativo
+            );
+
+            comando.ExecuteNonQuery();
+        }
+        catch
+        {
+            throw;
+        }
+    }
 }
+
