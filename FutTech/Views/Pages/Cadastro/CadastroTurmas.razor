@@ -1,0 +1,188 @@
+﻿@page "/turma/cadastro"
+@rendermode InteractiveServer
+
+@using FutTech.DAO
+@using FutTech.Models
+
+@inject TurmaDAO TurmasDAO
+@inject TreinadoresDAO TreinadoresDAO
+@inject NavigationManager NavigationManager
+
+<PageTitle>Cadastro de Turmas - FutTech</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h2 class="fw-bold mb-1">Cadastro de Turma</h2>
+
+        <p class="text-muted">
+            Cadastre uma nova turma na escolinha.
+        </p>
+    </div>
+
+</div>
+
+<div class="custom-table-card p-4">
+
+    <EditForm Model="turma" OnValidSubmit="Salvar">
+
+        <DataAnnotationsValidator />
+
+        <ValidationSummary class="alert alert-danger" />
+
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Nome
+                </label>
+
+                <InputText class="form-control"
+                           @bind-Value="turma.Nome"
+                           placeholder="Nome da turma" />
+
+                <ValidationMessage For="() => turma.Nome" />
+
+            </div>
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Categoria
+                </label>
+
+                <InputText class="form-control"
+                           @bind-Value="turma.Categoria"
+                           placeholder="Ex.: Sub-10, Sub-12, Sub-15" />
+
+                <ValidationMessage For="() => turma.Categoria" />
+
+            </div>
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Dias de treino
+                </label>
+
+                <InputText class="form-control"
+                           @bind-Value="turma.DiasDeTreino"
+                           placeholder="Ex.: Segunda e Quarta" />
+
+                <ValidationMessage For="() => turma.DiasDeTreino" />
+
+            </div>
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Horário
+                </label>
+
+                <InputText type="time"
+                           class="form-control"
+                           @bind-Value="HorarioTexto" />
+
+            </div>
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Treinador
+                </label>
+
+                <InputSelect class="form-select"
+                             @bind-Value="turma.TreinadorId">
+
+                    <option value="0">
+                        Selecione um treinador
+                    </option>
+
+                    @foreach (var treinador in Treinadores)
+                    {
+                        <option value="@treinador.Id">
+                            @treinador.Nome
+                        </option>
+                    }
+
+                </InputSelect>
+
+                <ValidationMessage For="() => turma.TreinadorId" />
+
+            </div>
+
+            <div class="col-md-6 mb-3">
+
+                <div class="form-check mt-4">
+
+                    <InputCheckbox class="form-check-input"
+                                   @bind-Value="turma.Ativa" />
+
+                    <label class="form-check-label">
+                        Turma ativa
+                    </label>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="d-flex gap-2 mt-3">
+
+            <button type="submit"
+                    class="btn btn-primary">
+
+                <i class="bi bi-check-lg"></i>
+                Cadastrar
+
+            </button>
+
+            <button type="button"
+                    class="btn btn-secondary"
+                    @onclick="Voltar">
+
+                Cancelar
+
+            </button>
+
+        </div>
+
+    </EditForm>
+
+</div>
+
+@code {
+
+    private Turma turma = new()
+    {
+        Ativa = true
+    };
+
+    private List<global::FutTech.Models.Treinador> Treinadores = new();
+
+    private string HorarioTexto = "";
+
+    protected override void OnInitialized()
+    {
+        Treinadores = TreinadoresDAO.Listar();
+    }
+
+    private void Salvar()
+    {
+        if (TimeOnly.TryParse(HorarioTexto, out var horario))
+        {
+            turma.Horario = horario;
+
+            TurmasDAO.Inserir(turma);
+
+            NavigationManager.NavigateTo("/turma");
+        }
+    }
+
+    private void Voltar()
+    {
+        NavigationManager.NavigateTo("/turma");
+    }
+}

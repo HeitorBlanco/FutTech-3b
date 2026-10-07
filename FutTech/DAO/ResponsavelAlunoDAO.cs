@@ -28,6 +28,8 @@ public class ResponsavelAlunoDAO
             lista.Add(Mapear(leitor));
         }
 
+        leitor.Close();
+
         return lista;
     }
 
@@ -47,6 +49,8 @@ public class ResponsavelAlunoDAO
         {
             lista.Add(Mapear(leitor));
         }
+
+        leitor.Close();
 
         return lista;
     }
@@ -68,70 +72,45 @@ public class ResponsavelAlunoDAO
             lista.Add(Mapear(leitor));
         }
 
+        leitor.Close();
+
         return lista;
     }
 
-    public void Salvar(ResponsavelAluno responsavel)
+    public void Inserir(ResponsavelAluno responsavel)
     {
-        if (responsavel.Id > 0)
-        {
-            const string sqlAtualizar = """
-                UPDATE ResponsavelAluno
-                SET id_usu_fk = @usuarioId,
-                    id_alu_fk = @alunoId,
-                    parentesco_res_alu = @parentesco,
-                    principal_res_alu = @principal
-                WHERE id_res_alu = @id;
-                """;
+        var comando = _conexao.CreateCommand(
+            "INSERT INTO ResponsavelAluno (id_usu_fk, id_alu_fk, parentesco_res_alu, principal_res_alu) VALUES (@usuarioId, @alunoId, @parentesco, @principal);"
+        );
 
-            using var comandoAtualizar = _conexao.CreateCommand(sqlAtualizar);
+        comando.Parameters.AddWithValue("@usuarioId", responsavel.UsuarioId);
+        comando.Parameters.AddWithValue("@alunoId", responsavel.AlunoId);
+        comando.Parameters.AddWithValue("@parentesco", responsavel.Parentesco);
+        comando.Parameters.AddWithValue("@principal", responsavel.Principal);
 
-            comandoAtualizar.Parameters.AddWithValue("@usuarioId", responsavel.UsuarioId);
-            comandoAtualizar.Parameters.AddWithValue("@alunoId", responsavel.AlunoId);
-            comandoAtualizar.Parameters.AddWithValue("@parentesco", responsavel.Parentesco);
-            comandoAtualizar.Parameters.AddWithValue("@principal", responsavel.Principal);
-            comandoAtualizar.Parameters.AddWithValue("@id", responsavel.Id);
+        comando.ExecuteNonQuery();
+    }
 
-            comandoAtualizar.ExecuteNonQuery();
+    public void Atualizar(ResponsavelAluno responsavel)
+    {
+        var comando = _conexao.CreateCommand(
+            "UPDATE ResponsavelAluno SET id_usu_fk = @usuarioId, id_alu_fk = @alunoId, parentesco_res_alu = @parentesco, principal_res_alu = @principal WHERE id_res_alu = @id;"
+        );
 
-            return;
-        }
+        comando.Parameters.AddWithValue("@usuarioId", responsavel.UsuarioId);
+        comando.Parameters.AddWithValue("@alunoId", responsavel.AlunoId);
+        comando.Parameters.AddWithValue("@parentesco", responsavel.Parentesco);
+        comando.Parameters.AddWithValue("@principal", responsavel.Principal);
+        comando.Parameters.AddWithValue("@id", responsavel.Id);
 
-        const string sqlInserir = """
-            INSERT INTO ResponsavelAluno
-            (
-                id_usu_fk,
-                id_alu_fk,
-                parentesco_res_alu,
-                principal_res_alu
-            )
-            VALUES
-            (
-                @usuarioId,
-                @alunoId,
-                @parentesco,
-                @principal
-            );
-            """;
-
-        using var comandoInserir = _conexao.CreateCommand(sqlInserir);
-
-        comandoInserir.Parameters.AddWithValue("@usuarioId", responsavel.UsuarioId);
-        comandoInserir.Parameters.AddWithValue("@alunoId", responsavel.AlunoId);
-        comandoInserir.Parameters.AddWithValue("@parentesco", responsavel.Parentesco);
-        comandoInserir.Parameters.AddWithValue("@principal", responsavel.Principal);
-
-        comandoInserir.ExecuteNonQuery();
+        comando.ExecuteNonQuery();
     }
 
     public void Excluir(int id)
     {
-        const string sql = """
-            DELETE FROM ResponsavelAluno
-            WHERE id_res_alu = @id;
-            """;
-
-        using var comando = _conexao.CreateCommand(sql);
+        var comando = _conexao.CreateCommand(
+            "DELETE FROM ResponsavelAluno WHERE id_res_alu = @id;"
+        );
 
         comando.Parameters.AddWithValue("@id", id);
 

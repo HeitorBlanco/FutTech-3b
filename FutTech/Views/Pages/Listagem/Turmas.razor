@@ -1,46 +1,99 @@
-﻿@page "/turmas"
+﻿
+@page "/turma"
+@rendermode InteractiveServer
 
 @using FutTech.DAO
 @using FutTech.Models
 
 @inject TurmaDAO TurmasDAO
+@inject NavigationManager NavigationManager
 
-<h1>Turmas</h1>
+<PageTitle>Turmas - FutTech</PageTitle>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Categoria</th>
-            <th>Dias de Treino</th>
-            <th>Horário</th>
-            <th>Treinador</th>
-            <th>Ativa</th>
-        </tr>
-    </thead>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-    <tbody>
-        @foreach (var turma in Turma)
-        {
+    <div>
+        <h1>Turmas</h1>
+        <p>Consulta das turmas cadastradas na escolinha.</p>
+    </div>
+
+    <div>
+
+        <button class="btn btn-primary"
+                @onclick="Cadastrar">
+
+            <i class="bi bi-plus-lg"></i>
+            Cadastrar Turma
+
+        </button>
+
+    </div>
+
+</div>
+
+<div class="table-responsive">
+
+    <table class="table">
+
+        <thead>
             <tr>
-                <td>@turma.Id</td>
-                <td>@turma.Nome</td>
-                <td>@turma.Categoria</td>
-                <td>@turma.DiasDeTreino</td>
-                <td>@turma.Horario.ToString("HH:mm")</td>
-                <td>@turma.TreinadorId</td>
-                <td>@(turma.Ativa ? "Sim" : "Não")</td>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Categoria</th>
+                <th>Dias de Treino</th>
+                <th>Horário</th>
+                <th>Treinador</th>
+                <th>Ativa</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+
+        <tbody>
+
+            @foreach (var turma in Turma)
+            {
+                <tr>
+
+                    <td>@turma.Id</td>
+
+                    <td>@turma.Nome</td>
+
+                    <td>@turma.Categoria</td>
+
+                    <td>@turma.DiasDeTreino</td>
+
+                    <td>
+                        @turma.Horario.ToString("HH:mm")
+                    </td>
+
+                    <td>
+                        @turma.TreinadorId
+                    </td>
+
+                    <td>
+                        @(turma.Ativa ? "Sim" : "Não")
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>
 
 @code {
+
     private List<Turma> Turma = new();
 
     protected override void OnInitialized()
     {
         Turma = TurmasDAO.Listar();
     }
+
+    private void Cadastrar()
+    {
+        NavigationManager.NavigateTo("/turma/cadastro");
+    }
 }
+
